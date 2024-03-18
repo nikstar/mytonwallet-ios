@@ -47,7 +47,7 @@ extension UIState {
                     pricePerTokenChange: +0.0348),
                 WalletToken(
                     tokenValue: TokenValue(token: .ton, value: 101.25),
-                    pricePerToken: CurrencyValue(currency: .usd, value: 3.00),
+                    pricePerToken: CurrencyValue(currency: .usd, value: 2.00),
                     pricePerTokenChange: +0.0112),
                 WalletToken(
                     tokenValue: TokenValue(token: Token(ticker: "DUCK", name: "Duck Coin", logo: ""), value: 2.34),
@@ -83,44 +83,6 @@ extension UIState {
     
 }
 
-struct CurrencyValue: Hashable, Codable {
-    
-    var currency: Currency
-    var value: Double // might want decimal
-}
-
-enum Currency: Hashable, Codable {
-    case usd
-}
-
-struct WalletToken: Hashable, Codable {
-    var tokenValue: TokenValue
-    var pricePerToken: CurrencyValue
-    var pricePerTokenChange: Double
-}
-
-                    
-struct TokenValue: Hashable, Codable {
-    var token: Token
-    var value: Double
-}
-
-extension TokenValue {
-    
-    static func ton(value: Double) -> TokenValue {
-        TokenValue(token: .ton, value: value)
-    }
-}
-
-struct Token: Hashable, Codable {
-    var ticker: String
-    var name: String
-    var logo: String
-}
-
-extension Token {
-    static let ton: Token = Token(ticker: "TON", name: "Toncoin", logo: "")
-}
 
 struct Transaction: Hashable, Codable {
     

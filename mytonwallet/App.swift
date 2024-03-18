@@ -9,6 +9,10 @@ struct mytonwalletApp: App {
     
     var body: some Scene {
         WindowGroup {
+//            ContentView(title: "Test", headerGradient: Gradient(colors: [.red, .white]), content: {
+//                Color.orange
+//                    .frame(height: 10000)
+//            })
             RootView()
                 .environmentObject(model)
         }

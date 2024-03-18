@@ -17,6 +17,13 @@
 		58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7672BA82DF1003D9628 /* MainWalletView.swift */; };
 		58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7692BA82F8D003D9628 /* RootView.swift */; };
 		58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */; };
+		58DDF76E2BA84CFB003D9628 /* Token+TokenValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */; };
+		58DDF7702BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */; };
+		58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */; };
+		58DDF7742BA86FEA003D9628 /* OffsetReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */; };
+		58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7752BA87572003D9628 /* ParentOffset.swift */; };
+		58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7772BA87A29003D9628 /* Scaffold.swift */; };
+		58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7792BA88130003D9628 /* GenericEnvironment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +39,13 @@
 		58DDF7672BA82DF1003D9628 /* MainWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWalletView.swift; sourceTree = "<group>"; };
 		58DDF7692BA82F8D003D9628 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderConstructionView.swift; sourceTree = "<group>"; };
+		58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Token+TokenValue.swift"; sourceTree = "<group>"; };
+		58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CurrencyValue+WalletToken.swift"; sourceTree = "<group>"; };
+		58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetScrollView.swift; sourceTree = "<group>"; };
+		58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetReporting.swift; sourceTree = "<group>"; };
+		58DDF7752BA87572003D9628 /* ParentOffset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentOffset.swift; sourceTree = "<group>"; };
+		58DDF7772BA87A29003D9628 /* Scaffold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scaffold.swift; sourceTree = "<group>"; };
+		58DDF7792BA88130003D9628 /* GenericEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericEnvironment.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,13 +79,20 @@
 		58511A872BA37F1400E08053 /* mytonwallet */ = {
 			isa = PBXGroup;
 			children = (
+				58DDF7772BA87A29003D9628 /* Scaffold.swift */,
+				58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */,
+				58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */,
 				58B6041C2BA43A5200049146 /* Info.plist */,
 				58511A882BA37F1400E08053 /* App.swift */,
 				58DDF7692BA82F8D003D9628 /* RootView.swift */,
 				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
 				58DDF7672BA82DF1003D9628 /* MainWalletView.swift */,
+				58DDF7792BA88130003D9628 /* GenericEnvironment.swift */,
+				58DDF7752BA87572003D9628 /* ParentOffset.swift */,
+				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
 				58511A8A2BA37F1400E08053 /* ContentView.swift */,
 				58DDF7632BA81EB9003D9628 /* Model.swift */,
+				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */,
 				58DDF7652BA81FDF003D9628 /* UIState.swift */,
 				58511A8C2BA37F1600E08053 /* Assets.xcassets */,
 				58511A8E2BA37F1600E08053 /* Preview Content */,
@@ -159,12 +180,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				58DDF7642BA81EB9003D9628 /* Model.swift in Sources */,
+				58DDF76E2BA84CFB003D9628 /* Token+TokenValue.swift in Sources */,
+				58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */,
+				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */,
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
+				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
 				58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */,
+				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift in Sources */,
+				58DDF7742BA86FEA003D9628 /* OffsetReporting.swift in Sources */,
 				58511A892BA37F1400E08053 /* App.swift in Sources */,
 				58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */,
+				58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

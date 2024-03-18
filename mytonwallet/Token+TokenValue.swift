@@ -24,10 +24,26 @@ extension TokenValue {
     }
 }
 
+extension TokenValue {
+    
+    func formatted<S: FormatStyle>(_ style: S) -> S.FormatOutput where S.FormatInput == Self {
+        style.format(self)
+    }
+    
+    func formatted() -> String {
+        formatted(.tokenValue())
+    }
+}
 
 struct TokenValueFormatStyle: FormatStyle {
     func format(_ tokenValue: TokenValue) -> String {
         let value = tokenValue.value.formatted(.number.precision(.fractionLength(0..<2)))
         return "\(value) \(tokenValue.token.ticker)"
+    }
+}
+
+extension FormatStyle where Self == TokenValueFormatStyle {
+    static func tokenValue() -> TokenValueFormatStyle {
+        TokenValueFormatStyle()
     }
 }

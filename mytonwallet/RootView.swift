@@ -12,20 +12,21 @@ struct RootView: View {
     var body: some View {
         TabView(selection: $currentTab) {
             MainWalletView()
-                .tabItem { Text("Wallet") }
+                .tabItem { Label("Wallet", image: "Tab.Wallet") }
                 .tag(Tab.wallet)
             
             UnderConstructionView()
-                .tabItem { Text("Assets") }
+                .tabItem { Label("Assets", image: "Tab.Assets") }
                 .tag(Tab.assets)
             
             UnderConstructionView()
-                .tabItem { Text("Browser") }
+                .tabItem { Label("Browser", image: "Tab.Browser") }
                 .tag(Tab.browser)
 
             UnderConstructionView()
-                .tabItem { Text("Settings") }
+                .tabItem { Label("Settings", image: "Tab.Settings") }
                 .tag(Tab.settings)
         }
+        
     }
 }
