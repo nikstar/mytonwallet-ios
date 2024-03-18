@@ -7,18 +7,31 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		58511A892BA37F1400E08053 /* mytonwalletApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* mytonwalletApp.swift */; };
+		58511A892BA37F1400E08053 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* App.swift */; };
 		58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A8A2BA37F1400E08053 /* ContentView.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
 		58511A902BA37F1600E08053 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */; };
+		58B6041B2BA437C100049146 /* src in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* src */; };
+		58DDF7642BA81EB9003D9628 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7632BA81EB9003D9628 /* Model.swift */; };
+		58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7652BA81FDF003D9628 /* UIState.swift */; };
+		58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7672BA82DF1003D9628 /* MainWalletView.swift */; };
+		58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7692BA82F8D003D9628 /* RootView.swift */; };
+		58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		58511A852BA37F1400E08053 /* mytonwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mytonwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		58511A882BA37F1400E08053 /* mytonwalletApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mytonwalletApp.swift; sourceTree = "<group>"; };
+		58511A882BA37F1400E08053 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		58511A8A2BA37F1400E08053 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		58B6041A2BA437C100049146 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		58DDF7632BA81EB9003D9628 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		58DDF7652BA81FDF003D9628 /* UIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIState.swift; sourceTree = "<group>"; };
+		58DDF7672BA82DF1003D9628 /* MainWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWalletView.swift; sourceTree = "<group>"; };
+		58DDF7692BA82F8D003D9628 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderConstructionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +48,7 @@
 		58511A7C2BA37F1400E08053 = {
 			isa = PBXGroup;
 			children = (
+				58B6041A2BA437C100049146 /* src */,
 				58511A872BA37F1400E08053 /* mytonwallet */,
 				58511A862BA37F1400E08053 /* Products */,
 			);
@@ -51,8 +65,14 @@
 		58511A872BA37F1400E08053 /* mytonwallet */ = {
 			isa = PBXGroup;
 			children = (
-				58511A882BA37F1400E08053 /* mytonwalletApp.swift */,
+				58B6041C2BA43A5200049146 /* Info.plist */,
+				58511A882BA37F1400E08053 /* App.swift */,
+				58DDF7692BA82F8D003D9628 /* RootView.swift */,
+				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
+				58DDF7672BA82DF1003D9628 /* MainWalletView.swift */,
 				58511A8A2BA37F1400E08053 /* ContentView.swift */,
+				58DDF7632BA81EB9003D9628 /* Model.swift */,
+				58DDF7652BA81FDF003D9628 /* UIState.swift */,
 				58511A8C2BA37F1600E08053 /* Assets.xcassets */,
 				58511A8E2BA37F1600E08053 /* Preview Content */,
 			);
@@ -125,6 +145,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58B6041B2BA437C100049146 /* src in Resources */,
 				58511A902BA37F1600E08053 /* Preview Assets.xcassets in Resources */,
 				58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */,
 			);
@@ -137,8 +158,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58DDF7642BA81EB9003D9628 /* Model.swift in Sources */,
+				58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */,
+				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
+				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
 				58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */,
-				58511A892BA37F1400E08053 /* mytonwalletApp.swift in Sources */,
+				58511A892BA37F1400E08053 /* App.swift in Sources */,
+				58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,7 +223,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -254,7 +280,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -275,6 +301,7 @@
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = mytonwallet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,6 +331,7 @@
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = mytonwallet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
