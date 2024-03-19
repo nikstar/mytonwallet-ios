@@ -14,6 +14,7 @@ struct mytonwalletApp: App {
 //                    .frame(height: 10000)
 //            })
             RootView()
+                .preferredColorScheme(.light)
                 .environmentObject(model)
         }
     }

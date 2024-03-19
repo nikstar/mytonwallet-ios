@@ -31,19 +31,41 @@ extension TokenValue {
     }
     
     func formatted() -> String {
-        formatted(.tokenValue())
+        formatted(.tokenValue)
     }
 }
 
 struct TokenValueFormatStyle: FormatStyle {
+    
+    var explicitPlus: Bool = false
+    var asNegative: Bool = false
+    
     func format(_ tokenValue: TokenValue) -> String {
-        let value = tokenValue.value.formatted(.number.precision(.fractionLength(0..<2)))
+        var formatter = FloatingPointFormatStyle<Double>.number.precision(.fractionLength(0..<2))
+        if explicitPlus {
+            formatter = formatter.sign(strategy: .always(includingZero: false))
+        }
+        var amount = tokenValue.value
+        if asNegative {
+            amount = -amount
+        }
+        let value = amount.formatted(formatter)
         return "\(value) \(tokenValue.token.ticker)"
     }
 }
 
 extension FormatStyle where Self == TokenValueFormatStyle {
-    static func tokenValue() -> TokenValueFormatStyle {
+    static var tokenValue: TokenValueFormatStyle {
         TokenValueFormatStyle()
     }
+    
+    
+    static func tokenValue(explicitPlus: Bool) -> TokenValueFormatStyle {
+        TokenValueFormatStyle(explicitPlus: explicitPlus)
+    }
+    
+    static func tokenValue(asNegative: Bool) -> TokenValueFormatStyle {
+        TokenValueFormatStyle(asNegative: asNegative)
+    }
+
 }

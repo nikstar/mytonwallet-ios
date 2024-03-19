@@ -56,7 +56,15 @@ extension UIState {
             ],
             transactions: [
                 Transaction(
-                    date: Date(), 
+                    date: Date(),
+                    info: .recieved(.init(
+                        value: TokenValue(token: .ton, value: 25),
+                        currencyValue: CurrencyValue(currency: .usd, value: 50),
+                        counterparty: Counterparty(address: "UQBK...y8I1", tonURL: nil),
+                        fee: TokenValue(token: .ton, value: 0),
+                        comment: nil))),
+                Transaction(
+                    date: Date(),
                     info: .sent(.init(
                         value: TokenValue(token: .ton, value: 25),
                         currencyValue: CurrencyValue(currency: .usd, value: 50),
@@ -64,18 +72,30 @@ extension UIState {
                         fee: TokenValue(token: .ton, value: 0),
                         comment: nil))),
                 Transaction(
-                    date: Date().addingTimeInterval(-3600),
+                    date: Date().addingTimeInterval(-3600 * 2),
+                    info: .receivedNFT(.init(
+                        nft: NFT(name: "Cat #918", image: "", collection: nil),
+                        counterparty: Counterparty(address: "", tonURL: "alice.ton"),
+                        fee: .ton(value: 0.03)))),
+                Transaction(
+                    date: Date().addingTimeInterval(-3600 * 2 * 24),
+                    info: .sentNFT(.init(
+                        nft: NFT(name: "Cat #918", image: "", collection: NFTCollection(name: "Rich Cats", image: "")),
+                        counterparty: Counterparty(address: "", tonURL: "alice.ton"),
+                        fee: .ton(value: 0.03)))),
+                Transaction(
+                    date: Date().addingTimeInterval(-3600 * 2.5 * 72),
                     info: .swapped(.init(
                         sent: .ton(value: 10),
                         received: .init(token: Token(ticker: "GRAM", name: "Gram", logo: ""), value: 1000),
                         exchangeRate: TokenValue.ton(value: 0.01),
                         fee: .ton(value: 0.02)))),
                 Transaction(
-                    date: Date().addingTimeInterval(-3600 * 2),
+                    date: Date().addingTimeInterval(-3600 * 2 * 72),
                     info: .sentNFT(.init(
                         nft: NFT(name: "Cat #918", image: "", collection: NFTCollection(name: "Rich Cats", image: "")),
                         counterparty: Counterparty(address: "", tonURL: "alice.ton"),
-                        fee: .ton(value: 0.03))))
+                        fee: .ton(value: 0.03)))),
                 
             ]
         )

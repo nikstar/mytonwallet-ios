@@ -29,7 +29,6 @@ struct MainWalletView: View {
     
     @State private var scrollPosition: CGPoint = .zero
     
-    @State private var scrollViewOffset: CGPoint = CGPoint(x: 1, y: 1)
     @State private var labelOffset: CGPoint = .zero
     @State private var transactionsOffset: CGPoint = .zero
     @State private var safeAreaOffset: CGPoint = .zero
@@ -45,14 +44,14 @@ struct MainWalletView: View {
     
     var body: some View {
         
+        let _ = Self._printChanges()
+        
         WithOffsetReporting(offset: $safeAreaOffset) {
-            Scaffold(topBarBackgroundStyle: topBarColor) {
-                WithOffsetReporting(offset: $scrollViewOffset) {
+            Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
                     ScrollView {
                         VStack(spacing: 0) {
                             WithOffsetReporting(offset: $labelOffset) {
                                 AssetsSection()
-                                    .environment(\.parentOffset, scrollViewOffset)
                                     .overlay {
                                         Color.white.opacity(transitionToTransactionsProgress)
                                     }
@@ -62,13 +61,11 @@ struct MainWalletView: View {
                             }
                         }
                     }
-                }
+                
                 .onChange(of: transactionsOffset) { transactionsOffset in
-                    if transactionsOffset.y - 10 < scrollViewOffset.y && scrolledToTransactions == false {
-                        withAnimation(.linear(duration: 3)) {
+                    if transactionsOffset.y - 10 < safeAreaOffset.y + 44 && scrolledToTransactions == false {
                             scrolledToTransactions = true
-                        }
-                    } else if transactionsOffset.y - 10 >= scrollViewOffset.y && scrolledToTransactions == true {
+                    } else if transactionsOffset.y - 10 >= safeAreaOffset.y + 44 && scrolledToTransactions == true {
                         scrolledToTransactions = false
                     }
                 }
@@ -120,14 +117,34 @@ struct MainWalletView: View {
         let endOffset = safeAreaOffset.y + 4
         let topOffset = max(labelOffset.y, endOffset)
         let progressRaw = clamp(1 - ((topOffset - endOffset) / 44))
+        
+        MainWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.uiState.mainWalletTotalValue, label: model.uiState.mainWalletLabel, transitioned: scrolledToTransactions)
+
+    }
+}
+
+
+struct MainWalletValue: View {
+    
+    var topOffset: CGFloat
+    var progressRaw: CGFloat
+    
+    var totalValue: CurrencyValue
+    var label: String
+    var transitioned: Bool
+    
+    var body: some View {
+        let _ = Self._printChanges()
+        
         let progress = easeInOutBezier(progressRaw)
         
         let size1 = linear(progress, from: 34, to: 17)
         let size2 = linear(progress, from: 17, to: 13)
         let padding = linear(progressRaw, from: 8, to: 0)
+    
         
         VStack(spacing: padding) {
-            Text(model.uiState.mainWalletTotalValue.value
+            Text(totalValue.value
                 .formatted(
                     .currency(code: "USD")
                     .presentation(.narrow)
@@ -137,16 +154,17 @@ struct MainWalletView: View {
                 )
             )
             .font(.system(size: size1, weight: .semibold))
-            .foregroundStyle(scrolledToTransactions ? .primary : Color.white)
+            .foregroundStyle(transitioned ? .primary : Color.white)
             
-            Text(model.uiState.mainWalletLabel)
+            Text(label)
                 .font(.system(size: size2, weight: .regular))
-                .foregroundStyle(scrolledToTransactions ? .secondary : Color(white: 1, opacity: 0.66))
+                .foregroundStyle(transitioned ? .secondary : Color(white: 1, opacity: 0.66))
         }
         .offset(y: topOffset)
         .ignoresSafeArea()
-
+        .animation(.easeInOut(duration: 0.250), value: transitioned)
     }
+    
 }
 
 struct AssetsSection: View {
@@ -197,9 +215,7 @@ struct AssetsSection: View {
                     Color.clear
                         .frame(maxWidth: 0, maxHeight: 0)
                     
-                    Rectangle()
-                        .fill(Color(white: 1, opacity: 0.25))
-                        .frame(maxWidth: .infinity, maxHeight: 0.33)
+                    CellDivider()
                         .gridCellColumns(2)
                }
             }
@@ -290,26 +306,6 @@ struct WalletTokenRow: View {
 
 
 
-struct TransactionsSection: View {
-    
-    var transitionToTransactionsProgress: CGFloat
-    
-    var body: some View {
-        UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16), style: .continuous)
-            .fill(Color.white)
-            .frame(height: 2000)
-            .frame(maxWidth: .infinity)
-            .background {
-                Color.mainWalletBackground
-                    .overlay {
-                        Color.white.opacity(transitionToTransactionsProgress)
-                    }
-            }
-
-    }
-}
-
-
 /// Clamp value to 0...1
 func clamp(_ value: CGFloat) -> CGFloat {
     min(1, max(0, value))
@@ -321,7 +317,7 @@ func easeInOutBezier(_ t: CGFloat) -> CGFloat {
 }
 
 func linear(_ progress: CGFloat, from: CGFloat, to: CGFloat) -> CGFloat {
-    (1 - progress) * from + progress * to
+    (1.0 - progress) * from + progress * to
 }
 
 #Preview {
