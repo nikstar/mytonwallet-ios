@@ -18,6 +18,8 @@
 		58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */; };
 		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
 		58B6041B2BA437C100049146 /* src in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* src */; };
+		58D164AE2BAB961D00DE08BF /* CallApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AD2BAB961D00DE08BF /* CallApiError.swift */; };
+		58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AF2BAB971800DE08BF /* JSReturnValue.swift */; };
 		58DDF7642BA81EB9003D9628 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7632BA81EB9003D9628 /* Model.swift */; };
 		58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7652BA81FDF003D9628 /* UIState.swift */; };
 		58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7672BA82DF1003D9628 /* MainWalletView.swift */; };
@@ -57,6 +59,8 @@
 		58659BFD2BAAD79B006E14C1 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		58B6041A2BA437C100049146 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
 		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		58D164AD2BAB961D00DE08BF /* CallApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallApiError.swift; sourceTree = "<group>"; };
+		58D164AF2BAB971800DE08BF /* JSReturnValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSReturnValue.swift; sourceTree = "<group>"; };
 		58DDF7632BA81EB9003D9628 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		58DDF7652BA81FDF003D9628 /* UIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIState.swift; sourceTree = "<group>"; };
 		58DDF7672BA82DF1003D9628 /* MainWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWalletView.swift; sourceTree = "<group>"; };
@@ -166,6 +170,8 @@
 			children = (
 				58659BF02BAAD143006E14C1 /* ApiConnector.swift */,
 				58659BFD2BAAD79B006E14C1 /* Api.swift */,
+				58D164AF2BAB971800DE08BF /* JSReturnValue.swift */,
+				58D164AD2BAB961D00DE08BF /* CallApiError.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -281,6 +287,7 @@
 				58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */,
 				58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */,
 				58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */,
+				58D164AE2BAB961D00DE08BF /* CallApiError.swift in Sources */,
 				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
 				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
@@ -289,6 +296,7 @@
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
 				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
+				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
 				58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */,
 				58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */,
 				58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */,

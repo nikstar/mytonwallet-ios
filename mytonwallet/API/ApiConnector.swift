@@ -5,12 +5,13 @@ import WebKit
 
 private let log = fileLog()
 
+
 class ApiConnector: NSObject {
     
     private var webView: WKWebView! = nil
     private var userContentController: WKUserContentController! = nil
     
-    private let root: URL = URL(string: "api-http://localhost:8000/")!
+    private let root: URL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "src")!
     
     override init() {
         super.init()
@@ -18,6 +19,8 @@ class ApiConnector: NSObject {
         let config = WKWebViewConfiguration()
         config.setURLSchemeHandler(self, forURLScheme: "api-https")
         config.setURLSchemeHandler(self, forURLScheme: "api-http")
+        
+        config.applicationNameForUserAgent = "MyTonWallet-iOS"
         
         userContentController = WKUserContentController()
         userContentController.add(self, name: "onUpdate")
@@ -30,14 +33,24 @@ class ApiConnector: NSObject {
         }
         #endif
         webView.navigationDelegate = self
-        webView.load(URLRequest(url: root))
-
+        
+        webView.loadFileURL(root, allowingReadAccessTo: root.deletingLastPathComponent())
     }
     
     
-    func executeJavaScript() async throws {
-        let res = try await webView.callAsyncJavaScript(#"await window.wallet.callApi('validateMnemonic', ['foo'])"#, arguments: [:], contentWorld: .page)
-        
+    func callApi(method: String, args: [Any]) async throws -> JSReturnValue? {
+        do {
+            let result = try await webView.callAsyncJavaScript("return await window.wallet.callApi('\(method)', ...args)", arguments: ["args": args], contentWorld: .page)
+            if let result {
+                return JSReturnValue(result)
+            } else {
+                return nil
+            }
+        } catch let error as WKError where error.errorCode == WKError.Code.javaScriptExceptionOccurred.rawValue {
+            throw CallApiError.javascriptException(error, exceptionMessage: (error.errorUserInfo["WKJavaScriptExceptionMessage"] as? String) ?? error.localizedDescription)
+        } catch {
+            throw CallApiError.webkitError(error as NSError)
+        }
     }
 }
 
@@ -45,43 +58,36 @@ class ApiConnector: NSObject {
 extension ApiConnector: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        log.debug("\(#function) request \(navigationAction.request.url?.absoluteString ?? "")")
+        log.debug("\(#function) \(navigationAction.request.httpMethod?.description ?? "") \(navigationAction.request.url?.absoluteString ?? "")")
         return .allow
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        log.debug("\(#function) request \(navigationResponse.response.url?.absoluteString ?? "")")
+        if let response = navigationResponse.response as? HTTPURLResponse, response.statusCode != 200 {
+            log.error("\(#function) response statusCode=\(response.statusCode) \(response.url?.absoluteString ?? "")")
+        }
         return .allow
-    }
-    
-    // MARK: -
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print(#function)
     }
     
     // MARK: Debugging provisional navigation
     
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        log.debug("\(#function)")
-    }
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {}
     
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         log.debug("\(#function)")
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        log.debug("\(#function)")
+        log.error("\(#function)")
     }
 }
 
 
 extension ApiConnector: WKURLSchemeHandler {
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
-        log.debug("\(#function) request \(urlSchemeTask.request.url?.absoluteString ?? "")")
         Task {
             var request = urlSchemeTask.request
-            print("request", request.httpMethod ?? "<>", request.url ?? "<>", request.httpBody ?? "<>")
+            log.info("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0)")
             guard let originalUrl = request.url else {
                 urlSchemeTask.didFailWithError(WKError(.unknown)); return
             }
@@ -89,20 +95,20 @@ extension ApiConnector: WKURLSchemeHandler {
                 .replacing(/^api-https:/, with: "https:")
                 .replacing(/^api-http:/, with: "http:")
             )!
-            print(request.url!)
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
     
-                print("response", request.url!, data.count, "bytes", response.mimeType ?? "<>")
+                log.info("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0) => response bytes=\(data.count)")
                 
                 if let upstreamResponse = response as? HTTPURLResponse {
-                    print("http response", upstreamResponse.statusCode)
+                    if upstreamResponse.statusCode != 200 {
+                        log.error("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0) => statusCode=\(upstreamResponse.statusCode)" )
+                    }
                     var headers = upstreamResponse.allHeaderFields as! [String: String]
                     headers["Access-Control-Allow-Origin"] = "*"
                     let response = HTTPURLResponse(url: originalUrl, statusCode: upstreamResponse.statusCode, httpVersion: nil, headerFields: headers)!
                     urlSchemeTask.didReceive(response)
                     urlSchemeTask.didReceive(data)
-                    
                 } else {
                     urlSchemeTask.didReceive(response)
                     urlSchemeTask.didReceive(data)
@@ -110,7 +116,7 @@ extension ApiConnector: WKURLSchemeHandler {
     
                 urlSchemeTask.didFinish()
             } catch {
-                log.error("server request \(error)")
+                log.error("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0) => error=\(error)" )
                 urlSchemeTask.didFailWithError(error)
             }
         }
@@ -123,7 +129,7 @@ extension ApiConnector: WKURLSchemeHandler {
 
 extension ApiConnector: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print(message.name, type(of: message.body))
+        print(message.name, type(of: message.body), (message.body as? [String:Any])?["type"] as Any)
     }
 }
 
