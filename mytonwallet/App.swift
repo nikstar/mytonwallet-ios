@@ -6,16 +6,14 @@ import Observation
 struct mytonwalletApp: App {
     
     private let model: Model = Model.testUI()
+    private let api: Api = Api()
     
     var body: some Scene {
         WindowGroup {
-//            ContentView(title: "Test", headerGradient: Gradient(colors: [.red, .white]), content: {
-//                Color.orange
-//                    .frame(height: 10000)
-//            })
             RootView()
                 .preferredColorScheme(.light)
                 .environmentObject(model)
+                .environmentObject(api)
         }
     }
 }

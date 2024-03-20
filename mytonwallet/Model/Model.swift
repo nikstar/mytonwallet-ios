@@ -104,10 +104,10 @@ extension UIState {
 }
 
 
-struct Transaction: Hashable, Codable {
+struct Transaction: Identifiable, Hashable, Codable {
     
+    var id: UUID = UUID()
     var date: Date
-    // todo: id
     var info: TransactionInfo
 }
 

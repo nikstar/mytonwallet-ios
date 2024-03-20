@@ -11,6 +11,12 @@
 		58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A8A2BA37F1400E08053 /* ContentView.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
 		58511A902BA37F1600E08053 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */; };
+		58659BF12BAAD143006E14C1 /* ApiConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF02BAAD143006E14C1 /* ApiConnector.swift */; };
+		58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */; };
+		58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */; };
+		58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */; };
+		58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */; };
+		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
 		58B6041B2BA437C100049146 /* src in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* src */; };
 		58DDF7642BA81EB9003D9628 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7632BA81EB9003D9628 /* Model.swift */; };
 		58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7652BA81FDF003D9628 /* UIState.swift */; };
@@ -34,6 +40,7 @@
 		58DDF78C2BA8E782003D9628 /* _RopeModule in Frameworks */ = {isa = PBXBuildFile; productRef = 58DDF78B2BA8E782003D9628 /* _RopeModule */; };
 		58DDF78E2BA97802003D9628 /* TransactionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF78D2BA97802003D9628 /* TransactionsSection.swift */; };
 		58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF78F2BA97B16003D9628 /* CellDivider.swift */; };
+		58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +49,12 @@
 		58511A8A2BA37F1400E08053 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		58659BF02BAAD143006E14C1 /* ApiConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiConnector.swift; sourceTree = "<group>"; };
+		58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+file_fileLog.swift"; sourceTree = "<group>"; };
+		58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+orThrow.swift"; sourceTree = "<group>"; };
+		58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+with.swift"; sourceTree = "<group>"; };
+		58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftUI.Button+asyncAction.swift"; sourceTree = "<group>"; };
+		58659BFD2BAAD79B006E14C1 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		58B6041A2BA437C100049146 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
 		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		58DDF7632BA81EB9003D9628 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -58,6 +71,7 @@
 		58DDF7792BA88130003D9628 /* GenericEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericEnvironment.swift; sourceTree = "<group>"; };
 		58DDF78D2BA97802003D9628 /* TransactionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsSection.swift; sourceTree = "<group>"; };
 		58DDF78F2BA97B16003D9628 /* CellDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDivider.swift; sourceTree = "<group>"; };
+		58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,8 +96,8 @@
 		58511A7C2BA37F1400E08053 = {
 			isa = PBXGroup;
 			children = (
-				58B6041A2BA437C100049146 /* src */,
 				58511A872BA37F1400E08053 /* mytonwallet */,
+				58B6041A2BA437C100049146 /* src */,
 				58511A862BA37F1400E08053 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,25 +113,12 @@
 		58511A872BA37F1400E08053 /* mytonwallet */ = {
 			isa = PBXGroup;
 			children = (
-				58DDF7772BA87A29003D9628 /* Scaffold.swift */,
-				58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */,
-				58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */,
-				58B6041C2BA43A5200049146 /* Info.plist */,
 				58511A882BA37F1400E08053 /* App.swift */,
-				58DDF7692BA82F8D003D9628 /* RootView.swift */,
-				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
-				58DDF7672BA82DF1003D9628 /* MainWalletView.swift */,
-				58DDF78F2BA97B16003D9628 /* CellDivider.swift */,
-				58DDF78D2BA97802003D9628 /* TransactionsSection.swift */,
-				58DDF7792BA88130003D9628 /* GenericEnvironment.swift */,
-				58DDF7752BA87572003D9628 /* ParentOffset.swift */,
-				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
-				58511A8A2BA37F1400E08053 /* ContentView.swift */,
-				58DDF7632BA81EB9003D9628 /* Model.swift */,
-				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */,
-				58DDF7652BA81FDF003D9628 /* UIState.swift */,
-				58511A8C2BA37F1600E08053 /* Assets.xcassets */,
-				58511A8E2BA37F1600E08053 /* Preview Content */,
+				58659BEE2BAAD0DB006E14C1 /* API */,
+				58659BEA2BAAD094006E14C1 /* Model */,
+				58659BED2BAAD0C1006E14C1 /* UI */,
+				58659BF22BAAD647006E14C1 /* Utils */,
+				58659BEF2BAAD0E4006E14C1 /* Resources */,
 			);
 			path = mytonwallet;
 			sourceTree = "<group>";
@@ -128,6 +129,66 @@
 				58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		58659BEA2BAAD094006E14C1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				58DDF7632BA81EB9003D9628 /* Model.swift */,
+				58DDF7652BA81FDF003D9628 /* UIState.swift */,
+				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
+				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		58659BED2BAAD0C1006E14C1 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				58DDF7692BA82F8D003D9628 /* RootView.swift */,
+				58DDF7792BA88130003D9628 /* GenericEnvironment.swift */,
+				58DDF7752BA87572003D9628 /* ParentOffset.swift */,
+				58511A8A2BA37F1400E08053 /* ContentView.swift */,
+				58DDF7772BA87A29003D9628 /* Scaffold.swift */,
+				58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */,
+				58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */,
+				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
+				58DDF7672BA82DF1003D9628 /* MainWalletView.swift */,
+				58DDF78F2BA97B16003D9628 /* CellDivider.swift */,
+				58DDF78D2BA97802003D9628 /* TransactionsSection.swift */,
+				58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		58659BEE2BAAD0DB006E14C1 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				58659BF02BAAD143006E14C1 /* ApiConnector.swift */,
+				58659BFD2BAAD79B006E14C1 /* Api.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		58659BEF2BAAD0E4006E14C1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				58B6041C2BA43A5200049146 /* Info.plist */,
+				58511A8C2BA37F1600E08053 /* Assets.xcassets */,
+				58511A8E2BA37F1600E08053 /* Preview Content */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		58659BF22BAAD647006E14C1 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */,
+				58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */,
+				58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */,
+				58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,17 +280,24 @@
 				58DDF76E2BA84CFB003D9628 /* Token+TokenValue.swift in Sources */,
 				58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */,
 				58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */,
+				58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */,
+				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
+				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */,
+				58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */,
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
 				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
+				58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */,
 				58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */,
+				58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */,
 				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift in Sources */,
 				58DDF7742BA86FEA003D9628 /* OffsetReporting.swift in Sources */,
 				58511A892BA37F1400E08053 /* App.swift in Sources */,
 				58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */,
 				58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */,
+				58659BF12BAAD143006E14C1 /* ApiConnector.swift in Sources */,
 				58DDF78E2BA97802003D9628 /* TransactionsSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

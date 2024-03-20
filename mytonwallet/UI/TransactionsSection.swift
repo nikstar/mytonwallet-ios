@@ -4,10 +4,13 @@ import OrderedCollections
 
 struct TransactionsSection: View {
     
+    var transitionToTransactionsProgress: CGFloat
+    
     
     @EnvironmentObject private var model: Model
     
-    var transitionToTransactionsProgress: CGFloat
+    @State private var presentedTransaction: Transaction? = nil
+    
     
     @State private var groupedTransactions: OrderedDictionary<DateComponents, [Transaction]> = [:]
     
@@ -31,6 +34,9 @@ struct TransactionsSection: View {
                     Color.white.opacity(transitionToTransactionsProgress)
                 }
         }
+        .sheet(item: $presentedTransaction) { presentedTransaction in
+            TransactionDetailsSheet(transaction: presentedTransaction)
+        }
         .onAppear {
             self.groupedTransactions = OrderedDictionary(grouping: model.uiState.transactions, by: {
                 Calendar.current.dateComponents([.year, .month, .day], from: $0.date)
@@ -44,13 +50,17 @@ struct TransactionsSection: View {
     }
     
     var list: some View {
-        LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) {
+        LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [/*.sectionHeaders*/]) {
             
             ForEach(groupedTransactions.keys, id: \.self) { date in
                 let transactions = groupedTransactions[date] ?? []
                 Section {
                     ForEach(transactions, id: \.self) { transaction in
                         TransactionRow(transaction: transaction)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                presentedTransaction = transaction
+                            }
                             .overlay(alignment: .bottom) {
                                 if transaction != transactions.last {
                                     CellDivider(color: .transactionSeparator)
@@ -62,7 +72,7 @@ struct TransactionsSection: View {
                 } header: {
                     Group {
                         if let first = transactions.first?.date {
-                            Text(first.formatted(date: Date.FormatStyle.DateStyle.abbreviated, time: Date.FormatStyle.TimeStyle.omitted))
+                            Text(first.formatted())
                             
                                 .font(.title3.bold())
                                 .padding(.horizontal, 16)
