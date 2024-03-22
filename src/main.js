@@ -42554,12 +42554,14 @@ class TonClient extends client_TonClient.TonClient {
     });
   }
   callRpc(method, params) {
-    return this.sendRequest(this.parameters.endpoint, {
+    const resp = this.sendRequest(this.parameters.endpoint, {
       id: 1,
       jsonrpc: '2.0',
       method,
       params
     });
+      console.log(resp);
+      return resp;
   }
   async sendRequest(apiUrl, request) {
     const method = request.method;
@@ -42937,7 +42939,9 @@ async function getAccountBalance(accountId) {
   return getWalletBalance(network, address);
 }
 async function getWalletBalance(network, walletOrAddress) {
-  return (await getWalletInfo(network, walletOrAddress)).balance;
+    const info = getWalletInfo(network, walletOrAddress);
+    console.log(info);
+  return (await info).balance;
 }
 async function getWalletSeqno(network, walletOrAddress) {
   const {

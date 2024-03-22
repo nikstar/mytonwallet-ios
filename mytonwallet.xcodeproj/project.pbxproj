@@ -11,7 +11,7 @@
 		58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A8A2BA37F1400E08053 /* ContentView.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
 		58511A902BA37F1600E08053 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */; };
-		58659BF12BAAD143006E14C1 /* ApiConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF02BAAD143006E14C1 /* ApiConnector.swift */; };
+		58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */; };
 		58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */; };
 		58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */; };
 		58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */; };
@@ -43,6 +43,9 @@
 		58DDF78E2BA97802003D9628 /* TransactionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF78D2BA97802003D9628 /* TransactionsSection.swift */; };
 		58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF78F2BA97B16003D9628 /* CellDivider.swift */; };
 		58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */; };
+		58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BA2BAC3D66000246C4 /* Secret.swift */; };
+		58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */; };
+		58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +54,7 @@
 		58511A8A2BA37F1400E08053 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		58659BF02BAAD143006E14C1 /* ApiConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiConnector.swift; sourceTree = "<group>"; };
+		58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSCoreConnection.swift; sourceTree = "<group>"; };
 		58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+file_fileLog.swift"; sourceTree = "<group>"; };
 		58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+orThrow.swift"; sourceTree = "<group>"; };
 		58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+with.swift"; sourceTree = "<group>"; };
@@ -76,6 +79,9 @@
 		58DDF78D2BA97802003D9628 /* TransactionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsSection.swift; sourceTree = "<group>"; };
 		58DDF78F2BA97B16003D9628 /* CellDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDivider.swift; sourceTree = "<group>"; };
 		58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
+		58F4F5BA2BAC3D66000246C4 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
+		58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestProxy.swift; sourceTree = "<group>"; };
+		58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPApi.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +106,7 @@
 		58511A7C2BA37F1400E08053 = {
 			isa = PBXGroup;
 			children = (
+				58F4F5BA2BAC3D66000246C4 /* Secret.swift */,
 				58511A872BA37F1400E08053 /* mytonwallet */,
 				58B6041A2BA437C100049146 /* src */,
 				58511A862BA37F1400E08053 /* Products */,
@@ -168,8 +175,10 @@
 		58659BEE2BAAD0DB006E14C1 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				58659BF02BAAD143006E14C1 /* ApiConnector.swift */,
+				58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */,
+				58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */,
 				58659BFD2BAAD79B006E14C1 /* Api.swift */,
+				58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */,
 				58D164AF2BAB971800DE08BF /* JSReturnValue.swift */,
 				58D164AD2BAB961D00DE08BF /* CallApiError.swift */,
 			);
@@ -291,6 +300,7 @@
 				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
 				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
+				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */,
 				58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */,
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
@@ -303,9 +313,11 @@
 				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift in Sources */,
 				58DDF7742BA86FEA003D9628 /* OffsetReporting.swift in Sources */,
 				58511A892BA37F1400E08053 /* App.swift in Sources */,
+				58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */,
 				58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */,
 				58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */,
-				58659BF12BAAD143006E14C1 /* ApiConnector.swift in Sources */,
+				58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */,
+				58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */,
 				58DDF78E2BA97802003D9628 /* TransactionsSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

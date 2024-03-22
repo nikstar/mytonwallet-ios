@@ -2,14 +2,16 @@
 
 import Foundation
 import WebKit
+import OSLog
 
 private let log = fileLog()
 
-
-class ApiConnector: NSObject {
+final class JSCoreConnection: NSObject {
     
     private var webView: WKWebView! = nil
     private var userContentController: WKUserContentController! = nil
+    private let requestProxy = RequestProxy()
+    
     
     private let root: URL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "src")!
     
@@ -17,8 +19,8 @@ class ApiConnector: NSObject {
         super.init()
         
         let config = WKWebViewConfiguration()
-        config.setURLSchemeHandler(self, forURLScheme: "api-https")
-        config.setURLSchemeHandler(self, forURLScheme: "api-http")
+        config.setURLSchemeHandler(requestProxy, forURLScheme: "api-https")
+        config.setURLSchemeHandler(requestProxy, forURLScheme: "api-http")
         
         config.applicationNameForUserAgent = "MyTonWallet-iOS"
         
@@ -55,7 +57,7 @@ class ApiConnector: NSObject {
 }
 
 
-extension ApiConnector: WKNavigationDelegate {
+extension JSCoreConnection: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
         log.debug("\(#function) \(navigationAction.request.httpMethod?.description ?? "") \(navigationAction.request.url?.absoluteString ?? "")")
@@ -83,53 +85,12 @@ extension ApiConnector: WKNavigationDelegate {
 }
 
 
-extension ApiConnector: WKURLSchemeHandler {
-    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
-        Task {
-            var request = urlSchemeTask.request
-            log.info("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0)")
-            guard let originalUrl = request.url else {
-                urlSchemeTask.didFailWithError(WKError(.unknown)); return
-            }
-            request.url = URL(string: originalUrl.absoluteString
-                .replacing(/^api-https:/, with: "https:")
-                .replacing(/^api-http:/, with: "http:")
-            )!
-            do {
-                let (data, response) = try await URLSession.shared.data(for: request)
-    
-                log.info("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0) => response bytes=\(data.count)")
-                
-                if let upstreamResponse = response as? HTTPURLResponse {
-                    if upstreamResponse.statusCode != 200 {
-                        log.error("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0) => statusCode=\(upstreamResponse.statusCode)" )
-                    }
-                    var headers = upstreamResponse.allHeaderFields as! [String: String]
-                    headers["Access-Control-Allow-Origin"] = "*"
-                    let response = HTTPURLResponse(url: originalUrl, statusCode: upstreamResponse.statusCode, httpVersion: nil, headerFields: headers)!
-                    urlSchemeTask.didReceive(response)
-                    urlSchemeTask.didReceive(data)
-                } else {
-                    urlSchemeTask.didReceive(response)
-                    urlSchemeTask.didReceive(data)
-                }
-    
-                urlSchemeTask.didFinish()
-            } catch {
-                log.error("\(request.httpMethod ?? "<no mehthod>") \(request.url?.absoluteString ?? "<>") body.length=\(request.httpBody?.count ?? 0) => error=\(error)" )
-                urlSchemeTask.didFailWithError(error)
-            }
-        }
-    }
-    
-    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
-        log.error("\(#function) \(urlSchemeTask.request.url?.absoluteString ?? "") stop not inplemented")
-    }
-}
-
-extension ApiConnector: WKScriptMessageHandler {
+extension JSCoreConnection: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         print(message.name, type(of: message.body), (message.body as? [String:Any])?["type"] as Any)
     }
 }
+
+
+
 

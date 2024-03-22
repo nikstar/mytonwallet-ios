@@ -4,6 +4,9 @@ import WebKit
 
 
 enum CallApiError: Error {
+    case emptyResonse(URLResponse)
+    case apiReturnedError(String)
+    case apiReturnParsingFailure(returnValue: JSReturnValue)
     case javascriptException(WKError, exceptionMessage: String?)
     case webkitError(NSError)
     case returnValueNil(method: String, args: [Any])

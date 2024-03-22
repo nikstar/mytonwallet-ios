@@ -21,25 +21,25 @@ struct JSReturnValue {
     }
     
     fileprivate init(value: Any, path: String, error: ErrorReason?) {
-        self.value = value
-        self.path = path
-        self.error = error
+        self._value = value
+        self._path = path
+        self._error = error
     }
     
-    var value: Any
-    var path: String = "."
-    var error: ErrorReason?
+    private var _value: Any
+    private var _path: String = "."
+    private var _error: ErrorReason?
     
     subscript(_ key: String) -> JSReturnValue {
-        guard error == nil else { return self }
-        if let kv = value as? [String: Any] {
+        guard _error == nil else { return self }
+        if let kv = _value as? [String: Any] {
             if let value = kv[key] {
-                return JSReturnValue(value: value, path: "\(path).\(key)", error: nil)
+                return JSReturnValue(value: value, path: "\(_path).\(key)", error: nil)
             } else {
-                return JSReturnValue(value: value, path: path, error: ErrorReason.keyNotFound(key: key))
+                return JSReturnValue(value: _value, path: _path, error: ErrorReason.keyNotFound(key: key))
             }
         } else {
-            return JSReturnValue(value: value, path: path, error: ErrorReason.notKeyValue)
+            return JSReturnValue(value: _value, path: _path, error: ErrorReason.notKeyValue)
         }
     }
     
@@ -48,26 +48,26 @@ struct JSReturnValue {
     }
     
     subscript(_ index: Int) -> JSReturnValue {
-        guard error == nil else { return self }
-        if let array = value as? [Any] {
+        guard _error == nil else { return self }
+        if let array = _value as? [Any] {
             if index < array.count {
-                return JSReturnValue(value: array[index], path: "\(path)[\(index)]", error: nil)
+                return JSReturnValue(value: array[index], path: "\(_path)[\(index)]", error: nil)
             } else {
-                return JSReturnValue(value: value, path: path, error: ErrorReason.indexOutOfBounds(index: index))
+                return JSReturnValue(value: _value, path: _path, error: ErrorReason.indexOutOfBounds(index: index))
             }
         } else {
-            return JSReturnValue(value: value, path: path, error: ErrorReason.notArray)
+            return JSReturnValue(value: _value, path: _path, error: ErrorReason.notArray)
         }
     }
     
     func `as`<T>(_ type: T.Type) throws -> T {
-        if let errorReason = self.error {
-            throw Error(reason: errorReason, path: path, value: value)
+        if let errorReason = self._error {
+            throw Error(reason: errorReason, path: _path, value: _value)
         }
-        if let value = value as? T {
+        if let value = _value as? T {
             return value
         } else {
-            throw Error(reason: .typeMismatch(expectedType: T.self), path: path, value: value)
+            throw Error(reason: .typeMismatch(expectedType: T.self), path: _path, value: _value)
         }
     }
 }

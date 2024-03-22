@@ -10,8 +10,10 @@ struct mytonwalletApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            RootView()
-            TestView()
+            RootView()
+                .overlay {
+                    TestView()
+                }
                 .preferredColorScheme(.light)
                 .environmentObject(model)
                 .environmentObject(api)
@@ -29,38 +31,66 @@ struct TestView: View {
     @EnvironmentObject private var api: Api
     
     var body: some View {
-        ZStack {
-            Color.white
+        ZStack(alignment: .top) {
+            Color.clear
             
             VStack {
-                Text("Hello")
                 Button(asyncAction: {
-
                     do {
-                        let v = try await api.callApi("importMnemonic", "mainnet", ["foo"], "password", returning: Bool.self)
+                        let v = try await api.importMnemonic(mnemonic: mnemonic1, password: "password")
                         print(v)
                     } catch {
                         print(error)
                     }
-                    
-
                 }) {
-                    Text("test async 1")
+                    Text("importMnemonic")
                 }
+                
                 Button(asyncAction: {
                     
                     do {
-                        let v = try await api.callApi("validateMnemonic", ["foo"], returning: Bool.self)
-                        print(v)
+//                        let info = try await api.getWalletInformation(address: address0)
+//                        let lt = try info.result.last_transaction_id.lt.as(String.self)
+//                        let hash = try info.result.last_transaction_id.hash.as(String.self)
+//                        let v = try await api.getTransactions(address: address0, limit: 20, archival: true)
+//                        print(v)
+//                        print(v)
+                        let tokens = try await api.callApi("fetchTokenBalances", accountId0)
+                        print(tokens)
                     } catch {
                         print(error)
                     }
-                    
-                    
-                    
                 }) {
-                    Text("test async 2")
+                    Text("locad.")
                 }
+                
+                Button(asyncAction: {
+                    
+                    do {
+                        let v = try await api.getTransactions(address: address0, limit: 20)
+                        print(v as Any)
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("getTransactions")
+                }
+                
+                Button(asyncAction: {
+                    
+                    do {
+                        let v = try await api.activateAccount(accountId: accountId0)
+                        print(v as Any)
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("activateAccount")
+                }
+                
+                
+
+                
             }
             .buttonStyle(.borderedProminent)
 
