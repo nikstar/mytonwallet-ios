@@ -103,10 +103,9 @@ struct MainWalletView: View {
             }
             
         )
+        .toolbarColorScheme(.dark, for: .navigationBar)
         .overlay(alignment: .top) { // animating account balance size
-            
             mainAccountValueAnimated
-
         }
         .animation(.easeOut(duration: 0.25), value: scrolledToTransactions)
     }

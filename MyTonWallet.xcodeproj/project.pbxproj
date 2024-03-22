@@ -14,16 +14,14 @@
 		580D09172BAD91BF00575E4B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09162BAD91BF00575E4B /* Lottie */; };
 		580D091A2BAD922100575E4B /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09192BAD922100575E4B /* Gzip */; };
 		58511A892BA37F1400E08053 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* App.swift */; };
-		58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A8A2BA37F1400E08053 /* ContentView.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
-		58511A902BA37F1600E08053 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */; };
 		58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */; };
 		58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */; };
 		58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */; };
 		58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */; };
 		58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */; };
 		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
-		58B6041B2BA437C100049146 /* src in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* src */; };
+		58B6041B2BA437C100049146 /* js-core in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* js-core */; };
 		58D164AE2BAB961D00DE08BF /* CallApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AD2BAB961D00DE08BF /* CallApiError.swift */; };
 		58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AF2BAB971800DE08BF /* JSReturnValue.swift */; };
 		58DDF7642BA81EB9003D9628 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7632BA81EB9003D9628 /* Model.swift */; };
@@ -52,6 +50,7 @@
 		58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BA2BAC3D66000246C4 /* Secret.swift */; };
 		58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */; };
 		58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */; };
+		58FBD28C2BADE215005F5F09 /* OverrideStatusBarColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,18 +58,16 @@
 		580D090E2BAD8B1A00575E4B /* PersitstentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersitstentState.swift; sourceTree = "<group>"; };
 		580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginFlow+Buttons.swift"; sourceTree = "<group>"; };
 		580D09122BAD912800575E4B /* Sticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
-		58511A852BA37F1400E08053 /* mytonwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mytonwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		58511A852BA37F1400E08053 /* MyTonWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTonWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58511A882BA37F1400E08053 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		58511A8A2BA37F1400E08053 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSCoreConnection.swift; sourceTree = "<group>"; };
 		58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+file_fileLog.swift"; sourceTree = "<group>"; };
 		58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+orThrow.swift"; sourceTree = "<group>"; };
 		58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+with.swift"; sourceTree = "<group>"; };
 		58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftUI.Button+asyncAction.swift"; sourceTree = "<group>"; };
 		58659BFD2BAAD79B006E14C1 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
-		58B6041A2BA437C100049146 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		58B6041A2BA437C100049146 /* js-core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "js-core"; sourceTree = "<group>"; };
 		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		58D164AD2BAB961D00DE08BF /* CallApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallApiError.swift; sourceTree = "<group>"; };
 		58D164AF2BAB971800DE08BF /* JSReturnValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSReturnValue.swift; sourceTree = "<group>"; };
@@ -92,6 +89,7 @@
 		58F4F5BA2BAC3D66000246C4 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestProxy.swift; sourceTree = "<group>"; };
 		58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPApi.swift; sourceTree = "<group>"; };
+		58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideStatusBarColor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,8 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				58F4F5BA2BAC3D66000246C4 /* Secret.swift */,
-				58511A872BA37F1400E08053 /* mytonwallet */,
-				58B6041A2BA437C100049146 /* src */,
+				58511A872BA37F1400E08053 /* MyTonWallet */,
+				58B6041A2BA437C100049146 /* js-core */,
 				58511A862BA37F1400E08053 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -138,12 +136,12 @@
 		58511A862BA37F1400E08053 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				58511A852BA37F1400E08053 /* mytonwallet.app */,
+				58511A852BA37F1400E08053 /* MyTonWallet.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		58511A872BA37F1400E08053 /* mytonwallet */ = {
+		58511A872BA37F1400E08053 /* MyTonWallet */ = {
 			isa = PBXGroup;
 			children = (
 				58511A882BA37F1400E08053 /* App.swift */,
@@ -153,15 +151,7 @@
 				58659BF22BAAD647006E14C1 /* Utils */,
 				58659BEF2BAAD0E4006E14C1 /* Resources */,
 			);
-			path = mytonwallet;
-			sourceTree = "<group>";
-		};
-		58511A8E2BA37F1600E08053 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				58511A8F2BA37F1600E08053 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
+			path = MyTonWallet;
 			sourceTree = "<group>";
 		};
 		58659BEA2BAAD094006E14C1 /* Model */ = {
@@ -182,7 +172,6 @@
 				58DDF7692BA82F8D003D9628 /* RootView.swift */,
 				58DDF7792BA88130003D9628 /* GenericEnvironment.swift */,
 				58DDF7752BA87572003D9628 /* ParentOffset.swift */,
-				58511A8A2BA37F1400E08053 /* ContentView.swift */,
 				58DDF7772BA87A29003D9628 /* Scaffold.swift */,
 				58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */,
 				58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */,
@@ -214,7 +203,6 @@
 			children = (
 				58B6041C2BA43A5200049146 /* Info.plist */,
 				58511A8C2BA37F1600E08053 /* Assets.xcassets */,
-				58511A8E2BA37F1600E08053 /* Preview Content */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -226,6 +214,7 @@
 				58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */,
 				58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */,
 				58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */,
+				58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -233,9 +222,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		58511A842BA37F1400E08053 /* mytonwallet */ = {
+		58511A842BA37F1400E08053 /* MyTonWallet */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 58511A932BA37F1600E08053 /* Build configuration list for PBXNativeTarget "mytonwallet" */;
+			buildConfigurationList = 58511A932BA37F1600E08053 /* Build configuration list for PBXNativeTarget "MyTonWallet" */;
 			buildPhases = (
 				58511A812BA37F1400E08053 /* Sources */,
 				58511A822BA37F1400E08053 /* Frameworks */,
@@ -245,7 +234,7 @@
 			);
 			dependencies = (
 			);
-			name = mytonwallet;
+			name = MyTonWallet;
 			packageProductDependencies = (
 				58DDF77C2BA8E491003D9628 /* Algorithms */,
 				58DDF77F2BA8E782003D9628 /* BitCollections */,
@@ -259,7 +248,7 @@
 				580D09192BAD922100575E4B /* Gzip */,
 			);
 			productName = mytonwallet;
-			productReference = 58511A852BA37F1400E08053 /* mytonwallet.app */;
+			productReference = 58511A852BA37F1400E08053 /* MyTonWallet.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -277,7 +266,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 58511A802BA37F1400E08053 /* Build configuration list for PBXProject "mytonwallet" */;
+			buildConfigurationList = 58511A802BA37F1400E08053 /* Build configuration list for PBXProject "MyTonWallet" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -296,7 +285,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				58511A842BA37F1400E08053 /* mytonwallet */,
+				58511A842BA37F1400E08053 /* MyTonWallet */,
 			);
 		};
 /* End PBXProject section */
@@ -306,8 +295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				58B6041B2BA437C100049146 /* src in Resources */,
-				58511A902BA37F1600E08053 /* Preview Assets.xcassets in Resources */,
+				58B6041B2BA437C100049146 /* js-core in Resources */,
 				58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,6 +317,7 @@
 				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
 				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
+				58FBD28C2BADE215005F5F09 /* OverrideStatusBarColor.swift in Sources */,
 				580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */,
 				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */,
@@ -339,7 +328,6 @@
 				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
 				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
 				58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */,
-				58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */,
 				58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */,
 				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift in Sources */,
 				58DDF7742BA86FEA003D9628 /* OffsetReporting.swift in Sources */,
@@ -483,14 +471,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"mytonwallet/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = mytonwallet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -513,14 +501,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"mytonwallet/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = mytonwallet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -539,7 +527,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		58511A802BA37F1400E08053 /* Build configuration list for PBXProject "mytonwallet" */ = {
+		58511A802BA37F1400E08053 /* Build configuration list for PBXProject "MyTonWallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58511A912BA37F1600E08053 /* Debug */,
@@ -548,7 +536,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		58511A932BA37F1600E08053 /* Build configuration list for PBXNativeTarget "mytonwallet" */ = {
+		58511A932BA37F1600E08053 /* Build configuration list for PBXNativeTarget "MyTonWallet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				58511A942BA37F1600E08053 /* Debug */,

@@ -5,8 +5,8 @@ import Observation
 @main
 struct mytonwalletApp: App {
     
-    private let model: Model = Model.load()
-//    private let model: Model = Model.testUI()
+//    private let model: Model = Model.load()
+    private let model: Model = Model.testUI()
     private let api: Api = Api()
     
     var body: some Scene {

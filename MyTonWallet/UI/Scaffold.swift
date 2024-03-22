@@ -35,7 +35,7 @@ struct Scaffold2<V: View, V2: View>: View {
                     }
                     
             }
-            .animation(.easeInOut(duration: 0.200), value: transition)
+            .animation(.easeInOut(duration: 0.000), value: transition)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

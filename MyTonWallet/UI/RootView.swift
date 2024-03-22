@@ -28,11 +28,18 @@ struct RootView: View {
             UnderConstructionView()
                 .tabItem { Label("Settings", image: "Tab.Settings") }
                 .tag(Tab.settings)
-        }
+        }        
         .overlay {
-            if !model.persistentState.loggedIn {
-                LoginFlow()
+            Group {
+                if !model.persistentState.loggedIn {
+                    LoginFlow()
+                        .transition(.asymmetric(
+                            insertion: .opacity.animation(.easeIn(duration: 0.2)),
+                            removal: .scale(scale: 1.1, anchor: .bottom).combined(with: .opacity).animation(.easeOut(duration: 0.25))
+                        ))
+                }
             }
+            .animation(.default, value: !model.persistentState.loggedIn)
         }
     }
 }

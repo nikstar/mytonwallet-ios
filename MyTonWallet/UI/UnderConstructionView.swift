@@ -6,7 +6,7 @@ struct UnderConstructionView: View {
     
     var body: some View {
         ZStack {
-            Color.white // make adaptable for dark theme
+            Color.white
             
             Text("Under Construction")
                 .foregroundStyle(.secondary)

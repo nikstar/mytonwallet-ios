@@ -13,7 +13,7 @@ final class JSCoreConnection: NSObject {
     private let requestProxy = RequestProxy()
     
     
-    private let root: URL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "src")!
+    private let root: URL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "js-core")!
     
     override init() {
         super.init()
