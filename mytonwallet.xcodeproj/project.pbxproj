@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D090C2BAD8A6400575E4B /* LoginFlow.swift */; };
+		580D090F2BAD8B1A00575E4B /* PersitstentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D090E2BAD8B1A00575E4B /* PersitstentState.swift */; };
+		580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */; };
+		580D09142BAD912800575E4B /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09122BAD912800575E4B /* Sticker.swift */; };
+		580D09172BAD91BF00575E4B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09162BAD91BF00575E4B /* Lottie */; };
+		580D091A2BAD922100575E4B /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09192BAD922100575E4B /* Gzip */; };
 		58511A892BA37F1400E08053 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* App.swift */; };
 		58511A8B2BA37F1400E08053 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A8A2BA37F1400E08053 /* ContentView.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
@@ -49,6 +55,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		580D090C2BAD8A6400575E4B /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
+		580D090E2BAD8B1A00575E4B /* PersitstentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersitstentState.swift; sourceTree = "<group>"; };
+		580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginFlow+Buttons.swift"; sourceTree = "<group>"; };
+		580D09122BAD912800575E4B /* Sticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
 		58511A852BA37F1400E08053 /* mytonwallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mytonwallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58511A882BA37F1400E08053 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		58511A8A2BA37F1400E08053 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,9 +101,11 @@
 			files = (
 				58DDF7862BA8E782003D9628 /* HashTreeCollections in Frameworks */,
 				58DDF7822BA8E782003D9628 /* Collections in Frameworks */,
+				580D09172BAD91BF00575E4B /* Lottie in Frameworks */,
 				58DDF7842BA8E782003D9628 /* DequeModule in Frameworks */,
 				58DDF7802BA8E782003D9628 /* BitCollections in Frameworks */,
 				58DDF7882BA8E782003D9628 /* HeapModule in Frameworks */,
+				580D091A2BAD922100575E4B /* Gzip in Frameworks */,
 				58DDF78A2BA8E782003D9628 /* OrderedCollections in Frameworks */,
 				58DDF78C2BA8E782003D9628 /* _RopeModule in Frameworks */,
 				58DDF77D2BA8E491003D9628 /* Algorithms in Frameworks */,
@@ -103,6 +115,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		580D09102BAD907B00575E4B /* Login Flow */ = {
+			isa = PBXGroup;
+			children = (
+				580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */,
+				580D09122BAD912800575E4B /* Sticker.swift */,
+				580D090C2BAD8A6400575E4B /* LoginFlow.swift */,
+			);
+			path = "Login Flow";
+			sourceTree = "<group>";
+		};
 		58511A7C2BA37F1400E08053 = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				58DDF7632BA81EB9003D9628 /* Model.swift */,
+				580D090E2BAD8B1A00575E4B /* PersitstentState.swift */,
 				58DDF7652BA81FDF003D9628 /* UIState.swift */,
 				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
 				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */,
@@ -168,6 +191,7 @@
 				58DDF78F2BA97B16003D9628 /* CellDivider.swift */,
 				58DDF78D2BA97802003D9628 /* TransactionsSection.swift */,
 				58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */,
+				580D09102BAD907B00575E4B /* Login Flow */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -231,6 +255,8 @@
 				58DDF7872BA8E782003D9628 /* HeapModule */,
 				58DDF7892BA8E782003D9628 /* OrderedCollections */,
 				58DDF78B2BA8E782003D9628 /* _RopeModule */,
+				580D09162BAD91BF00575E4B /* Lottie */,
+				580D09192BAD922100575E4B /* Gzip */,
 			);
 			productName = mytonwallet;
 			productReference = 58511A852BA37F1400E08053 /* mytonwallet.app */;
@@ -263,6 +289,8 @@
 			packageReferences = (
 				58DDF77B2BA8E490003D9628 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				58DDF77E2BA8E782003D9628 /* XCRemoteSwiftPackageReference "swift-collections" */,
+				580D09152BAD91BF00575E4B /* XCRemoteSwiftPackageReference "lottie-spm" */,
+				580D09182BAD922100575E4B /* XCRemoteSwiftPackageReference "GzipSwift" */,
 			);
 			productRefGroup = 58511A862BA37F1400E08053 /* Products */;
 			projectDirPath = "";
@@ -294,14 +322,17 @@
 				58DDF7642BA81EB9003D9628 /* Model.swift in Sources */,
 				58DDF76E2BA84CFB003D9628 /* Token+TokenValue.swift in Sources */,
 				58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */,
+				580D090F2BAD8B1A00575E4B /* PersitstentState.swift in Sources */,
 				58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */,
 				58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */,
 				58D164AE2BAB961D00DE08BF /* CallApiError.swift in Sources */,
 				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
 				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
+				580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */,
 				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */,
+				580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */,
 				58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */,
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
@@ -317,6 +348,7 @@
 				58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */,
 				58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */,
 				58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */,
+				580D09142BAD912800575E4B /* Sticker.swift in Sources */,
 				58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */,
 				58DDF78E2BA97802003D9628 /* TransactionsSection.swift in Sources */,
 			);
@@ -528,6 +560,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		580D09152BAD91BF00575E4B /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.1;
+			};
+		};
+		580D09182BAD922100575E4B /* XCRemoteSwiftPackageReference "GzipSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/1024jp/GzipSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.0.1;
+			};
+		};
 		58DDF77B2BA8E490003D9628 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
@@ -547,6 +595,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		580D09162BAD91BF00575E4B /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 580D09152BAD91BF00575E4B /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+		580D09192BAD922100575E4B /* Gzip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 580D09182BAD922100575E4B /* XCRemoteSwiftPackageReference "GzipSwift" */;
+			productName = Gzip;
+		};
 		58DDF77C2BA8E491003D9628 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 58DDF77B2BA8E490003D9628 /* XCRemoteSwiftPackageReference "swift-algorithms" */;

@@ -5,13 +5,14 @@ import Observation
 @main
 struct mytonwalletApp: App {
     
-    private let model: Model = Model.testUI()
+    private let model: Model = Model.load()
+//    private let model: Model = Model.testUI()
     private let api: Api = Api()
     
     var body: some Scene {
         WindowGroup {
             RootView()
-                .overlay {
+                .overlay(alignment: .topTrailing) {
                     TestView()
                 }
                 .preferredColorScheme(.light)
@@ -31,10 +32,7 @@ struct TestView: View {
     @EnvironmentObject private var api: Api
     
     var body: some View {
-        ZStack(alignment: .top) {
-            Color.clear
-            
-            VStack {
+        VStack(alignment: .trailing) {
                 Button(asyncAction: {
                     do {
                         let v = try await api.importMnemonic(mnemonic: mnemonic1, password: "password")
@@ -87,12 +85,6 @@ struct TestView: View {
                 }) {
                     Text("activateAccount")
                 }
-                
-                
-
-                
-            }
-            .buttonStyle(.borderedProminent)
 
         }
         

@@ -3,6 +3,8 @@ import SwiftUI
 
 struct RootView: View {
     
+    @EnvironmentObject private var model: Model
+    
     enum Tab: Int, Hashable {
         case wallet, assets, browser, settings
     }
@@ -27,6 +29,10 @@ struct RootView: View {
                 .tabItem { Label("Settings", image: "Tab.Settings") }
                 .tag(Tab.settings)
         }
-        
+        .overlay {
+            if !model.persistentState.loggedIn {
+                LoginFlow()
+            }
+        }
     }
 }

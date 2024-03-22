@@ -49,11 +49,11 @@ extension Api {
     // MARK: - Auth
     
     func generateMnemomic() async throws -> [String] {
-        try await callApi("generateMnemomic", returning: [String].self)
+        try await callApi("generateMnemonic", returning: [String].self)
     }
     
-    func createWallet(network: ApiNetwork, mnemonic: [String], password: String) async throws -> (accountId: String, address: String) {
-        let result = try await callApi("createWallet", network, mnemonic, password)
+    func createWallet(mnemonic: [String], password: String) async throws -> (accountId: String, address: String) {
+        let result = try await callApi("createWallet", network.rawValue, mnemonic, password)
         if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
             return (accountId, address)
         } else if let error = try? result.error.as(String.self) {
@@ -63,7 +63,7 @@ extension Api {
         }
     }
 
-    func validateMnemonic(mnemonic: String) async throws -> Bool {
+    func validateMnemonic(mnemonic: [String]) async throws -> Bool {
         try await callApi("validateMnemonic", mnemonic, returning: Bool.self)
     }
     
