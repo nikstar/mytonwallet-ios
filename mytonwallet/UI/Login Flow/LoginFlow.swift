@@ -93,7 +93,7 @@ fileprivate struct Start: View {
         } message: {
             Text(unhandledErrorMessage)
         }
-        .navigationTitle("")
+//        .navigationTitle("")
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .navigationBar)
@@ -134,81 +134,106 @@ struct SecretWords: View {
     
     @FocusState private var focusedTextField: Int?
     
+    @Namespace private var submitButton
+    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-//                Sticker("Recovery Phrase", play: .playOnce)
-//                    .padding(.bottom, 20)
-                Text("24 Secret Words")
-                    .font(.title.bold())
-                    .onAppear { navigationTitle = "" }
-                    .onDisappear { navigationTitle = "Import Wallet" }
-                    .padding(.bottom, 12)
-                    .padding(.top, 24)
-                Text("You can restore access to your wallet by entering the 24 secret words that you wrote down when creating the wallet.")
-                    .padding(.bottom, 32)
-                ForEach(0..<24) { i in
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text("\(i+1)  ")
-                            .font(.body.monospacedDigit())
-                            .foregroundColor(.secondary)
-                            .frame(minWidth: 26, alignment: .trailing)
-                        TextField("", text: $words[i])
-                            .textCase(.lowercase)
-                            .textInputAutocapitalization(.never)
-                            .frame(maxWidth: .infinity)
-                            .focused($focusedTextField, equals: i)
-                            .onChange(of: words[i]) { value in
-                                if focusedTextField == i {
-                                    print(i, value, "==")
-                                    let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
-                                    if insertedWords.count > 1 {
-                                        var words = self.words
-                                        for (j, w) in insertedWords.enumerated() {
-                                            if i+j >= words.count { break }
-                                            words[i+j] = String(w)
+        ScrollViewReader { scrollView in
+            ScrollView {
+                VStack(spacing: 0) {
+                    Text("24 Secret Words")
+                        .font(.title.bold())
+                        .onAppear {
+                            navigationTitle = ""
+                        }
+//                        .onDisappear {
+//                            navigationTitle = "Import Wallet"
+//                        }
+                        .padding(.bottom, 12)
+                        .padding(.top, 24)
+
+                    Text("You can restore access to your wallet by entering the 24 secret words that you wrote down when creating the wallet.")
+                        .padding(.bottom, 32)
+
+                    ForEach(0..<24) { i in
+                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                            Text("\(i+1)  ")
+                                .font(.body.monospacedDigit())
+                                .foregroundColor(.secondary)
+                                .frame(minWidth: 26, alignment: .trailing)
+                            TextField("", text: $words[i])
+                                .textCase(.lowercase)
+                                .textInputAutocapitalization(.never)
+                                .frame(maxWidth: .infinity)
+                                .focused($focusedTextField, equals: i)
+                                .onChange(of: words[i]) { value in
+                                    if focusedTextField == i {
+                                        print(i, value, "==")
+                                        let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
+                                        if insertedWords.count == words.count {
+                                            words = insertedWords.map(String.init)
+                                            focusedTextField = words.count - 1
+                                            withAnimation(.default) {
+                                                scrollView.scrollTo(submitButton, anchor: .bottom)
+                                            }
+                                        } else if insertedWords.count > 1 {
+                                            var words = self.words
+                                            for (j, w) in insertedWords.enumerated() {
+                                                if i+j >= words.count { break }
+                                                words[i+j] = String(w)
+                                            }
+                                            self.words = words
+                                            focusedTextField = min(i + insertedWords.count, words.count - 1)
+                                            if i + insertedWords.count >= words.count - 3 {
+                                                withAnimation(.default) {
+                                                    scrollView.scrollTo(submitButton, anchor: .bottom)
+                                                }
+                                            }
+                                        } else if value.last == " "  {
+                                            words[i] = String(value.dropLast())
+                                            focusedTextField = min(i + 1, words.count - 1)
+                                            if i + 1 >= words.count - 2 {
+                                                withAnimation(.default) {
+                                                    scrollView.scrollTo(submitButton, anchor: .bottom)
+                                                }
+                                            }
                                         }
-                                        self.words = words
-                                        focusedTextField = min(i + insertedWords.count, words.count - 1)
-                                    } else if value.last == " "  {
-                                        words[i] = String(value.dropLast())
-                                        focusedTextField = min(i + 1, words.count - 1)
                                     }
                                 }
-                            }
+                        }
+                        .padding(.all, 14)
+                        .background {
+                            Color(UIColor.tertiarySystemFill).cornerRadius(10)
+                        }
+                        .padding(.bottom, 16)
                     }
-                    .padding(.all, 14)
-                    .background {
-                        Color(UIColor.tertiarySystemFill).cornerRadius(10)
+                    .multilineTextAlignment(.leading)
+                    
+                    
+                    Button(asyncAction: onContinue) {
+                        Text("Continue")
                     }
-                    .padding(.bottom, 16)
+                    .buttonStyle(.wallet())
+                    .padding(.top, 16)
+                    .padding(.bottom, 32)
+                    .id(submitButton)
                 }
-                .multilineTextAlignment(.leading)
-                
-                
-                Button(asyncAction: onContinue) {
-                    Text("Continue")
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .padding(.bottom, 8)
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Wrong Phrase"),
+                        message: Text("Looks like you entered an invalid mnemonic phrase."),
+                        dismissButton: .cancel(Text("Close"))
+                    )
                 }
-                .buttonStyle(.wallet())
-                .padding(.top, 16)
-                .padding(.bottom, 32)
-            }
-            .multilineTextAlignment(.center)
-            .padding(.horizontal, 32)
-            .padding(.bottom, 8)
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Wrong Phrase"),
-                    message: Text("Looks like you entered an invalid mnemonic phrase."),
-                    dismissButton: .cancel(Text("Close"))
-                )
-            }
-            .navigationTitle(navigationTitle)
-            .navigationBarBackButtonHidden(false)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.visible, for: .navigationBar)
-            .onAppear {
-                focusedTextField = 0
+                .navigationTitle(navigationTitle)
+                .navigationBarBackButtonHidden(false)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar(.visible, for: .navigationBar)
+                .onAppear {
+                    focusedTextField = 0
+                }
             }
         }
     }
@@ -263,7 +288,7 @@ struct Congratulations: View {
         .padding(.horizontal, 32)
         .padding(.bottom, 40)
 
-        .navigationTitle("")
+//        .navigationTitle("")
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .navigationBar)
@@ -379,7 +404,7 @@ struct ConfirmPassword: View {
                 }
             }
         }
-        .navigationTitle("")
+//        .navigationTitle("")
         .navigationBarBackButtonHidden(false)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
