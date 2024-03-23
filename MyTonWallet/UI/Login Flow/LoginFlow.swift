@@ -57,7 +57,7 @@ struct LoginFlow: View {
 
 fileprivate struct Start: View {
     
-    @EnvironmentObject private var api: Api
+    private var api: Api { model.api }
     @EnvironmentObject private var model: Model
     @EnvironmentObject private var loginFlowModel: LoginFlowModel
     
@@ -102,7 +102,7 @@ fileprivate struct Start: View {
     func onCreate() async {
         do {
             let words = try await api.generateMnemomic()
-            let (accountId, _) = try await api.createWallet(mnemonic: words, password: model.persistentState.password)
+            let (accountId, _) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
             loginFlowModel.preliminaryAccountId = accountId
             loginFlowModel.isNewAccount = true
             loginFlowModel.path = [.created]
@@ -123,7 +123,7 @@ fileprivate struct Start: View {
 
 struct SecretWords: View {
     
-    @EnvironmentObject private var api: Api
+    private var api: Api { model.api }
     @EnvironmentObject private var model: Model
     @EnvironmentObject private var loginFlowModel: LoginFlowModel
     
@@ -241,7 +241,7 @@ struct SecretWords: View {
     func onContinue() async {
         do {
             if try await api.validateMnemonic(mnemonic: words) {
-                let (accountId, _) = try await api.createWallet(mnemonic: words, password: model.persistentState.password)
+                let (accountId, _) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
                 loginFlowModel.preliminaryAccountId = accountId
                 loginFlowModel.isNewAccount = false
                 loginFlowModel.path = [.created]

@@ -8,13 +8,16 @@ private let log = fileLog()
 
 final class JSCoreConnection: NSObject {
     
+    var isReady: Bool = false
+    
     private var webView: WKWebView! = nil
     private var userContentController: WKUserContentController! = nil
     private let requestProxy = RequestProxy()
-    
-    
+
     private let root: URL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "js-core")!
     
+    private var waitCallbacks: [() -> ()] = []
+ 
     override init() {
         super.init()
         
@@ -37,11 +40,24 @@ final class JSCoreConnection: NSObject {
         webView.navigationDelegate = self
         
         webView.loadFileURL(root, allowingReadAccessTo: root.deletingLastPathComponent())
+        
+    }
+    
+    
+    /// waits until script is loaded and api is ready
+    func waitUntilReady() async {
+        if isReady { return }
+        await withUnsafeContinuation { continuation in
+            self.waitCallbacks.append {
+                continuation.resume()
+            }
+        }
     }
     
     
     func callApi(method: String, args: [Any]) async throws -> JSReturnValue? {
         do {
+            await waitUntilReady()
             let result = try await webView.callAsyncJavaScript("return await window.wallet.callApi('\(method)', ...args)", arguments: ["args": args], contentWorld: .page)
             if let result {
                 return JSReturnValue(result)
@@ -59,16 +75,11 @@ final class JSCoreConnection: NSObject {
 
 extension JSCoreConnection: WKNavigationDelegate {
     
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        log.debug("\(#function) \(navigationAction.request.httpMethod?.description ?? "") \(navigationAction.request.url?.absoluteString ?? "")")
-        return .allow
-    }
-    
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
-        if let response = navigationResponse.response as? HTTPURLResponse, response.statusCode != 200 {
-            log.error("\(#function) response statusCode=\(response.statusCode) \(response.url?.absoluteString ?? "")")
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        isReady = true
+        for waitCallback in waitCallbacks {
+            waitCallback()
         }
-        return .allow
     }
     
     // MARK: Debugging provisional navigation

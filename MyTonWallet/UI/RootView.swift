@@ -14,21 +14,28 @@ struct RootView: View {
     var body: some View {
         TabView(selection: $currentTab) {
             MainWalletView()
+//            UnderConstructionView()
+//                .toolbarColorScheme(.light, for: .tabBar)
                 .tabItem { Label("Wallet", image: "Tab.Wallet") }
                 .tag(Tab.wallet)
+                
             
             UnderConstructionView()
+                .toolbarColorScheme(.light, for: .tabBar)
                 .tabItem { Label("Assets", image: "Tab.Assets") }
                 .tag(Tab.assets)
             
             UnderConstructionView()
+                .toolbarColorScheme(.light, for: .tabBar)
                 .tabItem { Label("Browser", image: "Tab.Browser") }
                 .tag(Tab.browser)
 
             UnderConstructionView()
+                .toolbarColorScheme(.light, for: .tabBar)
                 .tabItem { Label("Settings", image: "Tab.Settings") }
                 .tag(Tab.settings)
-        }        
+                
+        }
         .overlay {
             Group {
                 if !model.persistentState.loggedIn {
@@ -41,5 +48,11 @@ struct RootView: View {
             }
             .animation(.default, value: !model.persistentState.loggedIn)
         }
+        .onChange(of: model.persistentState) { persistentState in
+            Task.detached(priority: .background) {
+                persistentState.save()
+            }
+        }
+
     }
 }

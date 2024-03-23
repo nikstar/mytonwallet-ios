@@ -21,7 +21,9 @@ struct Scaffold2<V: View, V2: View>: View {
                     .background {
                         ZStack {
                             topBarBackgroundColor.opacity(transition ? 0 : 1)
-                            Rectangle().fill( Material.bar .opacity(transition ? 1 : 0))
+                            Rectangle().fill( 
+                                Material.regular.opacity(transition ? 1 : 0))
+                                .environment(\.colorScheme, .light)
                         }
                         .ignoresSafeArea()
                     }

@@ -15,25 +15,19 @@ struct TransactionsSection: View {
     @State private var groupedTransactions: OrderedDictionary<DateComponents, [Transaction]> = [:]
     
     var body: some View {
-        ZStack(alignment: .top) {
-            Color.white
-            
+//        return Color.mainWalletBackground
+//            .frame(minHeight: 1000)
+//            .toolbarColorScheme(.light, for: .bottomBar)
+//            .toolbarColorScheme(.light, for: .tabBar)
+
             list
             .padding(.bottom, 32)
-         
-        }
         .frame(minHeight: 1000)
         .foregroundStyle(.black)
         .background(Color.white)
         .clipShape(
             UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16), style: .continuous)
         )
-        .background {
-            Color.mainWalletBackground
-                .overlay {
-                    Color.white.opacity(transitionToTransactionsProgress)
-                }
-        }
         .sheet(item: $presentedTransaction) { presentedTransaction in
             TransactionDetailsSheet(transaction: presentedTransaction)
         }
@@ -47,6 +41,7 @@ struct TransactionsSection: View {
                 Calendar.current.dateComponents([.year, .month, .day], from: $0.date)
             })
         }
+//        .environment(\.colorScheme, .light)
     }
     
     var list: some View {
@@ -81,8 +76,12 @@ struct TransactionsSection: View {
                         }
                     }
                 } footer: {
-                    Color(UIColor.systemGroupedBackground)
-                        .frame(height: 8)
+                    if date != groupedTransactions.keys.last {
+                        Color(UIColor.systemGroupedBackground)
+                            .environment(\.colorScheme, .light)
+                            .frame(height: 8)
+
+                    }
                 }
             }
         }

@@ -6,7 +6,11 @@ private let API_V2 = "https://tonhttpapi.mytonwallet.org/api/v2/"
 
 final class Api: ObservableObject {
     
-    let network: ApiNetwork = .mainnet
+    let network: ApiNetwork
+    
+    init(network: ApiNetwork = .mainnet) {
+        self.network = network
+    }
     
     private var jsCore = JSCoreConnection()
     private var httpApiV2 = HTTPApi(API_V2)
@@ -21,7 +25,6 @@ final class Api: ObservableObject {
         } else {
             throw CallApiError.returnValueNil(method: method, args: args)
         }
-        
     }
     
     func callApi(_ method: String, _ args: Any...) async throws -> JSReturnValue {
@@ -52,6 +55,7 @@ extension Api {
         try await callApi("generateMnemonic", returning: [String].self)
     }
     
+    /// Creates new wallet. When importing existing mnemonic use ``importMnemonic(mnemonic:password:)`` instead.
     func createWallet(mnemonic: [String], password: String) async throws -> (accountId: String, address: String) {
         let result = try await callApi("createWallet", network.rawValue, mnemonic, password)
         if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
@@ -67,6 +71,7 @@ extension Api {
         try await callApi("validateMnemonic", mnemonic, returning: Bool.self)
     }
     
+    /// Attemps to guess best wallet version.
     func importMnemonic(mnemonic: [String], password: String) async throws -> (accountId: String, address: String) {
         let result = try await callApi("importMnemonic", network.rawValue, mnemonic, password)
         if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
@@ -92,6 +97,16 @@ extension Api {
     
     func activateAccount(accountId: String/*, newestTxIds?: ApiTxIdBySlug*/) async throws {
         try await callApiReturningVoid("activateAccount", accountId)
+    }
+    
+    func fetchAddress(accountId: String) async throws -> String {
+        try await callApi("fetchAddress", accountId, returning: String.self)
+    }
+    
+    // MARK: - Tokens
+    
+    func fetchTokenBalances(accountId: String) async throws -> JSReturnValue {
+        try await callApi("fetchTokenBalances", accountId)
     }
     
     

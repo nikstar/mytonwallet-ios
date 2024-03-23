@@ -13,7 +13,7 @@ final class HTTPApi {
     }
     
     func get(_ method: String, params: [String: String]) async throws -> JSReturnValue {
-        var url = baseUrl
+        let url = baseUrl
             .appending(component: method, directoryHint: .notDirectory)
             .appending(queryItems: params.map { URLQueryItem(name: $0.key, value: $0.value) })
         let (data, response) = try await URLSession.shared.data(from: url)

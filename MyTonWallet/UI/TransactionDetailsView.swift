@@ -52,7 +52,7 @@ struct TransactionDetailsSheet: View {
             .padding(.top, 16)
         }
         .foregroundStyle(Color.black, Color.secondary)
-        .preferredColorScheme(.light)
+//        .preferredColorScheme(.light)
     }
 }
 
@@ -101,8 +101,6 @@ struct TransactionDetailsView: View {
         
     }
 }
-
-
 
 
 #Preview {

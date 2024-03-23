@@ -6,7 +6,6 @@ import Observation
 struct UIState: Hashable, Codable {
     
     var mainWalletTotalValue: CurrencyValue
-    var mainWalletLabel: String // Localized?
     
     var walletTokens: [WalletToken]
     
@@ -20,7 +19,6 @@ extension UIState {
     static func test() -> UIState {
         UIState(
             mainWalletTotalValue: CurrencyValue(currency: .usd, value: 12259.5),
-            mainWalletLabel: "Main Wallet",
             walletTokens: [
                 WalletToken(
                     tokenValue: TokenValue(token: Token(ticker: "USDT", name: "jUSDT", logo: ""), value: 10527),

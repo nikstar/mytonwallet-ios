@@ -51,6 +51,7 @@
 		58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */; };
 		58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */; };
 		58FBD28C2BADE215005F5F09 /* OverrideStatusBarColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */; };
+		58FBD2902BAECE22005F5F09 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FBD28F2BAECE21005F5F09 /* DebugView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +91,8 @@
 		58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestProxy.swift; sourceTree = "<group>"; };
 		58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPApi.swift; sourceTree = "<group>"; };
 		58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverrideStatusBarColor.swift; sourceTree = "<group>"; };
+		58FBD28F2BAECE21005F5F09 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
+		58FBD2912BAECF4E005F5F09 /* MyTonWallet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyTonWallet.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				58511A882BA37F1400E08053 /* App.swift */,
+				58FBD28F2BAECE21005F5F09 /* DebugView.swift */,
 				58659BEE2BAAD0DB006E14C1 /* API */,
 				58659BEA2BAAD094006E14C1 /* Model */,
 				58659BED2BAAD0C1006E14C1 /* UI */,
@@ -188,12 +192,12 @@
 		58659BEE2BAAD0DB006E14C1 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */,
-				58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */,
 				58659BFD2BAAD79B006E14C1 /* Api.swift */,
+				58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */,
+				58D164AD2BAB961D00DE08BF /* CallApiError.swift */,
+				58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */,
 				58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */,
 				58D164AF2BAB971800DE08BF /* JSReturnValue.swift */,
-				58D164AD2BAB961D00DE08BF /* CallApiError.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -201,6 +205,7 @@
 		58659BEF2BAAD0E4006E14C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				58FBD2912BAECF4E005F5F09 /* MyTonWallet.entitlements */,
 				58B6041C2BA43A5200049146 /* Info.plist */,
 				58511A8C2BA37F1600E08053 /* Assets.xcassets */,
 			);
@@ -319,6 +324,7 @@
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
 				58FBD28C2BADE215005F5F09 /* OverrideStatusBarColor.swift in Sources */,
 				580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */,
+				58FBD2902BAECE22005F5F09 /* DebugView.swift in Sources */,
 				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* MainWalletView.swift in Sources */,
 				580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */,
@@ -469,6 +475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MyTonWallet/MyTonWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -499,6 +506,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MyTonWallet/MyTonWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";

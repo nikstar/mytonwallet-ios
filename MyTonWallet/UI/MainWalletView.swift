@@ -3,6 +3,8 @@
 import SwiftUI
 import Observation
 
+private let log = fileLog()
+
 private let topColor = Color.mainWalletBackground
 private let bottomColor = Color.white
 
@@ -41,15 +43,17 @@ struct MainWalletView: View {
     
     private var topBarColor: Color { Color(UIColor.blend(color1: UIColor(topColor), intensity1: 1 - transitionToTransactionsProgress, color2: UIColor(bottomColor), intensity2: transitionToTransactionsProgress)) }
     
+    @State private var unhandledErrorAlertPresented: Bool = false
+    @State private var unhandledErrorMessage: String = ""
     
     var body: some View {
         
-        let _ = Self._printChanges()
+//        let _ = Self._printChanges()
         
         WithOffsetReporting(offset: $safeAreaOffset) {
             Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
                     ScrollView {
-                        VStack(spacing: 0) {
+                        VStack(spacing: -20) {
                             WithOffsetReporting(offset: $labelOffset) {
                                 AssetsSection()
                                     .overlay {
@@ -103,11 +107,25 @@ struct MainWalletView: View {
             }
             
         )
-        .toolbarColorScheme(.dark, for: .navigationBar)
         .overlay(alignment: .top) { // animating account balance size
             mainAccountValueAnimated
         }
         .animation(.easeOut(duration: 0.25), value: scrolledToTransactions)
+        .task(id: model.persistentState.accountId) {
+            do {
+//                try await Task.sleep(nanoseconds: 3_000_000_000)
+                try await model.fetchTokens()
+            } catch {
+                log.fault("Unhandled error: \(error)")
+
+            }
+        }                
+        .alert("Error", isPresented: $unhandledErrorAlertPresented) {
+            Button("OK", role: .cancel, action: { unhandledErrorAlertPresented = false })
+        } message: {
+            Text(unhandledErrorMessage)
+        }
+
     }
     
     @ViewBuilder
@@ -117,7 +135,7 @@ struct MainWalletView: View {
         let topOffset = max(labelOffset.y, endOffset)
         let progressRaw = clamp(1 - ((topOffset - endOffset) / 44))
         
-        MainWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.uiState.mainWalletTotalValue, label: model.uiState.mainWalletLabel, transitioned: scrolledToTransactions)
+        MainWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.uiState.mainWalletTotalValue, label: "Main Wallet", transitioned: scrolledToTransactions)
 
     }
 }
@@ -133,7 +151,7 @@ struct MainWalletValue: View {
     var transitioned: Bool
     
     var body: some View {
-        let _ = Self._printChanges()
+//        let _ = Self._printChanges()
         
         let progress = easeInOutBezier(progressRaw)
         
@@ -153,12 +171,13 @@ struct MainWalletValue: View {
                 )
             )
             .font(.system(size: size1, weight: .semibold))
-            .foregroundStyle(transitioned ? .primary : Color.white)
+            .foregroundStyle(transitioned ? Color.black : Color.white)
             
             Text(label)
                 .font(.system(size: size2, weight: .regular))
                 .foregroundStyle(transitioned ? .secondary : Color(white: 1, opacity: 0.66))
         }
+        .environment(\.colorScheme, .light)
         .offset(y: topOffset)
         .ignoresSafeArea()
         .animation(.easeInOut(duration: 0.250), value: transitioned)
@@ -177,7 +196,8 @@ struct AssetsSection: View {
             walletTokens
         }
         .padding(.bottom, 16)
-        .background(Color.mainWalletBackground)
+        .padding(.bottom, 20)
+        .background(Color.mainWalletBackground, in: Rectangle())
     }
     
     var accountValue: some View {
