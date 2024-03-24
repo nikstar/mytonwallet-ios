@@ -167,7 +167,6 @@ struct SecretWords: View {
                                 .focused($focusedTextField, equals: i)
                                 .onChange(of: words[i]) { value in
                                     if focusedTextField == i {
-                                        print(i, value, "==")
                                         let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
                                         if insertedWords.count == words.count {
                                             words = insertedWords.map(String.init)

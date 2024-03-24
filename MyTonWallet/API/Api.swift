@@ -2,14 +2,30 @@
 import SwiftUI
 import Foundation
 
+private let log = fileLog()
+
 private let API_V2 = "https://tonhttpapi.mytonwallet.org/api/v2/"
 
 final class Api: ObservableObject {
     
     let network: ApiNetwork
     
-    init(network: ApiNetwork = .mainnet) {
+    var updates: AsyncCompactMapSequence<AsyncStream<JSReturnValue>, ApiUpdate>!
+    
+    
+    init(network: ApiNetwork) {
         self.network = network
+        self.updates =  jsCore.updates.compactMap { raw in
+            do {
+                let string = try raw.as(String.self)
+                let data = string.data(using: .utf8)!
+                let decoder = JSONDecoder()
+                return try decoder.decode(ApiUpdate.self, from: data)
+            } catch {
+                log.fault("Failed to decode api error=\(error) update: \("\(raw)")")
+                return nil
+            }
+        }
     }
     
     private var jsCore = JSCoreConnection()
@@ -20,10 +36,10 @@ final class Api: ObservableObject {
             do {
                 return try value.as(T.self)
             } catch {
-                throw CallApiError.returnTypeMismatch(method: method, args: args, expected: T.self, got: value)
+                throw ApiError.returnTypeMismatch(method: method, args: args, expected: T.self, got: value)
             }
         } else {
-            throw CallApiError.returnValueNil(method: method, args: args)
+            throw ApiError.returnValueNil(method: method, args: args)
         }
     }
     
@@ -31,13 +47,21 @@ final class Api: ObservableObject {
         if let value = try await jsCore.callApi(method: method, args: args) {
             return value
         } else {
-            throw CallApiError.returnValueNil(method: method, args: args)
+            throw ApiError.returnValueNil(method: method, args: args)
         }
     }
     
     func callApiReturningVoid(_ method: String, _ args: Any...) async throws {
         if let value = try await jsCore.callApi(method: method, args: args) {
-            throw CallApiError.unexpectedReturnValue(method: method, args: args, got: value)
+            throw ApiError.unexpectedReturnValue(method: method, args: args, got: value)
+        }
+    }
+    
+    func callApiReturningJSON(_ method: String, _ args: Any...) async throws -> Data {
+        if let value = try await jsCore.callApiJSON(method: method, args: args) {
+            return try value.as(String.self).data(using: .utf8)!
+        } else {
+            throw ApiError.returnValueNil(method: method, args: args)
         }
     }
     
@@ -61,9 +85,9 @@ extension Api {
         if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
             return (accountId, address)
         } else if let error = try? result.error.as(String.self) {
-            throw CallApiError.apiReturnedError(error)
+            throw ApiError.apiReturnedError(error)
         } else {
-            throw CallApiError.apiReturnParsingFailure(returnValue: result)
+            throw ApiError.apiReturnParsingFailure(returnValue: result)
         }
     }
 
@@ -77,9 +101,9 @@ extension Api {
         if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
             return (accountId, address)
         } else if let error = try? result.error.as(String.self) {
-            throw CallApiError.apiReturnedError(error)
+            throw ApiError.apiReturnedError(error)
         } else {
-            throw CallApiError.apiReturnParsingFailure(returnValue: result)
+            throw ApiError.apiReturnParsingFailure(returnValue: result)
             
         }
     }
@@ -90,7 +114,7 @@ extension Api {
     func getActiveAccountId() async throws -> String? {
         do {
             return try await callApi("getActiveAccountId", returning: String?.self)
-        } catch CallApiError.returnValueNil {
+        } catch ApiError.returnValueNil {
             return nil
         }
     }
@@ -105,8 +129,8 @@ extension Api {
     
     // MARK: - Tokens
     
-    func fetchTokenBalances(accountId: String) async throws -> JSReturnValue {
-        try await callApi("fetchTokenBalances", accountId)
+    func fetchTokenBalances(accountId: String) async throws -> Data {
+        try await callApiReturningJSON("fetchTokenBalances", accountId)
     }
     
     

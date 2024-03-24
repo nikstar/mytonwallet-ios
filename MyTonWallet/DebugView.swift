@@ -70,6 +70,19 @@ struct TestView: View {
             }) {
                 Text("getTransactions")
             }
+            
+            Button(asyncAction: {
+                
+                do {
+                    try await api.callApiReturningVoid("resetAccounts")
+                    
+                } catch {
+                    print(error)
+                }
+            }) {
+                Text("resetAccounts")
+            }
+            
         }
         .foregroundStyle(Color.white.opacity(0.5))
         .tint(Color.white.opacity(0.5))

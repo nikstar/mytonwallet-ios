@@ -10,6 +10,9 @@ final class JSCoreConnection: NSObject {
     
     var isReady: Bool = false
     
+    var updates: AsyncStream<JSReturnValue>
+    private var updatesContinuation: AsyncStream<JSReturnValue>.Continuation
+    
     private var webView: WKWebView! = nil
     private var userContentController: WKUserContentController! = nil
     private let requestProxy = RequestProxy()
@@ -19,6 +22,9 @@ final class JSCoreConnection: NSObject {
     private var waitCallbacks: [() -> ()] = []
  
     override init() {
+        
+        (self.updates, self.updatesContinuation) = AsyncStream.makeStream(of: JSReturnValue.self)
+        
         super.init()
         
         let config = WKWebViewConfiguration()
@@ -65,11 +71,28 @@ final class JSCoreConnection: NSObject {
                 return nil
             }
         } catch let error as WKError where error.errorCode == WKError.Code.javaScriptExceptionOccurred.rawValue {
-            throw CallApiError.javascriptException(error, exceptionMessage: (error.errorUserInfo["WKJavaScriptExceptionMessage"] as? String) ?? error.localizedDescription)
+            throw ApiError.javascriptException(error, exceptionMessage: (error.errorUserInfo["WKJavaScriptExceptionMessage"] as? String) ?? error.localizedDescription)
         } catch {
-            throw CallApiError.webkitError(error as NSError)
+            throw ApiError.webkitError(error as NSError)
         }
     }
+    
+    func callApiJSON(method: String, args: [Any]) async throws -> JSReturnValue? {
+        do {
+            await waitUntilReady()
+            let result = try await webView.callAsyncJavaScript("return await window.wallet.callApiJSON('\(method)', ...args)", arguments: ["args": args], contentWorld: .page)
+            if let result {
+                return JSReturnValue(result)
+            } else {
+                return nil
+            }
+        } catch let error as WKError where error.errorCode == WKError.Code.javaScriptExceptionOccurred.rawValue {
+            throw ApiError.javascriptException(error, exceptionMessage: (error.errorUserInfo["WKJavaScriptExceptionMessage"] as? String) ?? error.localizedDescription)
+        } catch {
+            throw ApiError.webkitError(error as NSError)
+        }
+    }
+
 }
 
 
@@ -98,7 +121,10 @@ extension JSCoreConnection: WKNavigationDelegate {
 
 extension JSCoreConnection: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print(message.name, type(of: message.body), (message.body as? [String:Any])?["type"] as Any)
+        guard message.name == "onUpdate" else { return }
+        let type: String = ((message.body as? [String:Any])?["type"] as? String) ?? "--"
+        log.debug("onUpdate: \(type)")
+        updatesContinuation.yield(JSReturnValue(message.body))
     }
 }
 

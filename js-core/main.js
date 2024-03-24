@@ -39601,17 +39601,17 @@ const IS_EXTENSION = ({}).IS_EXTENSION === '1';
 const IS_FIREFOX_EXTENSION = ({}).IS_FIREFOX_EXTENSION === '1';
 const IS_PACKAGED_ELECTRON = ({}).IS_PACKAGED_ELECTRON === '1';
 const IS_CAPACITOR = ({}).IS_CAPACITOR === '1';
-const ELECTRON_HOST_URL = 'https://dumb-host';
+const ELECTRON_HOST_URL = 'api-https://dumb-host';
 const INACTIVE_MARKER = '[Inactive]';
-const PRODUCTION_URL = 'https://mytonwallet.app';
-const BETA_URL = 'https://beta.mytonwallet.app';
-const BASE_URL = (/* unused pure expression or super */ null && ("https://mytonwallet.app"));
+const PRODUCTION_URL = 'api-https://mytonwallet.app';
+const BETA_URL = 'api-https://beta.mytonwallet.app';
+const BASE_URL = (/* unused pure expression or super */ null && ("api-https://mytonwallet.app"));
 const SWAP_FEE_ADDRESS = ({}).SWAP_FEE_ADDRESS || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
 const STRICTERDOM_ENABLED = DEBUG && !IS_PACKAGED_ELECTRON;
 const DEBUG_ALERT_MSG = 'Shoot!\nSomething went wrong, please see the error details in Dev Tools Console.';
 const PIN_LENGTH = 4;
 const NATIVE_BIOMETRICS_USERNAME = 'MyTonWallet';
-const NATIVE_BIOMETRICS_SERVER = 'https://mytonwallet.app';
+const NATIVE_BIOMETRICS_SERVER = 'api-https://mytonwallet.app';
 const MNEMONIC_COUNT = 24;
 const MNEMONIC_CHECK_COUNT = 3;
 const MOBILE_SCREEN_MAX_WIDTH = 700; // px
@@ -39648,17 +39648,17 @@ const TONAPIIO_TESTNET_URL = ({}).TONAPIIO_TESTNET_URL || 'api-https://tonapiio-
 const BRILLIANT_API_BASE_URL = ({}).BRILLIANT_API_BASE_URL || 'api-https://api.mytonwallet.org';
 const FRACTION_DIGITS = 9;
 const SHORT_FRACTION_DIGITS = 2;
-const MY_TON_WALLET_PROMO_URL = 'https://mytonwallet.io';
-const TELEGRAM_WEB_URL = 'https://web.telegram.org/a/';
-const TONSCAN_BASE_MAINNET_URL = 'https://tonscan.org/';
-const TONSCAN_BASE_TESTNET_URL = 'https://testnet.tonscan.org/';
-const GETGEMS_BASE_MAINNET_URL = 'https://getgems.io/';
-const GETGEMS_BASE_TESTNET_URL = 'https://testnet.getgems.io/';
+const MY_TON_WALLET_PROMO_URL = 'api-https://mytonwallet.io';
+const TELEGRAM_WEB_URL = 'api-https://web.telegram.org/a/';
+const TONSCAN_BASE_MAINNET_URL = 'api-https://tonscan.org/';
+const TONSCAN_BASE_TESTNET_URL = 'api-https://testnet.tonscan.org/';
+const GETGEMS_BASE_MAINNET_URL = 'api-https://getgems.io/';
+const GETGEMS_BASE_TESTNET_URL = 'api-https://testnet.getgems.io/';
 const CHANGELLY_SUPPORT_EMAIL = 'support@changelly.com';
 const CHANGELLY_SECURITY_EMAIL = 'security@changelly.com';
-const CHANGELLY_TERMS_OF_USE = 'https://changelly.com/terms-of-use';
-const CHANGELLY_PRIVACY_POLICY = 'https://changelly.com/privacy-policy';
-const CHANGELLY_AML_KYC = 'https://changelly.com/aml-kyc';
+const CHANGELLY_TERMS_OF_USE = 'api-https://changelly.com/terms-of-use';
+const CHANGELLY_PRIVACY_POLICY = 'api-https://changelly.com/privacy-policy';
+const CHANGELLY_AML_KYC = 'api-https://changelly.com/aml-kyc';
 const CHANGELLY_WAITING_DEADLINE = (/* unused pure expression or super */ null && (3 * 60 * 60 * 1000)); // 3 hour
 
 const TON_TOKEN_SLUG = 'toncoin';
@@ -39718,7 +39718,7 @@ const STAKING_MIN_AMOUNT = (/* unused pure expression or super */ null && (ONE_T
 const NOMINATORS_STAKING_MIN_AMOUNT = ONE_TON * 10001n;
 const TON_PROTOCOL = 'ton://';
 const TONCONNECT_PROTOCOL = 'tc://';
-const TONCONNECT_UNIVERSAL_URL = 'https://connect.mytonwallet.org';
+const TONCONNECT_UNIVERSAL_URL = 'api-https://connect.mytonwallet.org';
 const TONCONNECT_PROTOCOL_VERSION = 2;
 const TONCONNECT_WALLET_JSBRIDGE_KEY = 'mytonwallet';
 const DEFAULT_API_TIMEOUT = 5000;
@@ -39757,7 +39757,7 @@ const INIT_SWAP_ASSETS = {
     slug: 'ton-eqdcbkghmc',
     decimals: 8,
     // eslint-disable-next-line max-len
-    image: 'https://cache.tonapi.io/imgproxy/LaFKdzahVX9epWT067gyVLd8aCa1lFrZd7Rp9siViEE/rs:fill:200:200:1/g:no/aHR0cHM6Ly9icmlkZ2UudG9uLm9yZy90b2tlbi8xLzB4MjI2MGZhYzVlNTU0MmE3NzNhYTQ0ZmJjZmVkZjdjMTkzYmMyYzU5OS5wbmc.webp',
+    image: 'api-https://cache.tonapi.io/imgproxy/LaFKdzahVX9epWT067gyVLd8aCa1lFrZd7Rp9siViEE/rs:fill:200:200:1/g:no/aHR0cHM6Ly9icmlkZ2UudG9uLm9yZy90b2tlbi8xLzB4MjI2MGZhYzVlNTU0MmE3NzNhYTQ0ZmJjZmVkZjdjMTkzYmMyYzU5OS5wbmc.webp',
     contract: 'EQDcBkGHmC4pTf34x3Gm05XvepO5w60DNxZ-XT4I6-UGG5L5',
     price: 0,
     isPopular: false,
@@ -42554,14 +42554,12 @@ class TonClient extends client_TonClient.TonClient {
     });
   }
   callRpc(method, params) {
-    const resp = this.sendRequest(this.parameters.endpoint, {
+    return this.sendRequest(this.parameters.endpoint, {
       id: 1,
       jsonrpc: '2.0',
       method,
       params
     });
-      console.log(resp);
-      return resp;
   }
   async sendRequest(apiUrl, request) {
     const method = request.method;
@@ -42939,9 +42937,7 @@ async function getAccountBalance(accountId) {
   return getWalletBalance(network, address);
 }
 async function getWalletBalance(network, walletOrAddress) {
-    const info = getWalletInfo(network, walletOrAddress);
-    console.log(info);
-  return (await info).balance;
+  return (await getWalletInfo(network, walletOrAddress)).balance;
 }
 async function getWalletSeqno(network, walletOrAddress) {
   const {
@@ -43834,7 +43830,7 @@ async function callBackendPost(path, data, options) {
     authToken,
     isAllowBadRequest
   } = options !== null && options !== void 0 ? options : {};
-  console.log(`Backend POST ${path}`);
+  console.log(`POST ${path}`);
   const response = await fetch(`${BRILLIANT_API_BASE_URL}${path}`, {
     method: 'POST',
     headers: {
@@ -43846,14 +43842,12 @@ async function callBackendPost(path, data, options) {
     },
     body: JSON.stringify(data)
   });
-  console.log(`backend POST response ${path} ${response.status}`);
+  console.log(`POST ${path} => ${response.status}`);
   handleFetchErrors(response, isAllowBadRequest ? [BAD_REQUEST_CODE] : undefined);
-  const json = await response.json();
-  console.log(`backend POST response ${path} ${response.status} -> ${json}`);
-  return json;
+  return response.json();
 }
 async function callBackendGet(path, data, headers) {
-  console.log(`Backend GET ${path}`);
+  console.log(`GET ${path}`);
   const url = new URL(`${BRILLIANT_API_BASE_URL}${path}`);
   if (data) {
     Object.entries(data).forEach(_ref => {
@@ -43868,11 +43862,9 @@ async function callBackendGet(path, data, headers) {
       'X-App-Origin': 'file://'
     }
   });
-  console.log(`backend GET response ${path} ${response.status}`);
   handleFetchErrors(response);
-  const json = await response.json();
-  console.log(`backend GET response ${path} ${response.status} -> ${json}`);
-  return json;
+  console.log(`GET ${path} => ${response.status}`);
+  return response.json();
 }
 ;// CONCATENATED MODULE: ./src/api/common/addresses.ts
 
@@ -48797,39 +48789,32 @@ function callApi(fnName) {
   // @ts-ignore
   return methods_namespaceObject[fnName](...args);
 }
-;// CONCATENATED MODULE: ./src/api/index.ts
-
-// export { initApi, callApi } from './providers/worker/connector';
 ;// CONCATENATED MODULE: ./src/ios_entrypoint.js
 /* eslint-disable no-console */
 
-
-// (async () => {
-//   const api = initApi((update) => console.log(`update=${JSON.stringify(update).substring(0, 200)}`), {
-//     isElectron: false,
-//     isNativeBottomSheet: false,
-//   });
-//   const ok = await callApi('validateMnemonic', ['foo']);
-//   console.log(ok);
-//   console.log(`api=${JSON.stringify(api)}`);
-// })();
-
 function initApiWithOnUpdateCallback() {
-      initApi(update => {
-          console.log(update);
-          window.webkit.messageHandlers.onUpdate.postMessage(update);
-      }, {
-        isElectron: false,
-        isNativeBottomSheet: false
-      });
-        
-    }
-    window.wallet = {
-      initApi: initApi,
-      callApi: callApi,
-      initApiWithOnUpdateCallback
-    };
-    initApiWithOnUpdateCallback();
+  initApi(update => {
+    console.log(update);
+    window.webkit.messageHandlers.onUpdate.postMessage(JSON.stringify(update));
+  }, {
+    isElectron: false,
+    isNativeBottomSheet: false
+  });
+}
+async function callApiJSON(fn) {
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+  const res = await callApi(fn, ...args);
+  return JSON.stringify(res);
+}
+window.wallet = {
+  initApi: initApi,
+  callApi: callApi,
+  initApiWithOnUpdateCallback,
+  callApiJSON
+};
+initApiWithOnUpdateCallback();
 })();
 
 /******/ })()

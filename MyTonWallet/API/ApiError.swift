@@ -3,7 +3,7 @@ import Foundation
 import WebKit
 
 
-enum CallApiError: Error {
+enum ApiError: Error {
     case emptyResonse(URLResponse)
     case apiReturnedError(String)
     case apiReturnParsingFailure(returnValue: JSReturnValue)
