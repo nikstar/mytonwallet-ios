@@ -2,7 +2,7 @@
 import SwiftUI
 
 
-struct TestView: View {
+struct DebugView: View {
     
     private var api: Api { model.api }
     @EnvironmentObject private var model: Model
@@ -17,16 +17,16 @@ struct TestView: View {
                 Text("Reset store and exit")
             }
             
-            Button(action: {
-                model.persistentState.accountId = nil
+            Button(asyncAction: {
+                await model.logOut()
             }) {
                 Text("Log out")
             }
             
             Button(asyncAction: {
                 do {
-                    let (accountId, _) = try await api.importMnemonic(mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
-                    model.persistentState.accountId = accountId
+                    let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
+                    model.logIn(accountId: accountId, address: address)
                     print(accountId)
                 } catch {
                     print(error)
@@ -38,7 +38,7 @@ struct TestView: View {
             Button(asyncAction: {
                 do {
                     let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic2, password: model.persistentState.encryptionPassword)
-                    model.persistentState.accountId = accountId
+                    model.logIn(accountId: accountId, address: address)
                     print(accountId, address)
                 } catch {
                     print(error)
@@ -84,8 +84,8 @@ struct TestView: View {
             }
             
         }
-        .foregroundStyle(Color.white.opacity(0.5))
-        .tint(Color.white.opacity(0.5))
+        .foregroundStyle(Color.black.opacity(0.5))
+        .tint(Color.black.opacity(0.5))
         .background(Color.black.opacity(0.1), in: Rectangle())
         
     }

@@ -8,24 +8,8 @@ private let log = fileLog()
 private let topColor = Color.mainWalletBackground
 private let bottomColor = Color.white
 
-extension UIColor {
-    static func blend(color1: UIColor, intensity1: CGFloat = 0.5, color2: UIColor, intensity2: CGFloat = 0.5) -> UIColor {
-        let total = intensity1 + intensity2
-        let l1 = intensity1/total
-        let l2 = intensity2/total
-        guard l1 > 0 else { return color2}
-        guard l2 > 0 else { return color1}
-        var (r1, g1, b1, a1): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
-        var (r2, g2, b2, a2): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
 
-        color1.getRed(&r1, green: &g1, blue: &b1, alpha: &a1)
-        color2.getRed(&r2, green: &g2, blue: &b2, alpha: &a2)
-
-        return UIColor(red: l1*r1 + l2*r2, green: l1*g1 + l2*g2, blue: l1*b1 + l2*b2, alpha: l1*a1 + l2*a2)
-    }
-}
-
-struct MainWalletView: View {
+struct WalletTab: View {
     
     @EnvironmentObject private var model: Model
     
@@ -111,21 +95,12 @@ struct MainWalletView: View {
             mainAccountValueAnimated
         }
         .animation(.easeOut(duration: 0.25), value: scrolledToTransactions)
-        .task(id: model.persistentState.accountId) {
-            do {
-//                try await Task.sleep(nanoseconds: 3_000_000_000)
-                try await model.fetchTokens()
-            } catch {
-                log.fault("Unhandled error: \(error)")
-
-            }
-        }                
         .alert("Error", isPresented: $unhandledErrorAlertPresented) {
             Button("OK", role: .cancel, action: { unhandledErrorAlertPresented = false })
         } message: {
             Text(unhandledErrorMessage)
         }
-
+        .animation(.default, value: model.walletTokens)
     }
     
     @ViewBuilder
@@ -135,18 +110,18 @@ struct MainWalletView: View {
         let topOffset = max(labelOffset.y, endOffset)
         let progressRaw = clamp(1 - ((topOffset - endOffset) / 44))
         
-        MainWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.uiState.mainWalletTotalValue, label: "Main Wallet", transitioned: scrolledToTransactions)
+        TotalWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.totalValue, label: "Main Wallet", transitioned: scrolledToTransactions)
 
     }
 }
 
 
-struct MainWalletValue: View {
+struct TotalWalletValue: View {
     
     var topOffset: CGFloat
     var progressRaw: CGFloat
     
-    var totalValue: CurrencyValue
+    var totalValue: CurrencyValue?
     var label: String
     var transitioned: Bool
     
@@ -158,10 +133,9 @@ struct MainWalletValue: View {
         let size1 = linear(progress, from: 34, to: 17)
         let size2 = linear(progress, from: 17, to: 13)
         let padding = linear(progressRaw, from: 8, to: 0)
-    
         
         VStack(spacing: padding) {
-            Text(totalValue.value
+            Text(totalValue?.value
                 .formatted(
                     .currency(code: "USD")
                     .presentation(.narrow)
@@ -169,9 +143,11 @@ struct MainWalletValue: View {
                     .rounded(rule: .towardZero)
                     .precision(.fractionLength(0..<2))
                 )
+                 ?? "$9,999"
             )
             .font(.system(size: size1, weight: .semibold))
             .foregroundStyle(transitioned ? Color.black : Color.white)
+            .maybeRedacted(totalValue == nil)
             
             Text(label)
                 .font(.system(size: size2, weight: .regular))
@@ -228,14 +204,16 @@ struct AssetsSection: View {
     
     var walletTokens: some View {
         Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 0) {
-            ForEach(model.uiState.walletTokens, id: \.self) { token in
+            ForEach(model.walletTokens.values, id: \.self) { token in
                 WalletTokenRow(walletToken: token)
                 GridRow {
                     Color.clear
                         .frame(maxWidth: 0, maxHeight: 0)
                     
-                    CellDivider()
-                        .gridCellColumns(2)
+                    if token != model.walletTokens.values.last {
+                        CellDivider()
+                            .gridCellColumns(2)
+                    }
                }
             }
             
@@ -277,52 +255,6 @@ struct ActionButton: View {
     }
 }
 
-struct WalletTokenRow: View {
-    
-    var walletToken: WalletToken
-    
-    private var token: Token { walletToken.tokenValue.token }
-    
-    var body: some View {
-        GridRow {
-            Circle()
-                .fill(Color.green)
-                .frame(width: 40, height: 40)
-                .padding(.leading, 16)
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text(token.name)
-                    .font(.callout)
-                    
-                HStack(spacing: 4) {
-                    Text(walletToken.pricePerToken.value.formatted(.currency(code: "USD").presentation(.narrow).precision(.fractionLength(2..<10))))
-                        .foregroundStyle(.opacity(0.66))
-                    Text(walletToken.pricePerTokenChange.formatted(.percent.sign(strategy: .always(includingZero: false))))
-                        .foregroundStyle(.opacity(0.45))
-                    Spacer()
-                }
-                .font(.footnote)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            VStack(alignment: .trailing, spacing: 0) {
-                Text(walletToken.tokenValue.formatted())
-                    .font(.callout)
-                    
-                Text(walletToken.valueInCurrency.value.formatted(.currency(code: "USD").presentation(.narrow).precision(.fractionLength(0..<2))))
-                    .font(.footnote)
-                    .foregroundStyle(.opacity(0.70))
-                    
-            }
-            .gridColumnAlignment(.trailing)
-            .padding(.trailing, 16)
-            
-        }
-        .padding(.vertical, 8)
-    }
-    
-}
-
 
 
 /// Clamp value to 0...1
@@ -340,6 +272,6 @@ func linear(_ progress: CGFloat, from: CGFloat, to: CGFloat) -> CGFloat {
 }
 
 #Preview {
-    MainWalletView()
+    WalletTab()
         .environmentObject(Model.testUI())
 }

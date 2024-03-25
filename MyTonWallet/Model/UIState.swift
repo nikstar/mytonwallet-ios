@@ -7,7 +7,7 @@ struct UIState: Hashable, Codable {
     
     var mainWalletTotalValue: CurrencyValue
     
-    var walletTokens: [WalletToken]
+//    var walletTokens: [WalletToken]
     
     var transactions: [Transaction]
     
@@ -19,24 +19,24 @@ extension UIState {
     static func test() -> UIState {
         UIState(
             mainWalletTotalValue: CurrencyValue(currency: .usd, value: 12259.5),
-            walletTokens: [
-                WalletToken(
-                    tokenValue: TokenValue(token: Token(ticker: "USDT", name: "jUSDT", logo: ""), value: 10527),
-                    pricePerToken: CurrencyValue(currency: .usd, value: 1.00),
-                    pricePerTokenChange: +0.0001),
-                WalletToken(
-                    tokenValue: TokenValue(token: Token(ticker: "GRAM", name: "Gram", logo: ""), value: 30000),
-                    pricePerToken: CurrencyValue(currency: .usd, value: 0.05),
-                    pricePerTokenChange: +0.0348),
-                WalletToken(
-                    tokenValue: TokenValue(token: .ton, value: 101.25),
-                    pricePerToken: CurrencyValue(currency: .usd, value: 2.00),
-                    pricePerTokenChange: +0.0112),
-                WalletToken(
-                    tokenValue: TokenValue(token: Token(ticker: "DUCK", name: "Duck Coin", logo: ""), value: 2.34),
-                    pricePerToken: CurrencyValue(currency: .usd, value: 0.0001),
-                    pricePerTokenChange: -0.983),
-            ],
+//            walletTokens: [
+//                WalletToken(
+//                    tokenValue: TokenValue(token: Token(ticker: "USDT", name: "jUSDT", logo: ""), value: 10527),
+//                    pricePerToken: CurrencyValue(currency: .usd, value: 1.00),
+//                    pricePerTokenChange: +0.0001),
+//                WalletToken(
+//                    tokenValue: TokenValue(token: Token(ticker: "GRAM", name: "Gram", logo: ""), value: 30000),
+//                    pricePerToken: CurrencyValue(currency: .usd, value: 0.05),
+//                    pricePerTokenChange: +0.0348),
+//                WalletToken(
+//                    tokenValue: TokenValue(token: .ton, value: 101.25),
+//                    pricePerToken: CurrencyValue(currency: .usd, value: 2.00),
+//                    pricePerTokenChange: +0.0112),
+//                WalletToken(
+//                    tokenValue: TokenValue(token: Token(ticker: "DUCK", name: "Duck Coin", logo: ""), value: 2.34),
+//                    pricePerToken: CurrencyValue(currency: .usd, value: 0.0001),
+//                    pricePerTokenChange: -0.983),
+//            ],
             transactions: [
                 Transaction(
                     date: Date(),

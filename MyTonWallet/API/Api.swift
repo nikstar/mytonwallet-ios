@@ -31,6 +31,8 @@ final class Api: ObservableObject {
     private var jsCore = JSCoreConnection()
     private var httpApiV2 = HTTPApi(API_V2)
     
+    private let jsonDecoder = JSONDecoder()
+    
     func callApi<T>(_ method: String, _ args: Any..., returning: T.Type) async throws -> T {
         if let value = try await jsCore.callApi(method: method, args: args) {
             do {
@@ -65,9 +67,14 @@ final class Api: ObservableObject {
         }
     }
     
-//    func callApiV2_GET(_ method: String, args: [String: Any]) async throws {
-//        let
-//    }
+    func callApi<T: Decodable>(_ method: String, _ args: Any..., decoding: T.Type) async throws -> T {
+        if let value = try await jsCore.callApiJSON(method: method, args: args) {
+            let data = try value.as(String.self).data(using: .utf8)!
+            return try jsonDecoder.decode(T.self, from: data)
+        } else {
+            throw ApiError.returnValueNil(method: method, args: args)
+        }
+    }
 }
 
 
@@ -129,8 +136,20 @@ extension Api {
     
     // MARK: - Tokens
     
-    func fetchTokenBalances(accountId: String) async throws -> Data {
-        try await callApiReturningJSON("fetchTokenBalances", accountId)
+    struct FetchTokens: Decodable {
+        
+        var slug: String?
+        var balance: String?
+        var token: ApiToken?
+        var jettonWallet: String?
+    }
+    
+    func fetchTokenBalances(accountId: String) async throws -> [FetchTokens] {
+        try await callApi("fetchTokenBalances", accountId, decoding: [FetchTokens].self)
+    }
+    
+    func getWalletBalance(address: String) async throws -> Int {
+        try await callApi("getWalletBalance", network.rawValue, address, decoding: ApiBigint.self).value
     }
     
     
@@ -148,6 +167,17 @@ extension Api {
         if let archival, archival == true { params["archival"] = String(archival) }
         return try await httpApiV2.get("getTransactions", params: params)
     }
+    
+    // MARK: - Activity
+    
+//    export async function fetchTokenActivitySlice(accountId: string, slug: string, fromTxId?: string, limit?: number) {
+    func fetchTokenActivitySlice(accountId: String, slug: String = "toncoin", fromTxId: String? = nil, limit: Int? = nil) async throws -> [ApiActivity] {
+        guard fromTxId == nil && limit == nil else {
+            fatalError("unimplemented")
+        }
+        return try await callApi("fetchTokenActivitySlice", accountId, slug, decoding: [ApiActivity].self)
+    }
+    
 }
 
 

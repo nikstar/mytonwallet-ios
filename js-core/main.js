@@ -43830,24 +43830,20 @@ async function callBackendPost(path, data, options) {
     authToken,
     isAllowBadRequest
   } = options !== null && options !== void 0 ? options : {};
-  console.log(`POST ${path}`);
   const response = await fetch(`${BRILLIANT_API_BASE_URL}${path}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...(authToken && {
         'X-Auth-Token': authToken
-      }),
-      'X-App-Origin': 'file://'
+      })
     },
     body: JSON.stringify(data)
   });
-  console.log(`POST ${path} => ${response.status}`);
   handleFetchErrors(response, isAllowBadRequest ? [BAD_REQUEST_CODE] : undefined);
   return response.json();
 }
 async function callBackendGet(path, data, headers) {
-  console.log(`GET ${path}`);
   const url = new URL(`${BRILLIANT_API_BASE_URL}${path}`);
   if (data) {
     Object.entries(data).forEach(_ref => {
@@ -43857,13 +43853,9 @@ async function callBackendGet(path, data, headers) {
     });
   }
   const response = await fetch(url, {
-    headers: {
-      ...headers,
-      'X-App-Origin': 'file://'
-    }
+    headers
   });
   handleFetchErrors(response);
-  console.log(`GET ${path} => ${response.status}`);
   return response.json();
 }
 ;// CONCATENATED MODULE: ./src/api/common/addresses.ts
@@ -46809,15 +46801,8 @@ async function initPolling(_onUpdate, _isAccountActive) {
   polling_onUpdate = _onUpdate;
   isAccountActive = _isAccountActive;
   await tryUpdatePrices();
-  Promise.all([
-  // tryUpdateKnownAddresses(),
-  tryUpdateTokens(_onUpdate)
-  // tryLoadSwapTokens(_onUpdate),
-  // tryUpdateStakingCommonData(),
-  ]).then(() => resolvePreloadPromise());
-
-  // void tryUpdateRegion(_onUpdate);
-
+  Promise.all([tryUpdateKnownAddresses(), tryUpdateTokens(_onUpdate), tryLoadSwapTokens(_onUpdate), tryUpdateStakingCommonData()]).then(() => resolvePreloadPromise());
+  void tryUpdateRegion(_onUpdate);
   void setupBackendPolling();
   void setupLongBackendPolling();
 }
@@ -47080,13 +47065,9 @@ async function setupLongBackendPolling() {
   const localOnUpdate = polling_onUpdate;
   while (isUpdaterAlive(localOnUpdate)) {
     await pauseOrFocus(LONG_BACKEND_INTERVAL);
-    await Promise.all([tryUpdateKnownAddresses()
-    // tryUpdateStakingCommonData(),
-    // tryUpdateRegion(localOnUpdate),
-    ]);
+    await Promise.all([tryUpdateKnownAddresses(), tryUpdateStakingCommonData(), tryUpdateRegion(localOnUpdate)]);
   }
 }
-
 async function tryUpdatePrices(localOnUpdate) {
   if (!localOnUpdate) {
     localOnUpdate = polling_onUpdate;

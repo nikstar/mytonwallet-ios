@@ -12,7 +12,7 @@ struct MyTonWalletApp: App {
         WindowGroup {
             RootView()
                 .overlay(alignment: .topTrailing) {
-                    TestView()
+                    DebugView()
                 }
                 .environmentObject(model)
 //                .environmentObject(api)

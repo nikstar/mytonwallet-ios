@@ -35,10 +35,10 @@ final class RequestProxy: NSObject, WKURLSchemeHandler {
     func runTask(_ urlSchemeTask: WKURLSchemeTask) async {
         var request = urlSchemeTask.request
         
-        log.info("\(request.httpMethod ?? "--") \(request.url?.absoluteString ?? "--")")
-        if let body = request.httpBody, body.count > 0 {
-            log.debug("data=\(String(data: body, encoding: .utf8) ?? "--")")
-        }
+//        log.info("\(request.httpMethod ?? "--") \(request.url?.absoluteString ?? "--")")
+//        if let body = request.httpBody, body.count > 0 {
+//            log.debug("data=\(String(data: body, encoding: .utf8) ?? "--")")
+//        }
         guard let originalUrl = request.url else {
             urlSchemeTask.didFailWithError(WKError(.unknown))
             return
@@ -51,10 +51,10 @@ final class RequestProxy: NSObject, WKURLSchemeHandler {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             if let upstreamResponse = response as? HTTPURLResponse {
-                log.info("\(request.httpMethod ?? "--") \(request.url?.absoluteString ?? "--") => statusCode=\(upstreamResponse.statusCode) bytes=\(data.count)" )
-                if request.url?.absoluteString.contains(/RPC/) == true {
-                    log.debug("\(String(data: request.httpBody!, encoding: .utf8)!) => \(String(data: data, encoding: .utf8)!)")
-                }
+//                log.info("\(request.httpMethod ?? "--") \(request.url?.absoluteString ?? "--") => statusCode=\(upstreamResponse.statusCode) bytes=\(data.count)" )
+//                if request.url?.absoluteString.contains(/RPC/) == true {
+//                    log.debug("\(String(data: request.httpBody!, encoding: .utf8)!) => \(String(data: data, encoding: .utf8)!)")
+//                }
                 var headers = upstreamResponse.allHeaderFields as! [String: String]
                 headers["Access-Control-Allow-Origin"] = "*"
                 let response = HTTPURLResponse(url: originalUrl, statusCode: upstreamResponse.statusCode, httpVersion: nil, headerFields: headers)!

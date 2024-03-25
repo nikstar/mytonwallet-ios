@@ -7,6 +7,7 @@ private let log = fileLog()
 final class LoginFlowModel: ObservableObject {
     
     @Published var preliminaryAccountId: String? = nil
+    @Published var preliminaryAddress: String? = nil
     @Published var isNewAccount: Bool = true
     @Published var preliminaryUserPassword: String? = nil
     @Published var path: [LoginFlowState] = []
@@ -102,8 +103,9 @@ fileprivate struct Start: View {
     func onCreate() async {
         do {
             let words = try await api.generateMnemomic()
-            let (accountId, _) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
+            let (accountId, address) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
             loginFlowModel.preliminaryAccountId = accountId
+            loginFlowModel.preliminaryAddress = address
             loginFlowModel.isNewAccount = true
             loginFlowModel.path = [.created]
         } catch {
@@ -240,8 +242,9 @@ struct SecretWords: View {
     func onContinue() async {
         do {
             if try await api.validateMnemonic(mnemonic: words) {
-                let (accountId, _) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
+                let (accountId, address) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
                 loginFlowModel.preliminaryAccountId = accountId
+                loginFlowModel.preliminaryAddress = address
                 loginFlowModel.isNewAccount = false
                 loginFlowModel.path = [.created]
             } else {
@@ -298,8 +301,12 @@ struct Congratulations: View {
     }
     
     func onNoPassword() {
+        guard let accountId = loginFlowModel.preliminaryAccountId, let address = loginFlowModel.preliminaryAddress else {
+            log.fault("logic error - accountId or address not set")
+            return
+        }
         model.persistentState.userPassword = nil
-        model.persistentState.accountId = loginFlowModel.preliminaryAccountId
+        model.logIn(accountId: accountId, address: address)
     }
 }
 
@@ -411,8 +418,12 @@ struct ConfirmPassword: View {
     }
     
     func onPasswordConfirmed() {
-        model.persistentState.userPassword = nil
-        model.persistentState.accountId = loginFlowModel.preliminaryAccountId
+        guard let accountId = loginFlowModel.preliminaryAccountId, let address = loginFlowModel.preliminaryAddress else {
+            log.fault("logic error - accountId or address not set")
+            return
+        }
+        model.persistentState.userPassword = loginFlowModel.preliminaryUserPassword
+        model.logIn(accountId: accountId, address: address)
     }
 }
 

@@ -1,14 +1,17 @@
 
 import Foundation
 
-enum Currency: Hashable, Codable {
-    case usd
+struct Currency: Hashable, Codable {
+    
+    var code: String
+    
+    static let usd = Currency(code: "USD")
 }
 
 
 struct CurrencyValue: Hashable, Codable {
     var currency: Currency
-    var value: Double // might want decimal
+    var value: Double
 }
 
 extension CurrencyValue {
@@ -25,7 +28,7 @@ extension CurrencyValue {
 struct CurrencyValueFormatStyle: FormatStyle {
     func format(_ currencyValue: CurrencyValue) -> String {
         currencyValue.value.formatted(
-            .currency(code: "USD")
+            .currency(code: currencyValue.currency.code)
             .presentation(.narrow)
             .decimalSeparator(strategy: .automatic)
             .rounded(rule: .towardZero)
@@ -41,15 +44,3 @@ extension FormatStyle where Self == CurrencyValueFormatStyle {
 }
 
 
-struct WalletToken: Hashable, Codable {
-    var tokenValue: TokenValue
-    var pricePerToken: CurrencyValue
-    var pricePerTokenChange: Double
-}
-
-                    
-extension WalletToken {
-    var valueInCurrency: CurrencyValue {
-        CurrencyValue(currency: pricePerToken.currency, value: tokenValue.value * pricePerToken.value)
-    }
-}

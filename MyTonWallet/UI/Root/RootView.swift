@@ -13,9 +13,7 @@ struct RootView: View {
     
     var body: some View {
         TabView(selection: $currentTab) {
-            MainWalletView()
-//            UnderConstructionView()
-//                .toolbarColorScheme(.light, for: .tabBar)
+            WalletTab()
                 .tabItem { Label("Wallet", image: "Tab.Wallet") }
                 .tag(Tab.wallet)
                 

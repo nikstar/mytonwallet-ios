@@ -49,7 +49,6 @@ final class JSCoreConnection: NSObject {
         
     }
     
-    
     /// waits until script is loaded and api is ready
     func waitUntilReady() async {
         if isReady { return }
@@ -122,8 +121,6 @@ extension JSCoreConnection: WKNavigationDelegate {
 extension JSCoreConnection: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard message.name == "onUpdate" else { return }
-        let type: String = ((message.body as? [String:Any])?["type"] as? String) ?? "--"
-        log.debug("onUpdate: \(type)")
         updatesContinuation.yield(JSReturnValue(message.body))
     }
 }
