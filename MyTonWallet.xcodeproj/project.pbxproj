@@ -30,6 +30,7 @@
 		58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */; };
 		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
 		58B6041B2BA437C100049146 /* js-core in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* js-core */; };
+		58C8E6392BB2E6B200CDE5A0 /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 58C8E6382BB2E6B200CDE5A0 /* SimpleToast */; };
 		58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AD2BAB961D00DE08BF /* ApiError.swift */; };
 		58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AF2BAB971800DE08BF /* JSReturnValue.swift */; };
 		58D2D0222BB1A55300F613DE /* NormalizedActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */; };
@@ -127,6 +128,7 @@
 				580D091A2BAD922100575E4B /* Gzip in Frameworks */,
 				58DDF78A2BA8E782003D9628 /* OrderedCollections in Frameworks */,
 				58DDF78C2BA8E782003D9628 /* _RopeModule in Frameworks */,
+				58C8E6392BB2E6B200CDE5A0 /* SimpleToast in Frameworks */,
 				58DDF77D2BA8E491003D9628 /* Algorithms in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,6 +312,7 @@
 				58DDF78B2BA8E782003D9628 /* _RopeModule */,
 				580D09162BAD91BF00575E4B /* Lottie */,
 				580D09192BAD922100575E4B /* Gzip */,
+				58C8E6382BB2E6B200CDE5A0 /* SimpleToast */,
 			);
 			productName = mytonwallet;
 			productReference = 58511A852BA37F1400E08053 /* MyTonWallet.app */;
@@ -344,6 +347,7 @@
 				58DDF77E2BA8E782003D9628 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				580D09152BAD91BF00575E4B /* XCRemoteSwiftPackageReference "lottie-spm" */,
 				580D09182BAD922100575E4B /* XCRemoteSwiftPackageReference "GzipSwift" */,
+				58C8E6372BB2E6B100CDE5A0 /* XCRemoteSwiftPackageReference "SimpleToast" */,
 			);
 			productRefGroup = 58511A862BA37F1400E08053 /* Products */;
 			projectDirPath = "";
@@ -640,6 +644,14 @@
 				minimumVersion = 6.0.1;
 			};
 		};
+		58C8E6372BB2E6B100CDE5A0 /* XCRemoteSwiftPackageReference "SimpleToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sanzaru/SimpleToast";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.8.1;
+			};
+		};
 		58DDF77B2BA8E490003D9628 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-algorithms.git";
@@ -668,6 +680,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 580D09182BAD922100575E4B /* XCRemoteSwiftPackageReference "GzipSwift" */;
 			productName = Gzip;
+		};
+		58C8E6382BB2E6B200CDE5A0 /* SimpleToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 58C8E6372BB2E6B100CDE5A0 /* XCRemoteSwiftPackageReference "SimpleToast" */;
+			productName = SimpleToast;
 		};
 		58DDF77C2BA8E491003D9628 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;

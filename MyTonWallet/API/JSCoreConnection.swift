@@ -33,7 +33,7 @@ final class JSCoreConnection: NSObject {
         
         config.applicationNameForUserAgent = "MyTonWallet-iOS"
         
-        removeLocalData()
+//        removeLocalData()
         
         userContentController = WKUserContentController()
         userContentController.add(self, name: "onUpdate")

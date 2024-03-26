@@ -178,6 +178,10 @@ extension Api {
         return try await callApi("fetchTokenActivitySlice", accountId, slug, decoding: [ApiActivity].self)
     }
     
+//
+    func fetchAllActivitySliceForTokens(accountId: String, tokens: [String], limit: Int? = nil) async throws -> [ApiActivity] {
+        return try await callApi("fetchAllActivitySliceForTokens", accountId, tokens, limit as Any, decoding: [ApiActivity].self)
+    }
 }
 
 

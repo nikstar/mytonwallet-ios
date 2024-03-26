@@ -11,14 +11,26 @@ final class Model: ObservableObject {
     @Published var persistentState: PersitstentState
     @Published var uiState: UIState
     
-    @Published var knownTokens: [String: ApiToken] = [:]
+    @Published var knownTokens: [Slug: ApiToken] = [:]
     @Published var walletVersions: ApiUpdateWalletVersions? = nil
     
     @Published var walletTokens: OrderedDictionary<String, TokenAmount> = [:]
     @Published var baseCurrency: Currency = .usd
-    @Published var activities: OrderedSet<NormalizedActivity> = []
+    @Published var activities: OrderedDictionary<NormalizedActivity.ID, NormalizedActivity> = [:]
     @Published var nfts: [ApiNft] = []
     @Published var swapTokens: [String: ApiToken] = [:]
+    
+    func getToken(_ slug: Slug) -> ApiToken? {
+        return knownTokens[slug]
+    }
+    
+    func updateToken(_ token: ApiToken) {
+        let slug = token.slug
+        if let currentInfo = getToken(slug), currentInfo.quote != nil && token.quote == nil {
+            return // no new useful info
+        }
+        knownTokens[slug] = token
+    }
     
     var totalValue: CurrencyValue? {
         guard walletTokens.count > 0 else { return nil }
@@ -61,35 +73,37 @@ final class Model: ObservableObject {
             await MainActor.run {
                 do {
                     switch update {
-                    case .tokens(let apiUpdateTokens):
-                        if let _ = apiUpdateTokens.baseCurrency, let tokens = apiUpdateTokens.tokens {
-                            for (slug, token) in tokens {
-                                knownTokens[slug] = token
+                    case .tokens(let u):
+                        if let _ = u.baseCurrency, let newInfo = u.tokens {
+                            for (_, token) in newInfo {
+                                self.updateToken(token)
                             }
                             for slug in walletTokens.keys {
                                 if let freshTokenInfo = knownTokens[slug] {
                                     walletTokens[slug]?.token = freshTokenInfo
                                 }
                             }
-                            for var activity in self.activities {
+                            for (key, var activity) in self.activities {
                                 activity.update(with: knownTokens)
-                                self.activities.updateOrAppend(activity)
+                                self.activities[key] = activity
                             }
                         }
                     case .walletVeersions(let apiUpdateWalletVersions):
                         self.walletVersions = apiUpdateWalletVersions
-                    case .balances(let apiUpdateBalances):
-                        for (slug, balance) in apiUpdateBalances.balancesToUpdate {
+                    case .balances(let u):
+                        guard u.accountId == persistentState.accountId else { break }
+                        for (slug, balance) in u.balancesToUpdate {
                             print("apiUpdateBalances.balancesToUpdate", slug, balance)
                         }
                     case .newActivities(let u):
+                        guard u.accountId == persistentState.accountId else { break }
                         print(self.activities.count, u.activities.count)
                         for newActivity in u.activities {
-                            activities.updateOrAppend(
-                                NormalizedActivity(activity: newActivity, knownTokens: self.knownTokens)
-                            )
+                            let normalized = NormalizedActivity(activity: newActivity, knownTokens: self.knownTokens)
+                            self.activities[normalized.id] = normalized
                         }
                     case .nfts(let u):
+                        guard u.accountId == persistentState.accountId else { break }
                         self.nfts = u.nfts
                     case .region(let u):
                         log.debug("updateRegion isLimited=\(u.isLimited)")
@@ -105,6 +119,8 @@ final class Model: ObservableObject {
     
     @MainActor
     func logIn(accountId: String, address: String) {
+        logOut()
+        
         persistentState.accountId = accountId
         persistentState.address = address
         
@@ -119,10 +135,10 @@ final class Model: ObservableObject {
     }
     
     @MainActor
-    func logOut() async {
+    func logOut() {
         persistentState.accountId = nil
         persistentState.address = nil
-        self.activities = []
+        self.activities = [:]
         self.nfts = []
         self.walletTokens = [:]
     }
@@ -156,28 +172,31 @@ final class Model: ObservableObject {
             }
         }
         
-        let activities = try await api.fetchTokenActivitySlice(accountId: accountId)
+        let activities = try await api.fetchAllActivitySliceForTokens(accountId: accountId, tokens: Array(walletTokens.keys))
         await MainActor.run {
             for activity in activities {
-                self.activities.updateOrAppend(
-                    NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
-                )
+                let normalized = NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
+                self.activities[normalized.id] = normalized
             }
         }
-        for (slug, token) in walletTokens {
-            let activities = try await api.fetchTokenActivitySlice(accountId: accountId, slug: slug)
-            print(slug, token.formatted())
-            await MainActor.run {
-                for activity in activities {
-                    print(activity)
-                    self.activities.updateOrAppend(
-                        NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
-                    )
-                }
-            }
-        }
+//        for (slug, token) in walletTokens {
+//            let activities = try await api.fetchTokenActivitySlice(accountId: accountId, slug: slug)
+//            print(slug, token.formatted())
+//            await MainActor.run {
+//                for activity in activities {
+//                    print(activity)
+//                    self.activities.updateOrAppend(
+//                        NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
+//                    )
+//                }
+//            }
+//        }
         await MainActor.run {
-            self.activities.sort(by: { $0.date > $1.date })
+            self.activities.sort(by: { $0.key > $1.key })
+        }
+        
+        for (_, activity) in self.activities.prefix(3) {
+            print(activity)
         }
     }
     

@@ -3,8 +3,11 @@
 import Foundation
 
 
+typealias Slug = String
+
+
 struct ApiToken: Hashable, Codable {
-    var slug: String
+    var slug: Slug
     var name: String
     var symbol: String
     var isPopular: Bool?

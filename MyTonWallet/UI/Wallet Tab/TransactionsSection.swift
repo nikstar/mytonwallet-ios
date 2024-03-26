@@ -34,17 +34,18 @@ struct TransactionsSection: View {
 //            EmptyView()
         }
         .onAppear {
-            self.groupedActivities = OrderedDictionary(grouping: model.activities, by: { activity -> DateComponents in
+            self.groupedActivities = OrderedDictionary(grouping: model.activities.values, by: { activity -> DateComponents in
                 let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
                 return Calendar.current.dateComponents([.year, .month, .day], from: date)
             })
         }
         .onChange(of: model.activities) { activities in
-            self.groupedActivities = OrderedDictionary(grouping: activities, by: { activity -> DateComponents in
+            self.groupedActivities = OrderedDictionary(grouping: activities.values, by: { activity -> DateComponents in
                 let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
                 return Calendar.current.dateComponents([.year, .month, .day], from: date)
             })
         }
+        .animation(.default, value: groupedActivities)
 //        .environment(\.colorScheme, .light)
     }
     
