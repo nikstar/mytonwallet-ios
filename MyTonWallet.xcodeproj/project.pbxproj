@@ -27,10 +27,11 @@
 		58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */; };
 		58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */; };
 		58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */; };
-		58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */; };
+		58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */; };
 		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
 		58B6041B2BA437C100049146 /* js-core in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* js-core */; };
 		58C8E6392BB2E6B200CDE5A0 /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 58C8E6382BB2E6B200CDE5A0 /* SimpleToast */; };
+		58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */; };
 		58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AD2BAB961D00DE08BF /* ApiError.swift */; };
 		58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AF2BAB971800DE08BF /* JSReturnValue.swift */; };
 		58D2D0222BB1A55300F613DE /* NormalizedActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */; };
@@ -40,9 +41,9 @@
 		58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7692BA82F8D003D9628 /* RootView.swift */; };
 		58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */; };
 		58DDF76E2BA84CFB003D9628 /* Token+TokenValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */; };
-		58DDF7702BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */; };
+		58DDF7702BA853C7003D9628 /* Currency+CurrencyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue.swift */; };
 		58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */; };
-		58DDF7742BA86FEA003D9628 /* OffsetReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */; };
+		58DDF7742BA86FEA003D9628 /* WithOffsetReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7732BA86FEA003D9628 /* WithOffsetReporting.swift */; };
 		58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7752BA87572003D9628 /* ParentOffset.swift */; };
 		58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7772BA87A29003D9628 /* Scaffold.swift */; };
 		58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7792BA88130003D9628 /* GenericEnvironment.swift */; };
@@ -84,10 +85,11 @@
 		58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+file_fileLog.swift"; sourceTree = "<group>"; };
 		58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+orThrow.swift"; sourceTree = "<group>"; };
 		58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+with.swift"; sourceTree = "<group>"; };
-		58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftUI.Button+asyncAction.swift"; sourceTree = "<group>"; };
+		58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Button+asyncAction.swift"; sourceTree = "<group>"; };
 		58659BFD2BAAD79B006E14C1 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		58B6041A2BA437C100049146 /* js-core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "js-core"; sourceTree = "<group>"; };
 		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TonAddress.swift; sourceTree = "<group>"; };
 		58D164AD2BAB961D00DE08BF /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		58D164AF2BAB971800DE08BF /* JSReturnValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSReturnValue.swift; sourceTree = "<group>"; };
 		58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalizedActivity.swift; sourceTree = "<group>"; };
@@ -97,9 +99,9 @@
 		58DDF7692BA82F8D003D9628 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderConstructionView.swift; sourceTree = "<group>"; };
 		58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Token+TokenValue.swift"; sourceTree = "<group>"; };
-		58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CurrencyValue+WalletToken.swift"; sourceTree = "<group>"; };
+		58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Currency+CurrencyValue.swift"; sourceTree = "<group>"; };
 		58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetScrollView.swift; sourceTree = "<group>"; };
-		58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetReporting.swift; sourceTree = "<group>"; };
+		58DDF7732BA86FEA003D9628 /* WithOffsetReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithOffsetReporting.swift; sourceTree = "<group>"; };
 		58DDF7752BA87572003D9628 /* ParentOffset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentOffset.swift; sourceTree = "<group>"; };
 		58DDF7772BA87A29003D9628 /* Scaffold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scaffold.swift; sourceTree = "<group>"; };
 		58DDF7792BA88130003D9628 /* GenericEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericEnvironment.swift; sourceTree = "<group>"; };
@@ -170,9 +172,10 @@
 			children = (
 				58DDF7752BA87572003D9628 /* ParentOffset.swift */,
 				58DDF7792BA88130003D9628 /* GenericEnvironment.swift */,
-				58DDF7732BA86FEA003D9628 /* OffsetReporting.swift */,
+				58DDF7732BA86FEA003D9628 /* WithOffsetReporting.swift */,
 				58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */,
 				580043FE2BB0D9B500C364CE /* UIColor+blend.swift */,
+				58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -224,11 +227,12 @@
 			children = (
 				58DDF7632BA81EB9003D9628 /* Model.swift */,
 				580044022BB0DDAC00C364CE /* TokenAmount.swift */,
+				58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */,
 				58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */,
 				580D090E2BAD8B1A00575E4B /* PersitstentState.swift */,
 				58DDF7652BA81FDF003D9628 /* UIState.swift */,
 				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
-				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift */,
+				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -279,7 +283,6 @@
 				58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */,
 				58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */,
 				58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */,
-				58659BF82BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift */,
 				58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */,
 			);
 			path = Utils;
@@ -399,10 +402,11 @@
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
 				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
 				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
-				58659BFC2BAAD6AF006E14C1 /* SwiftUI.Button+asyncAction.swift in Sources */,
+				58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */,
 				58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */,
-				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue+WalletToken.swift in Sources */,
-				58DDF7742BA86FEA003D9628 /* OffsetReporting.swift in Sources */,
+				58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */,
+				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue.swift in Sources */,
+				58DDF7742BA86FEA003D9628 /* WithOffsetReporting.swift in Sources */,
 				58511A892BA37F1400E08053 /* App.swift in Sources */,
 				58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */,
 				58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */,

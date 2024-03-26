@@ -14,7 +14,7 @@ struct OffsetPreferenceKey: PreferenceKey {
 
 struct WithOffsetReporting<V: View>: View {
     
-    var `in`: CoordinateSpace = .global
+    var `in`: CoordinateSpace
     var offset: Binding<CGPoint>
     @ViewBuilder var content: () -> V
     

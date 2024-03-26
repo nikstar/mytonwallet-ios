@@ -63,6 +63,7 @@ struct TokenImage: View {
     @ViewBuilder
     var body: some View {
         if let image = token?.image {
+            let _ = print(image)
             AsyncImage(url: URL(string: image)) { image in
                 image
                     .resizable()

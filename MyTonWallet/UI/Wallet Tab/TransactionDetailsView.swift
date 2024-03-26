@@ -2,12 +2,6 @@
 import SwiftUI
 import SimpleToast
 
-fileprivate extension String {
-    func trimmedAddress() -> String {
-        "\(prefix(6))...\(suffix(6))"
-    }
-}
-
 
 struct TransactionDetailsSheet: View {
     
@@ -149,38 +143,38 @@ struct TransactionDetailsView: View {
             
             Section {
                 LabeledContent {
-                    Text(activity.activity.fromAddress?.trimmedAddress() ?? "-")
+                    Text(activity.activity.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
                         .font(.body.monospaced())
                 } label: {
                     Text("From")//.frame(width: 42, alignment: .leading)
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.fromAddress
+                    UIPasteboard.general.string = activity.activity.fromAddress?.string
                     toastPresented = true
                 }
 
                 LabeledContent {
-                    Text(activity.activity.toAddress?.trimmedAddress() ?? "-")
+                    Text(activity.activity.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
                         .font(.body.monospaced())
                 } label: {
                     Text("To")
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.toAddress
+                    UIPasteboard.general.string = activity.activity.toAddress?.string
                     toastPresented = true
                 }
 
                 LabeledContent {
-                    Text(activity.activity.normalizedAddress?.trimmedAddress() ?? "-")
+                    Text(activity.activity.normalizedAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
                         .font(.body.monospaced())
                 } label: {
                     Text("Normalized")//.frame(width: 42, alignment: .leading)
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.normalizedAddress
+                    UIPasteboard.general.string = activity.activity.normalizedAddress?.string
                     toastPresented = true
                 }
 

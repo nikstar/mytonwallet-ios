@@ -7,7 +7,7 @@ private let log = fileLog()
 final class LoginFlowModel: ObservableObject {
     
     @Published var preliminaryAccountId: String? = nil
-    @Published var preliminaryAddress: String? = nil
+    @Published var preliminaryAddress: TonAddress? = nil
     @Published var isNewAccount: Bool = true
     @Published var preliminaryUserPassword: String? = nil
     @Published var path: [LoginFlowState] = []

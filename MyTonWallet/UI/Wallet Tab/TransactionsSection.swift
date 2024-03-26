@@ -137,9 +137,9 @@ struct TransactionRow: View {
     var topLeft: some View {
         switch activity.activity.type {
         case .received:
-            Text(activity.activity.fromAddress?.prefix(9) ?? "--")
+            Text(activity.activity.fromAddress?.formatted() ?? "--")
         case .sent:
-            Text(activity.activity.toAddress?.prefix(9) ?? "--")
+            Text(activity.activity.toAddress?.formatted() ?? "--")
 
 //        case .recieved(let i), .sent(let i):
 //            Text(i.counterparty.tonURL ?? i.counterparty.address)

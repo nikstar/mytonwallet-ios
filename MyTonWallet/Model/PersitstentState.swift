@@ -11,9 +11,9 @@ struct PersitstentState: Hashable, Codable {
     var userPassword: String?
     
     var accountId: String?
-    var address: String?
+    var address: TonAddress?
     
-    init(encryptionPassword: String, userPassword: String?, accountId: String?, address: String?) {
+    init(encryptionPassword: String, userPassword: String?, accountId: String?, address: TonAddress?) {
         self.encryptionPassword = encryptionPassword
         self.userPassword = userPassword
         self.accountId = accountId
@@ -39,7 +39,7 @@ struct PersitstentState: Hashable, Codable {
         
         let userPassword = defaults.string(forKey: CodingKeys.userPassword.stringValue)
         let accountId = defaults.string(forKey: CodingKeys.accountId.stringValue)
-        let address = defaults.string(forKey: CodingKeys.address.stringValue)
+        let address = defaults.string(forKey: CodingKeys.address.stringValue).map(TonAddress.init(stringLiteral:))
         
         return PersitstentState(encryptionPassword: encryptionPassword, userPassword: userPassword, accountId: accountId, address: address)
     }
@@ -52,7 +52,7 @@ struct PersitstentState: Hashable, Codable {
         defaults.setValue(encryptionPassword, forKey: CodingKeys.encryptionPassword.stringValue)
         defaults.setValue(userPassword, forKey: CodingKeys.userPassword.stringValue)
         defaults.setValue(accountId, forKey: CodingKeys.accountId.stringValue)
-        defaults.setValue(address, forKey: CodingKeys.address.stringValue)
+        defaults.setValue(address?.string, forKey: CodingKeys.address.stringValue)
     }
 }
 

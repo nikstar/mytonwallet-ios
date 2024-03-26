@@ -87,10 +87,10 @@ extension Api {
     }
     
     /// Creates new wallet. When importing existing mnemonic use ``importMnemonic(mnemonic:password:)`` instead.
-    func createWallet(mnemonic: [String], password: String) async throws -> (accountId: String, address: String) {
+    func createWallet(mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
         let result = try await callApi("createWallet", network.rawValue, mnemonic, password)
         if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
-            return (accountId, address)
+            return (accountId, TonAddress(address))
         } else if let error = try? result.error.as(String.self) {
             throw ApiError.apiReturnedError(error)
         } else {
@@ -103,9 +103,9 @@ extension Api {
     }
     
     /// Attemps to guess best wallet version.
-    func importMnemonic(mnemonic: [String], password: String) async throws -> (accountId: String, address: String) {
+    func importMnemonic(mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
         let result = try await callApi("importMnemonic", network.rawValue, mnemonic, password)
-        if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
+        if let accountId = try? result.accountId.as(String.self), let address = try? TonAddress(result.address.as(String.self)) {
             return (accountId, address)
         } else if let error = try? result.error.as(String.self) {
             throw ApiError.apiReturnedError(error)
@@ -130,8 +130,8 @@ extension Api {
         try await callApiReturningVoid("activateAccount", accountId)
     }
     
-    func fetchAddress(accountId: String) async throws -> String {
-        try await callApi("fetchAddress", accountId, returning: String.self)
+    func fetchAddress(accountId: String) async throws -> TonAddress {
+        try await TonAddress(callApi("fetchAddress", accountId, returning: String.self))
     }
     
     // MARK: - Tokens
@@ -148,19 +148,19 @@ extension Api {
         try await callApi("fetchTokenBalances", accountId, decoding: [FetchTokens].self)
     }
     
-    func getWalletBalance(address: String) async throws -> Int {
-        try await callApi("getWalletBalance", network.rawValue, address, decoding: ApiBigint.self).value
+    func getWalletBalance(address: TonAddress) async throws -> Int {
+        try await callApi("getWalletBalance", network.rawValue, address.string, decoding: ApiBigint.self).value
     }
     
     
     // MARK: - Wallet
     
-    func getWalletInformation(address: String) async throws -> JSReturnValue {
-        return try await httpApiV2.get("getWalletInformation", params: ["address": address])
+    func getWalletInformation(address: TonAddress) async throws -> JSReturnValue {
+        return try await httpApiV2.get("getWalletInformation", params: ["address": address.string])
     }
     
-    func getTransactions(address: String, limit: Int? = nil, lt: Int? = nil, hash: String? = nil, archival: Bool? = nil) async throws -> JSReturnValue {
-        var params: [String:String] = ["address": address]
+    func getTransactions(address: TonAddress, limit: Int? = nil, lt: Int? = nil, hash: String? = nil, archival: Bool? = nil) async throws -> JSReturnValue {
+        var params: [String:String] = ["address": address.string]
         if let limit { params["limit"] = String(limit) }
         if let lt { params["lt"] = String(lt) }
         if let hash { params["hash"] = hash }

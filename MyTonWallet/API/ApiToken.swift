@@ -11,7 +11,7 @@ struct ApiToken: Hashable, Codable {
     var name: String
     var symbol: String
     var isPopular: Bool?
-    var minterAddress: String?
+    var minterAddress: TonAddress?
     var decimals: Int
     var color: String?
     var image: String?

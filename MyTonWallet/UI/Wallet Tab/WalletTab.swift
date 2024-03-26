@@ -17,11 +17,10 @@ struct WalletTab: View {
     
     @State private var labelOffset: CGPoint = .zero
     @State private var transactionsOffset: CGPoint = .zero
-    @State private var safeAreaOffset: CGPoint = .zero
     
     @State private var scrolledToTransactions: Bool = false
     private var transitionToTransactionsProgress: CGFloat {
-        let progressRaw = 1 - clamp((transactionsOffset.y - (safeAreaOffset.y + 44)) / 50)
+        let progressRaw = 1 - clamp((transactionsOffset.y - 44) / 50)
         return easeInOutBezier(progressRaw)
     }
     
@@ -30,55 +29,57 @@ struct WalletTab: View {
     @State private var unhandledErrorAlertPresented: Bool = false
     @State private var unhandledErrorMessage: String = ""
     
+    @Namespace private var contentCoordinateSpace
+    
     var body: some View {
         
 //        let _ = Self._printChanges()
         
-        WithOffsetReporting(offset: $safeAreaOffset) {
-            Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
-                    ScrollView {
-                        VStack(spacing: -20) {
-                            WithOffsetReporting(offset: $labelOffset) {
-                                AssetsSection()
-                                    .overlay {
-                                        Color.white.opacity(transitionToTransactionsProgress)
-                                    }
+        Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
+            ScrollView {
+                VStack(spacing: -20) {
+                    WithOffsetReporting(in: .named(contentCoordinateSpace), offset: $labelOffset) {
+                        AssetsSection()
+                            .overlay {
+                                Color.white.opacity(transitionToTransactionsProgress)
                             }
-                            WithOffsetReporting(offset: $transactionsOffset) {
-                                TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
-                            }
-                        }
                     }
-                
-                .onChange(of: transactionsOffset) { transactionsOffset in
-                    if transactionsOffset.y - 10 < safeAreaOffset.y + 44 && scrolledToTransactions == false {
-                            scrolledToTransactions = true
-                    } else if transactionsOffset.y - 10 >= safeAreaOffset.y + 44 && scrolledToTransactions == true {
-                        scrolledToTransactions = false
+                    WithOffsetReporting(in: .named(contentCoordinateSpace), offset: $transactionsOffset) {
+                        TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .foregroundStyle(Color.white)
-                
-            } topBarContent: {
-                HStack {
-                    Button(action: {}) {
-                        Label("Settings", image: "Toolbar.Settings")
-                            .labelStyle(.iconOnly)
-                    }
-
-                    Spacer()
-                    
-                    Button(action: {}) {
-                        Label("Scan QR", image: "Toolbar.Scan")
-                            .labelStyle(.iconOnly)
-                    }
-
-                }
-                .padding(.horizontal, 16)
-                .foregroundColor(scrolledToTransactions ? .blue : .white)
             }
+            
+            .onChange(of: transactionsOffset) { transactionsOffset in
+                if transactionsOffset.y - 10 < 44 && scrolledToTransactions == false {
+                        scrolledToTransactions = true
+                } else if transactionsOffset.y - 10 >= 44 && scrolledToTransactions == true {
+                    scrolledToTransactions = false
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .foregroundStyle(Color.white)
+
+        } topBarContent: {
+            HStack {
+                Button(action: {}) {
+                    Label("Settings", image: "Toolbar.Settings")
+                        .labelStyle(.iconOnly)
+                }
+
+                Spacer()
+                
+                Button(action: {}) {
+                    Label("Scan QR", image: "Toolbar.Scan")
+                        .labelStyle(.iconOnly)
+                }
+
+            }
+            .padding(.horizontal, 16)
+            .foregroundColor(scrolledToTransactions ? .blue : .white)
         }
+
+        .coordinateSpace(name: contentCoordinateSpace)
         .background( // for overscrolling at the bottom
             VStack(spacing: 0) {
                 Color.mainWalletBackground
@@ -106,7 +107,7 @@ struct WalletTab: View {
     @ViewBuilder
     var mainAccountValueAnimated: some View {
         
-        let endOffset = safeAreaOffset.y + 4
+        let endOffset = 4.0
         let topOffset = max(labelOffset.y, endOffset)
         let progressRaw = clamp(1 - ((topOffset - endOffset) / 44))
         
@@ -127,6 +128,8 @@ struct TotalWalletValue: View {
     
     var body: some View {
 //        let _ = Self._printChanges()
+        
+        
         
         let progress = easeInOutBezier(progressRaw)
         
@@ -155,7 +158,6 @@ struct TotalWalletValue: View {
         }
         .environment(\.colorScheme, .light)
         .offset(y: topOffset)
-        .ignoresSafeArea()
         .animation(.easeInOut(duration: 0.250), value: transitioned)
     }
     

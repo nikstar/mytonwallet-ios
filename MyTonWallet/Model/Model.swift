@@ -27,6 +27,9 @@ final class Model: ObservableObject {
     func updateToken(_ token: ApiToken) {
         let slug = token.slug
         if let currentInfo = getToken(slug), currentInfo.quote != nil && token.quote == nil {
+            if currentInfo.image != token.image {
+                print(currentInfo.image, token.image)
+            }
             return // no new useful info
         }
         knownTokens[slug] = token
@@ -93,7 +96,7 @@ final class Model: ObservableObject {
                     case .balances(let u):
                         guard u.accountId == persistentState.accountId else { break }
                         for (slug, balance) in u.balancesToUpdate {
-                            print("apiUpdateBalances.balancesToUpdate", slug, balance)
+                            log.info("apiUpdateBalances.balancesToUpdate \(slug) => \(balance.value)" )
                         }
                     case .newActivities(let u):
                         guard u.accountId == persistentState.accountId else { break }
@@ -118,7 +121,7 @@ final class Model: ObservableObject {
     }
     
     @MainActor
-    func logIn(accountId: String, address: String) {
+    func logIn(accountId: String, address: TonAddress) {
         logOut()
         
         persistentState.accountId = accountId
