@@ -33,6 +33,8 @@ final class JSCoreConnection: NSObject {
         
         config.applicationNameForUserAgent = "MyTonWallet-iOS"
         
+        removeLocalData()
+        
         userContentController = WKUserContentController()
         userContentController.add(self, name: "onUpdate")
         config.userContentController = userContentController
@@ -92,6 +94,18 @@ final class JSCoreConnection: NSObject {
         }
     }
 
+    func removeLocalData() {
+        let dataStore = WKWebsiteDataStore.default()
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+          dataStore.removeData(
+            ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
+            for: records,
+            completionHandler: {
+                log.info("local data cleaned")
+            }
+          )
+        }
+    }
 }
 
 

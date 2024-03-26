@@ -30,8 +30,8 @@ struct TransactionsSection: View {
             UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16), style: .continuous)
         )
         .sheet(item: $presentedTransaction) { presentedTransaction in
-//            TransactionDetailsSheet(transaction: presentedTransaction)
-            EmptyView()
+            TransactionDetailsSheet(transaction: presentedTransaction)
+//            EmptyView()
         }
         .onAppear {
             self.groupedActivities = OrderedDictionary(grouping: model.activities, by: { activity -> DateComponents in
@@ -78,7 +78,6 @@ struct TransactionsSection: View {
                                 .padding(.bottom, 4)
                         }
                     }
-//                    .border(Color.red)
                 } footer: {
                     if date != groupedActivities.keys.last {
                         Color(UIColor.systemGroupedBackground)

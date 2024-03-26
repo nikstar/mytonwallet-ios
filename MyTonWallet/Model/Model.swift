@@ -82,18 +82,17 @@ final class Model: ObservableObject {
                         for (slug, balance) in apiUpdateBalances.balancesToUpdate {
                             print("apiUpdateBalances.balancesToUpdate", slug, balance)
                         }
-                    case .newActivities(let apiUpdateNewActivities):
-                        print(self.activities.count, apiUpdateNewActivities.activities.count)
-                        for newActivity in apiUpdateNewActivities.activities {
+                    case .newActivities(let u):
+                        print(self.activities.count, u.activities.count)
+                        for newActivity in u.activities {
                             activities.updateOrAppend(
                                 NormalizedActivity(activity: newActivity, knownTokens: self.knownTokens)
                             )
                         }
                     case .nfts(let u):
                         self.nfts = u.nfts
-                        print("nfts", u.nfts)
                     case .region(let u):
-                        print(u.isLimited)
+                        log.debug("updateRegion isLimited=\(u.isLimited)")
                     case .swapTokens(let u):
                         for (slug, token) in u.tokens {
                             self.swapTokens[slug] = token
