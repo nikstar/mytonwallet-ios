@@ -314,7 +314,9 @@ struct Congratulations: View {
             return
         }
         model.persistentState.userPassword = nil
-        model.logIn(accountId: accountId, address: address)
+        Task {
+            await model.logIn(accountId: accountId, address: address)
+        }
     }
 }
 
@@ -431,7 +433,9 @@ struct ConfirmPassword: View {
             return
         }
         model.persistentState.userPassword = loginFlowModel.preliminaryUserPassword
-        model.logIn(accountId: accountId, address: address)
+        Task {
+            await model.logIn(accountId: accountId, address: address)
+        }
     }
 }
 

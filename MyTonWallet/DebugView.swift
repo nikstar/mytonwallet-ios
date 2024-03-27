@@ -13,7 +13,10 @@ struct DebugView: View {
         if debugOverlay {
             VStack(alignment: .trailing) {
                 
-                Button(action: {
+                Button(asyncAction: {
+                    try?  await api.callApiReturningVoid("resetAccounts")
+                    await model.api.jsCore.removeLocalData()
+                    // todo: clear cache
                     UserDefaults.standard.removePersistentDomain(forName: "group.me.nikstar.mytonwallet")
                     exit(0)
                 }) {
@@ -29,7 +32,7 @@ struct DebugView: View {
                 Button(asyncAction: {
                     do {
                         let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
-                        model.logIn(accountId: accountId, address: address)
+                        await model.logIn(accountId: accountId, address: address)
                         print(accountId)
                     } catch {
                         print(error)
@@ -39,52 +42,19 @@ struct DebugView: View {
                 }
                 
                 Button(asyncAction: {
-                    do {
-                        let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic2, password: model.persistentState.encryptionPassword)
-                        model.logIn(accountId: accountId, address: address)
-                        print(accountId, address)
-                    } catch {
-                        print(error)
-                    }
+                    await model.logOut()
+                    model.switchToNetwork(network: .mainnet)
                 }) {
-                    Text("Log in with test wallet 2")
+                    Text("Switch to mainnet")
                 }
                 
                 Button(asyncAction: {
-                    do {
-                        let tokens = try await api.fetchTokenBalances(accountId: model.persistentState.accountId!)
-                        print(tokens)
-                    } catch {
-                        print(error)
-                    }
+                    await model.logOut()
+                    model.switchToNetwork(network: .testnet)
                 }) {
-                    Text("fetchTokenBalances")
+                    Text("Switch to testnet")
                 }
                 
-                Button(asyncAction: {
-                    
-                    do {
-                        let address = try await api.fetchAddress(accountId: model.persistentState.accountId!)
-                        let v = try await api.getTransactions(address: address, limit: 20)
-                        print(v as Any)
-                    } catch {
-                        print(error)
-                    }
-                }) {
-                    Text("getTransactions")
-                }
-                
-                Button(asyncAction: {
-                    
-                    do {
-                        try await api.callApiReturningVoid("resetAccounts")
-                        
-                    } catch {
-                        print(error)
-                    }
-                }) {
-                    Text("resetAccounts")
-                }
                 
             }
             .foregroundStyle(Color.black.opacity(0.5))

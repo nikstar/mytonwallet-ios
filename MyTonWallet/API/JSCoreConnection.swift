@@ -94,16 +94,20 @@ final class JSCoreConnection: NSObject {
         }
     }
 
-    func removeLocalData() {
-        let dataStore = WKWebsiteDataStore.default()
-        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-          dataStore.removeData(
-            ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
-            for: records,
-            completionHandler: {
-                log.info("local data cleaned")
+    func removeLocalData() async {
+        await withUnsafeContinuation { cont in
+            let dataStore = WKWebsiteDataStore.default()
+            dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+              dataStore.removeData(
+                ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
+                for: records,
+                completionHandler: {
+                    log.info("local data cleaned")
+                    cont.resume()
+                }
+              )
             }
-          )
+
         }
     }
 }

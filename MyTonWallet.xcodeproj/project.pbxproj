@@ -36,6 +36,7 @@
 		58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AF2BAB971800DE08BF /* JSReturnValue.swift */; };
 		58D2D0222BB1A55300F613DE /* NormalizedActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */; };
 		58D4E6EC2BB449AB00831B07 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D4E6EB2BB449AB00831B07 /* SettingsTab.swift */; };
+		58D4E6EE2BB4588B00831B07 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 58D4E6ED2BB4588B00831B07 /* PrivacyInfo.xcprivacy */; };
 		58DDF7642BA81EB9003D9628 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7632BA81EB9003D9628 /* Model.swift */; };
 		58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7652BA81FDF003D9628 /* UIState.swift */; };
 		58DDF7682BA82DF1003D9628 /* WalletTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7672BA82DF1003D9628 /* WalletTab.swift */; };
@@ -95,6 +96,7 @@
 		58D164AF2BAB971800DE08BF /* JSReturnValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSReturnValue.swift; sourceTree = "<group>"; };
 		58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalizedActivity.swift; sourceTree = "<group>"; };
 		58D4E6EB2BB449AB00831B07 /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
+		58D4E6ED2BB4588B00831B07 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		58DDF7632BA81EB9003D9628 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		58DDF7652BA81FDF003D9628 /* UIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIState.swift; sourceTree = "<group>"; };
 		58DDF7672BA82DF1003D9628 /* WalletTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletTab.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 		58659BEF2BAAD0E4006E14C1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				58D4E6ED2BB4588B00831B07 /* PrivacyInfo.xcprivacy */,
 				58FBD2912BAECF4E005F5F09 /* MyTonWallet.entitlements */,
 				58B6041C2BA43A5200049146 /* Info.plist */,
 				58511A8C2BA37F1600E08053 /* Assets.xcassets */,
@@ -369,6 +372,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58D4E6EE2BB4588B00831B07 /* PrivacyInfo.xcprivacy in Resources */,
 				58B6041B2BA437C100049146 /* js-core in Resources */,
 				58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */,
 			);
@@ -557,12 +561,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MyTonWallet/MyTonWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = mytonwallet/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -588,12 +593,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = MyTonWallet/MyTonWallet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = mytonwallet/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";

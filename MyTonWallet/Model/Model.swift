@@ -20,6 +20,10 @@ final class Model: ObservableObject {
     @Published var nfts: [ApiNft] = []
     @Published var swapTokens: [String: ApiToken] = [:]
     
+    func switchToNetwork(network: ApiNetwork) {
+        self.api = Api(network: network)
+    }
+    
     func getToken(_ slug: Slug) -> ApiToken? {
         return knownTokens[slug]
     }
@@ -121,8 +125,8 @@ final class Model: ObservableObject {
     }
     
     @MainActor
-    func logIn(accountId: String, address: TonAddress) {
-        logOut()
+    func logIn(accountId: String, address: TonAddress) async {
+        await logOut()
         
         persistentState.accountId = accountId
         persistentState.address = address
@@ -138,7 +142,7 @@ final class Model: ObservableObject {
     }
     
     @MainActor
-    func logOut() {
+    func logOut() async {
         persistentState.accountId = nil
         persistentState.address = nil
         self.activities = [:]

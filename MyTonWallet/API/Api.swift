@@ -4,7 +4,7 @@ import Foundation
 
 private let log = fileLog()
 
-private let API_V2 = "https://tonhttpapi.mytonwallet.org/api/v2/"
+//private let API_V2 = "https://tonhttpapi.mytonwallet.org/api/v2/"
 
 final class Api: ObservableObject {
     
@@ -28,8 +28,8 @@ final class Api: ObservableObject {
         }
     }
     
-    private var jsCore = JSCoreConnection()
-    private var httpApiV2 = HTTPApi(API_V2)
+    var jsCore = JSCoreConnection()
+//    private var httpApiV2 = HTTPApi(API_V2)
     
     private let jsonDecoder = JSONDecoder()
     
@@ -154,19 +154,19 @@ extension Api {
     
     
     // MARK: - Wallet
-    
-    func getWalletInformation(address: TonAddress) async throws -> JSReturnValue {
-        return try await httpApiV2.get("getWalletInformation", params: ["address": address.string])
-    }
-    
-    func getTransactions(address: TonAddress, limit: Int? = nil, lt: Int? = nil, hash: String? = nil, archival: Bool? = nil) async throws -> JSReturnValue {
-        var params: [String:String] = ["address": address.string]
-        if let limit { params["limit"] = String(limit) }
-        if let lt { params["lt"] = String(lt) }
-        if let hash { params["hash"] = hash }
-        if let archival, archival == true { params["archival"] = String(archival) }
-        return try await httpApiV2.get("getTransactions", params: params)
-    }
+//    
+//    func getWalletInformation(address: TonAddress) async throws -> JSReturnValue {
+//        return try await httpApiV2.get("getWalletInformation", params: ["address": address.string])
+//    }
+//    
+//    func getTransactions(address: TonAddress, limit: Int? = nil, lt: Int? = nil, hash: String? = nil, archival: Bool? = nil) async throws -> JSReturnValue {
+//        var params: [String:String] = ["address": address.string]
+//        if let limit { params["limit"] = String(limit) }
+//        if let lt { params["lt"] = String(lt) }
+//        if let hash { params["hash"] = hash }
+//        if let archival, archival == true { params["archival"] = String(archival) }
+//        return try await httpApiV2.get("getTransactions", params: params)
+//    }
     
     // MARK: - Activity
     
