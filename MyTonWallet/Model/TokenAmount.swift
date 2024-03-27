@@ -30,7 +30,7 @@ extension TokenAmount {
     
     var valueInCurrency: CurrencyValue? {
         if let pricePerToken {
-            CurrencyValue(currency: pricePerToken.currency, value: decimalAmount * pricePerToken.value)
+            CurrencyValue(currency: pricePerToken.currency, value: abs(decimalAmount) * pricePerToken.value)
         } else {
             nil
         }
@@ -51,11 +51,13 @@ extension TokenAmount {
 
 struct TokenAmountFormatStyle: FormatStyle {
     
+    var precision: NumberFormatStyleConfiguration.Precision = .fractionLength(0..<2)
     var explicitPlus: Bool = false
     var asNegative: Bool = false
+    var noSign: Bool = false
     
     func format(_ tokenValue: TokenAmount) -> String {
-        var formatter = FloatingPointFormatStyle<Double>.number.precision(.fractionLength(0..<2))
+        var formatter = FloatingPointFormatStyle<Double>.number.precision(precision)
         if explicitPlus {
             formatter = formatter.sign(strategy: .always(includingZero: false))
         }
@@ -63,8 +65,17 @@ struct TokenAmountFormatStyle: FormatStyle {
         if asNegative {
             amount = -amount
         }
+        if noSign {
+            amount = abs(amount)
+        }
         let value = amount.formatted(formatter)
         return "\(value) \(tokenValue.token.symbol)"
+    }
+    
+    func precision(_ v: NumberFormatStyleConfiguration.Precision) -> TokenAmountFormatStyle {
+        var s = self
+        s.precision = v
+        return s
     }
 }
 
@@ -82,4 +93,7 @@ extension FormatStyle where Self == TokenAmountFormatStyle {
         TokenAmountFormatStyle(asNegative: asNegative)
     }
 
+    static func tokenAmount(noSign: Bool) -> TokenAmountFormatStyle {
+        TokenAmountFormatStyle(noSign: noSign)
+    }
 }

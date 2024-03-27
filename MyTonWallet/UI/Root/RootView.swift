@@ -36,6 +36,11 @@ struct RootView: View {
                 .tag(Tab.settings)
                 
         }
+        .onChange(of: model.persistentState.accountId) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                currentTab = .wallet
+            }
+        }
         .overlay {
             Group {
                 if !model.persistentState.loggedIn {

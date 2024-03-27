@@ -96,14 +96,14 @@ struct TransactionsSection: View {
     }
     
     @ViewBuilder var emptyState: some View {
-        if model.assumeEmpty && groupedActivities.isEmpty {
+        if model.persistentState.accountId != nil && model.assumeEmpty && groupedActivities.isEmpty {
             VStack(spacing: 16) {
                 Sticker("Created", play: .playOnce)
                 Text("You have no transactions yet.")
                     .font(.body.weight(.medium))
                     .foregroundStyle(.black)
             }
-            .padding(.top, 80)
+            .padding(.top, 100)
             .padding(.horizontal, 50)
         }
     }
@@ -198,10 +198,10 @@ struct TransactionRow: View {
     var topRight: some View {
         switch activity.activity.type {
         case .received:
-            Text(activity.tokenAmount?.formatted() ?? "no amount")
+            Text(activity.tokenAmount?.formatted(.tokenAmount(explicitPlus: true)) ?? "no amount")
                 .foregroundStyle(Color.transactionGreen)
         case .sent:
-            Text(activity.tokenAmount?.formatted() ?? "no amount")
+            Text(activity.tokenAmount?.formatted(.tokenAmount(noSign: true)) ?? "no amount")
 //        case .received:
 //            Text(i.value.formatted(.tokenValue(explicitPlus: true)))
 //                .foregroundStyle(Color.transactionGreen)

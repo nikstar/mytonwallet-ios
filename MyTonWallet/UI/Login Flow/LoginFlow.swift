@@ -70,40 +70,43 @@ fileprivate struct Start: View {
     @State private var unhandledErrorMessage: String = ""
     
     var body: some View {
-        VStack(spacing: 0) {
-            Sticker("Start")
-                .padding(.bottom, 24)
-            Text("MyTonWallet")
-                .font(.title.weight(.semibold))
-                .padding(.bottom, 12)
-            Text("Securely store and send crypto.")
-                .padding(.bottom, 36)
+        ZStack {
+            Color.clear
             
-            Button(asyncAction: onCreate) {
-                Text("Create New Wallet")
+            VStack(spacing: 0) {
+                Sticker("Start")
+                    .padding(.bottom, 24)
+                Text("MyTonWallet")
+                    .font(.title.weight(.semibold))
+                    .padding(.bottom, 12)
+                Text("Securely store and send crypto.")
+                    .padding(.bottom, 36)
+                
+                Button(asyncAction: onCreate) {
+                    Text("Create New Wallet")
+                }
+                .buttonStyle(.wallet())
+                .padding(.bottom, 16)
+                
+                Button(action: onImport) {
+                    Text("Import Existing Wallet")
+                }
+                .buttonStyle(.wallet(textColor: .blue, backgroundColor: .clear))
             }
-            .buttonStyle(.wallet())
-            .padding(.bottom, 16)
-            
-            Button(action: onImport) {
-                Text("Import Existing Wallet")
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 32)
+            .padding(.bottom, 40)
+            .alert("Error", isPresented: $unhandledErrorAlertPresented) {
+                Button("OK", role: .cancel, action: { unhandledErrorAlertPresented = false })
+            } message: {
+                Text(unhandledErrorMessage)
             }
-            .buttonStyle(.wallet(textColor: .blue, backgroundColor: .clear))
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .navigationBar)
         }
-        .multilineTextAlignment(.center)
-        .padding(.horizontal, 32)
-        .padding(.bottom, 40)
-        .alert("Error", isPresented: $unhandledErrorAlertPresented) {
-            Button("OK", role: .cancel, action: { unhandledErrorAlertPresented = false })
-        } message: {
-            Text(unhandledErrorMessage)
-        }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .navigationBar)
         .overlay(alignment: .bottom) {
             Toggle("Debug Overlay", isOn: $debugOverlay)
-                .offset(y: 50)
                 .padding(.horizontal, 32)
         }
     }
@@ -179,11 +182,13 @@ struct SecretWords: View {
                                     if focusedTextField == i {
                                         let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
                                         if insertedWords.count == words.count {
-                                            words = insertedWords.map(String.init)
-                                            focusedTextField = words.count - 1
-                                            withAnimation(.default) {
-                                                scrollView.scrollTo(submitButton, anchor: .bottom)
-                                            }
+                                            focusedTextField = nil
+//                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                words = insertedWords.map(String.init)
+                                                withAnimation(.default) {
+                                                    scrollView.scrollTo(submitButton, anchor: .bottom)
+                                                }
+//                                            }
                                         } else if insertedWords.count > 1 {
                                             var words = self.words
                                             for (j, w) in insertedWords.enumerated() {
@@ -523,6 +528,9 @@ struct PasscodeTextField: View {
                 }
                 .onChange(of: passcode.count) { count in
                     if count == 0 {
+                        passwordEntryFocused = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         passwordEntryFocused = true
                     }
                 }

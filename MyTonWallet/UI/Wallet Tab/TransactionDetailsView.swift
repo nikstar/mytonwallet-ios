@@ -16,7 +16,7 @@ struct TransactionDetailsSheet: View {
                 .toolbar {
                     ToolbarItem(placement: .principal) {
                         VStack(spacing: 0) {
-                            Text(transaction.activity.isIncoming == true ? "Received" : "Sent")
+                            Text(transaction.isIncoming ? "Received" : "Sent")
                                                 .font(.headline.weight(.semibold))
                             Text(transaction.date.formatted(.dateTime.year().month(.wide).day().hour().minute()))
                                 .font(.footnote)
@@ -98,37 +98,86 @@ struct TransactionDetailsView: View {
     var activity: NormalizedActivity
     
     @State private var toastPresented: Bool = false
+
+    @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
     
+
     var body: some View {
         List {
             Section {} header: {
                 VStack(spacing: 8) {
-                    Text(activity.tokenAmount?.formatted() ?? "--")
-                        .font(.largeTitle.weight(.semibold))
-                        .foregroundStyle(Color.green)
-                        .frame(maxWidth: .infinity, alignment: .center)
+                    if activity.isIncoming {
+                        Text(activity.tokenAmount?.formatted(.tokenAmount(explicitPlus: true)) ?? "--")
+                            .font(.largeTitle.weight(.semibold))
+                            .foregroundStyle(activity.isIncoming ? Color.green : Color.black)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    } else {
+                        Text(activity.tokenAmount?.formatted(.tokenAmount(noSign: true)) ?? "--")
+                            .font(.largeTitle.weight(.semibold))
+                            .foregroundStyle(activity.isIncoming ? Color.green : Color.black)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
                     
                     Text(activity.tokenAmount?.valueInCurrency?.formatted() ?? "--")
                         .font(.body)
-                        .foregroundStyle(Color.transactionSecondary)
+                        .foregroundStyle(activity.isIncoming ? Color.green : Color.transactionSecondary)
                         .frame(maxWidth: .infinity, alignment: .center)
-
+                    
                 }
+                .textCase(nil)
                 .padding(.vertical, 24)
             }
             
             if let comment = activity.activity.comment {
                 Section {
                     Text(verbatim: comment)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            UIPasteboard.general.string = comment
+                            toastPresented = true
+                        }
+
                 } header: {
                     Text("Comment")
                 }
             }
             
             Section {
-                Text("Todo")
-                    .italic()
-                    .foregroundStyle(.secondary)
+                
+                if activity.isIncoming {
+                    LabeledContent {
+                        Text(activity.activity.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("Sender")//.frame(width: 42, alignment: .leading)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.activity.fromAddress?.string
+                        toastPresented = true
+                    }
+                    
+                } else { // is outgoing
+                    LabeledContent {
+                        Text(activity.activity.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("Recipient")
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.activity.toAddress?.string
+                        toastPresented = true
+                    }
+                }
+                
+                
+                LabeledContent("Amount", value: activity.tokenAmount?.formatted(.tokenAmount(noSign: true).precision(.significantDigits(1...9))) ?? "-")
+                    .foregroundStyle(.primary)
+                
+                LabeledContent("Fee", value: activity.fee.formatted(.tokenAmount(noSign: true).precision(.significantDigits(1...9))) )
+                    .foregroundStyle(.primary)
+                
                 
                 if let tx = activity.activity.txId?.split(separator: ":").last.map(String.init), let url = URL(string: "https://tonscan.org/tx/\(tx)") {
                     Link(destination: url) {
@@ -141,86 +190,89 @@ struct TransactionDetailsView: View {
             }
             .foregroundStyle(.primary)
             
-            Section {
-                LabeledContent {
-                    Text(activity.activity.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
-                        .font(.body.monospaced())
-                } label: {
-                    Text("From")//.frame(width: 42, alignment: .leading)
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.fromAddress?.string
-                    toastPresented = true
-                }
-
-                LabeledContent {
-                    Text(activity.activity.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
-                        .font(.body.monospaced())
-                } label: {
-                    Text("To")
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.toAddress?.string
-                    toastPresented = true
-                }
-
-                LabeledContent {
-                    Text(activity.activity.normalizedAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
-                        .font(.body.monospaced())
-                } label: {
-                    Text("Normalized")//.frame(width: 42, alignment: .leading)
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.normalizedAddress?.string
-                    toastPresented = true
-                }
-
-                LabeledContent {
-                    Text(activity.activity.txId ?? "-")
-                        .font(.body.monospaced())
-                } label: {
-                    Text("TxId").frame(width: 42, alignment: .leading)
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.txId
-                    toastPresented = true
-                }
-
-                LabeledContent {
-                    Text(activity.activity.txId?.split(separator: ":").last ?? "-")
-                        .font(.body.monospaced())
-                } label: {
-                    Text("Tx").frame(width: 42, alignment: .leading)
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    UIPasteboard.general.string = activity.activity.txId?.split(separator: ":").last.map(String.init)
-                    toastPresented = true
-                }
-                
-                LabeledContent {
-                    Text(activity.date.formatted(.iso8601))
-                } label: {
-                    Text("Date")
-                }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    UIPasteboard.general.string = activity.date.formatted(.iso8601)
-                    toastPresented = true
-                }
-                
-                LabeledContent("Amount", value: activity.tokenAmount?.formatted() ?? "-")
-                    .foregroundStyle(.primary)
-                LabeledContent("Fee", value: "\((Double(activity.activity.fee?.value ?? 0) / 1_000_000_000).formatted()) TON" )
-                    .foregroundStyle(.primary)
+            if debugOverlay {
+                Section {
+                    LabeledContent {
+                        Text(activity.activity.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("From")//.frame(width: 42, alignment: .leading)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.activity.fromAddress?.string
+                        toastPresented = true
+                    }
+                    
+                    LabeledContent {
+                        Text(activity.activity.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("To")
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.activity.toAddress?.string
+                        toastPresented = true
+                    }
+                    
+                    LabeledContent {
+                        Text(activity.activity.normalizedAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("Normalized")//.frame(width: 42, alignment: .leading)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.activity.normalizedAddress?.string
+                        toastPresented = true
+                    }
+                    
+                    LabeledContent {
+                        Text(activity.activity.txId ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("TxId").frame(width: 42, alignment: .leading)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.activity.txId
+                        toastPresented = true
+                    }
+                    
+                    LabeledContent {
+                        Text(activity.activity.txId?.split(separator: ":").last ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("Tx").frame(width: 42, alignment: .leading)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.activity.txId?.split(separator: ":").last.map(String.init)
+                        toastPresented = true
+                    }
+                    
+                    LabeledContent {
+                        Text(activity.date.formatted(.iso8601))
+                    } label: {
+                        Text("Date")
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.date.formatted(.iso8601)
+                        toastPresented = true
+                    }
+                    
+                    LabeledContent("Amount", value: activity.tokenAmount?.formatted() ?? "-")
+                        .foregroundStyle(.primary)
+                    LabeledContent("Fee", value: "\((Double(activity.activity.fee?.value ?? 0) / 1_000_000_000).formatted()) TON" )
+                        .foregroundStyle(.primary)
                 } header: {
-                Text("Debug")
+                    Text("Debug")
+                }
+                .foregroundStyle(.primary)
+
             }
-            .foregroundStyle(.primary)
 
         }
         .listStyle(.insetGrouped)

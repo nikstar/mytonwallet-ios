@@ -13,6 +13,10 @@ struct NormalizedActivity: Hashable, Codable, Identifiable {
     var id: String { activity.id }
     
     var date: Date { Date(timeIntervalSince1970: Double(activity.timestamp) / 1000) }
+    
+    var isIncoming: Bool { activity.isIncoming ?? false }
+    
+    var fee: TokenAmount { .init(amount: Double(activity.fee?.value ?? 0), token: .toncoin)}
 }
 
 

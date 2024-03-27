@@ -113,7 +113,7 @@ final class Model: ObservableObject {
                         guard u.accountId == persistentState.accountId else { break }
                         print(self.activities.count, u.activities.count)
                         for newActivity in u.activities {
-                            if ((newActivity.amount?.value ?? 0) <= 20) && (newActivity.slug == "toncoin") { continue }
+                            if (abs(newActivity.amount?.value ?? 0) <= 20) && (newActivity.slug == "toncoin") { continue }
                             let normalized = NormalizedActivity(activity: newActivity, knownTokens: self.knownTokens)
                             self.activities[normalized.id] = normalized
                         }
@@ -191,7 +191,7 @@ final class Model: ObservableObject {
         let activities = try await api.fetchAllActivitySliceForTokens(accountId: accountId, tokens: Array(walletTokens.keys))
         await MainActor.run {
             for activity in activities {
-                if ((activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
+                if (abs(activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
                 let normalized = NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
                 self.activities[normalized.id] = normalized
             }
@@ -202,7 +202,7 @@ final class Model: ObservableObject {
 //            await MainActor.run {
 //                for activity in activities {
 //                    print(activity)
-//                    if ((activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
+//                    if (abs(activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
 
 //                    self.activities.updateOrAppend(
 //                        NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
@@ -217,9 +217,9 @@ final class Model: ObservableObject {
             }
         }
         
-        for (_, activity) in self.activities.prefix(3) {
-            print(activity)
-        }
+//        for (_, activity) in self.activities.prefix(3) {
+//            print(activity)
+//        }
     }
     
     func fetchTokens() async throws {
