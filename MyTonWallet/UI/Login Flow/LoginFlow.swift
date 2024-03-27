@@ -1,5 +1,7 @@
 
 import SwiftUI
+import Pow
+
 
 private let log = fileLog()
 
@@ -172,6 +174,7 @@ struct SecretWords: View {
                                 .textInputAutocapitalization(.never)
                                 .frame(maxWidth: .infinity)
                                 .focused($focusedTextField, equals: i)
+                                .foregroundStyle(focusedTextField == i || words[i].isEmpty || validWords.isEmpty || validWords.contains(words[i]) ? Color.black : Color.red)
                                 .onChange(of: words[i]) { value in
                                     if focusedTextField == i {
                                         let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
@@ -243,7 +246,11 @@ struct SecretWords: View {
             }
         }
         .task {
-            // load words
+            do {
+                self.validWords = Set(try await model.api.getMnemonicWordList())
+            } catch {
+                log.fault("getMnemonicWordList \(error)")
+            }
         }
     }
     
@@ -347,7 +354,10 @@ struct SetupPassword: View {
         .multilineTextAlignment(.center)
         .onChange(of: passwordValue) { passwordValue in
             if passwordValue.count == length {
-                onPasswordEntered()
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.2))
+                    onPasswordEntered()
+                }
             }
         }
         .safeAreaInset(edge: .bottom, content: {
@@ -394,6 +404,9 @@ struct ConfirmPassword: View {
     @State private var passwordValue: String = ""
     private var length: Int { loginFlowModel.preliminaryUserPassword?.count ?? 4 }
     
+    /// toggle to trigger
+    @State private var shakeTrigger: Bool = false
+    
     var body: some View {
         
         VStack(spacing: 0) {
@@ -405,18 +418,23 @@ struct ConfirmPassword: View {
                 .padding(.bottom, 12)
             Text("Re-enter the \(length) digits in the passcode.")
                 .padding(.bottom, 32)
-            PasscodeTextField($passwordValue, length: length)
+            PasscodeTextField($passwordValue, length: length)        
+                .changeEffect(.shake(rate: .fast), value: shakeTrigger)
+
             Spacer()
         }
         .padding(.horizontal, 32)
         .multilineTextAlignment(.center)
         .onChange(of: passwordValue) { passwordValue in
             if passwordValue.count == length {
-                if passwordValue == loginFlowModel.preliminaryUserPassword {
-                    onPasswordConfirmed()
-                } else {
-                    // shake
-                    self.passwordValue = ""
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(0.2))
+                    if passwordValue == loginFlowModel.preliminaryUserPassword {
+                        onPasswordConfirmed()
+                    } else {
+                        shakeTrigger.toggle()
+                        self.passwordValue = ""
+                    }
                 }
             }
         }
@@ -479,8 +497,10 @@ struct PasscodeTextField: View {
                                 Circle().stroke(lineWidth: 1).foregroundColor(Color(UIColor.separator)).frame(width: 16, height: 16)
                                 if i + 1 <= passcode.count {
                                     Circle().fill().frame(width: 16, height: 16)
+                                        .transition(.scale)
                                 }
                             }
+                            .animation(.bouncy(duration: 0.15), value: passcode.count)
                         }
                     } else {
                         ForEach(0..<6) { i in
@@ -488,8 +508,10 @@ struct PasscodeTextField: View {
                                 Circle().stroke(lineWidth: 1).foregroundColor(Color(UIColor.separator)).frame(width: 16, height: 16)
                                 if i + 1 <= passcode.count {
                                     Circle().fill().frame(width: 16, height: 16)
+                                        .transition(.scale)
                                 }
                             }
+                            .animation(.bouncy(duration: 0.2), value: passcode.count)
                         }
                     }
                 }
@@ -498,6 +520,11 @@ struct PasscodeTextField: View {
                 }
                 .onAppear {
                     passwordEntryFocused = true
+                }
+                .onChange(of: passcode.count) { count in
+                    if count == 0 {
+                        passwordEntryFocused = true
+                    }
                 }
             
         }

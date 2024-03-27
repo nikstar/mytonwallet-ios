@@ -55,7 +55,7 @@ struct DebugView: View {
                     Text("Switch to testnet")
                 }
                 
-                
+                Text("Current: \(model.network)").italic()
             }
             .foregroundStyle(Color.black.opacity(0.5))
             .tint(Color.black.opacity(0.5))

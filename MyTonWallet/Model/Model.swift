@@ -21,8 +21,10 @@ final class Model: ObservableObject {
     @Published var swapTokens: [String: ApiToken] = [:]
     
     @AppStorage("assumeEmpty", store: .group) var assumeEmpty: Bool = false
+    @AppStorage("network", store: .group) var network: String = "mainnet"
     
     func switchToNetwork(network: ApiNetwork) {
+        self.network = network.rawValue
         self.api = Api(network: network)
     }
     
@@ -59,6 +61,9 @@ final class Model: ObservableObject {
     init(persistentState: PersitstentState, uiState: UIState) {
         self.persistentState = persistentState
         self.uiState = uiState
+        if network == "testnet" {
+            switchToNetwork(network: .testnet)
+        }
         
         observeUpdatesTask = Task.detached { [weak self] in
             await self?.observeUpdates()
@@ -108,6 +113,7 @@ final class Model: ObservableObject {
                         guard u.accountId == persistentState.accountId else { break }
                         print(self.activities.count, u.activities.count)
                         for newActivity in u.activities {
+                            if ((newActivity.amount?.value ?? 0) <= 20) && (newActivity.slug == "toncoin") { continue }
                             let normalized = NormalizedActivity(activity: newActivity, knownTokens: self.knownTokens)
                             self.activities[normalized.id] = normalized
                         }
@@ -185,6 +191,7 @@ final class Model: ObservableObject {
         let activities = try await api.fetchAllActivitySliceForTokens(accountId: accountId, tokens: Array(walletTokens.keys))
         await MainActor.run {
             for activity in activities {
+                if ((activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
                 let normalized = NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
                 self.activities[normalized.id] = normalized
             }
@@ -195,6 +202,8 @@ final class Model: ObservableObject {
 //            await MainActor.run {
 //                for activity in activities {
 //                    print(activity)
+//                    if ((activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
+
 //                    self.activities.updateOrAppend(
 //                        NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
 //                    )
@@ -203,6 +212,9 @@ final class Model: ObservableObject {
 //        }
         await MainActor.run {
             self.activities.sort(by: { $0.key > $1.key })
+            if self.activities.isEmpty {
+                self.assumeEmpty = true       
+            }
         }
         
         for (_, activity) in self.activities.prefix(3) {

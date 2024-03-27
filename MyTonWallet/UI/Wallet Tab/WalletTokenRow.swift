@@ -56,32 +56,6 @@ struct WalletTokenRow: View {
 }
 
 
-struct TokenImage: View {
-    
-    var token: Optional<ApiToken>
-    
-    @ViewBuilder
-    var body: some View {
-        if let image = token?.image {
-            let _ = print(image)
-            AsyncImage(url: URL(string: image)) { image in
-                image
-                    .resizable()
-            } placeholder: {
-                Rectangle().fill(Material.thin)
-            }
-        } else {
-            if token?.slug == "toncoin" {
-                Image("Toncoin.Image")
-                    .resizable()
-            } else {
-                Rectangle().fill(Material.thin)
-            }
-        }
-    }
-}
-
-
 extension View {
     
     @ViewBuilder

@@ -103,7 +103,7 @@ struct TransactionsSection: View {
                     .font(.body.weight(.medium))
                     .foregroundStyle(.black)
             }
-            .padding(.top, 78)
+            .padding(.top, 80)
             .padding(.horizontal, 50)
         }
     }

@@ -30,6 +30,8 @@
 		58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */; };
 		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
 		58B6041B2BA437C100049146 /* js-core in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* js-core */; };
+		58B934B02BB4AE290086DEBC /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 58B934AF2BB4AE290086DEBC /* Pow */; };
+		58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B934B22BB4B56D0086DEBC /* TokenImage.swift */; };
 		58C8E6392BB2E6B200CDE5A0 /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 58C8E6382BB2E6B200CDE5A0 /* SimpleToast */; };
 		58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */; };
 		58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AD2BAB961D00DE08BF /* ApiError.swift */; };
@@ -91,6 +93,7 @@
 		58659BFD2BAAD79B006E14C1 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		58B6041A2BA437C100049146 /* js-core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "js-core"; sourceTree = "<group>"; };
 		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		58B934B22BB4B56D0086DEBC /* TokenImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenImage.swift; sourceTree = "<group>"; };
 		58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TonAddress.swift; sourceTree = "<group>"; };
 		58D164AD2BAB961D00DE08BF /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		58D164AF2BAB971800DE08BF /* JSReturnValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSReturnValue.swift; sourceTree = "<group>"; };
@@ -134,6 +137,7 @@
 				580D091A2BAD922100575E4B /* Gzip in Frameworks */,
 				58DDF78A2BA8E782003D9628 /* OrderedCollections in Frameworks */,
 				58DDF78C2BA8E782003D9628 /* _RopeModule in Frameworks */,
+				58B934B02BB4AE290086DEBC /* Pow in Frameworks */,
 				58C8E6392BB2E6B200CDE5A0 /* SimpleToast in Frameworks */,
 				58DDF77D2BA8E491003D9628 /* Algorithms in Frameworks */,
 			);
@@ -168,6 +172,7 @@
 				580044002BB0DB8300C364CE /* WalletTokenRow.swift */,
 				58DDF78D2BA97802003D9628 /* TransactionsSection.swift */,
 				58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */,
+				58B934B22BB4B56D0086DEBC /* TokenImage.swift */,
 			);
 			path = "Wallet Tab";
 			sourceTree = "<group>";
@@ -322,6 +327,7 @@
 				580D09162BAD91BF00575E4B /* Lottie */,
 				580D09192BAD922100575E4B /* Gzip */,
 				58C8E6382BB2E6B200CDE5A0 /* SimpleToast */,
+				58B934AF2BB4AE290086DEBC /* Pow */,
 			);
 			productName = mytonwallet;
 			productReference = 58511A852BA37F1400E08053 /* MyTonWallet.app */;
@@ -357,6 +363,7 @@
 				580D09152BAD91BF00575E4B /* XCRemoteSwiftPackageReference "lottie-spm" */,
 				580D09182BAD922100575E4B /* XCRemoteSwiftPackageReference "GzipSwift" */,
 				58C8E6372BB2E6B100CDE5A0 /* XCRemoteSwiftPackageReference "SimpleToast" */,
+				58B934AE2BB4AE290086DEBC /* XCRemoteSwiftPackageReference "Pow" */,
 			);
 			productRefGroup = 58511A862BA37F1400E08053 /* Products */;
 			projectDirPath = "";
@@ -408,6 +415,7 @@
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
 				5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
+				58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */,
 				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
 				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
 				58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */,
@@ -658,6 +666,14 @@
 				minimumVersion = 6.0.1;
 			};
 		};
+		58B934AE2BB4AE290086DEBC /* XCRemoteSwiftPackageReference "Pow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EmergeTools/Pow";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.3;
+			};
+		};
 		58C8E6372BB2E6B100CDE5A0 /* XCRemoteSwiftPackageReference "SimpleToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sanzaru/SimpleToast";
@@ -694,6 +710,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 580D09182BAD922100575E4B /* XCRemoteSwiftPackageReference "GzipSwift" */;
 			productName = Gzip;
+		};
+		58B934AF2BB4AE290086DEBC /* Pow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 58B934AE2BB4AE290086DEBC /* XCRemoteSwiftPackageReference "Pow" */;
+			productName = Pow;
 		};
 		58C8E6382BB2E6B200CDE5A0 /* SimpleToast */ = {
 			isa = XCSwiftPackageProductDependency;

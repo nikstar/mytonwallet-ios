@@ -115,6 +115,10 @@ extension Api {
         }
     }
     
+    func getMnemonicWordList() async throws -> [String] {
+        try await callApi("getMnemonicWordList", decoding: [String].self)
+    }
+    
     
     // MARK: - Accounts
     
