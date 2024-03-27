@@ -170,8 +170,10 @@ struct AssetsSection: View {
     var body: some View {
         VStack(spacing: 0) {
             accountValue
-            actionButtons
-            walletTokens
+            VStack(spacing: 16) {
+                actionButtons
+                walletTokens
+            }
         }
         .padding(.bottom, 16)
         .padding(.bottom, 20)
@@ -201,7 +203,7 @@ struct AssetsSection: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
-        .padding(.vertical, 16)
+        .padding(.top, 16)
     }
     
     var walletTokens: some View {

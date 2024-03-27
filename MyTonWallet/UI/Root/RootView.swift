@@ -5,7 +5,7 @@ struct RootView: View {
     
     @EnvironmentObject private var model: Model
     
-    @AppStorage("debugOverlay") private var debugOverlay = false
+    @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
     
     enum Tab: Int, Hashable {
         case wallet, assets, browser, settings

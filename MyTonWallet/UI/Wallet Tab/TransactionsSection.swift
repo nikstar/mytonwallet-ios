@@ -23,7 +23,7 @@ struct TransactionsSection: View {
         list
 //            .padding(.top, -10)
         .padding(.bottom, 32)
-        .frame(minHeight: 1000)
+        .frame(minHeight: 700)
         .foregroundStyle(.black)
         .background(Color.white)
         .clipShape(
@@ -46,6 +46,10 @@ struct TransactionsSection: View {
             })
         }
         .animation(.default, value: groupedActivities)
+        .overlay(alignment: .top) {
+            emptyState
+        }
+
 //        .environment(\.colorScheme, .light)
     }
     
@@ -88,6 +92,19 @@ struct TransactionsSection: View {
                     }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder var emptyState: some View {
+        if model.assumeEmpty && groupedActivities.isEmpty {
+            VStack(spacing: 16) {
+                Sticker("Created", play: .playOnce)
+                Text("You have no transactions yet.")
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(.black)
+            }
+            .padding(.top, 78)
+            .padding(.horizontal, 50)
         }
     }
 }

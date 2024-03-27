@@ -4,7 +4,7 @@ import SwiftUI
 
 struct SettingsTab: View {
 
-    @AppStorage("debugOverlay") private var debugOverlay = false
+    @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
 
     var body: some View {
         List {

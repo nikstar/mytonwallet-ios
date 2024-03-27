@@ -58,7 +58,7 @@ struct LoginFlow: View {
 
 fileprivate struct Start: View {
     
-    @AppStorage("debugOverlay") private var debugOverlay = false
+    @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
     
     private var api: Api { model.api }
     @EnvironmentObject private var model: Model
@@ -315,7 +315,7 @@ struct Congratulations: View {
         }
         model.persistentState.userPassword = nil
         Task {
-            await model.logIn(accountId: accountId, address: address)
+            await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
         }
     }
 }
@@ -434,7 +434,7 @@ struct ConfirmPassword: View {
         }
         model.persistentState.userPassword = loginFlowModel.preliminaryUserPassword
         Task {
-            await model.logIn(accountId: accountId, address: address)
+            await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
         }
     }
 }

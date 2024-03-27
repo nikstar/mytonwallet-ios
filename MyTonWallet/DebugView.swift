@@ -4,7 +4,7 @@ import SwiftUI
 
 struct DebugView: View {
     
-    @AppStorage("debugOverlay") private var debugOverlay = false
+    @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
     
     private var api: Api { model.api }
     @EnvironmentObject private var model: Model
@@ -32,7 +32,7 @@ struct DebugView: View {
                 Button(asyncAction: {
                     do {
                         let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
-                        await model.logIn(accountId: accountId, address: address)
+                        await model.logIn(accountId: accountId, address: address, assumeEmpty: false)
                         print(accountId)
                     } catch {
                         print(error)

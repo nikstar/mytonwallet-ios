@@ -20,6 +20,8 @@ final class Model: ObservableObject {
     @Published var nfts: [ApiNft] = []
     @Published var swapTokens: [String: ApiToken] = [:]
     
+    @AppStorage("assumeEmpty", store: .group) var assumeEmpty: Bool = false
+    
     func switchToNetwork(network: ApiNetwork) {
         self.api = Api(network: network)
     }
@@ -125,9 +127,10 @@ final class Model: ObservableObject {
     }
     
     @MainActor
-    func logIn(accountId: String, address: TonAddress) async {
+    func logIn(accountId: String, address: TonAddress, assumeEmpty: Bool) async {
         await logOut()
         
+        self.assumeEmpty = assumeEmpty
         persistentState.accountId = accountId
         persistentState.address = address
         
