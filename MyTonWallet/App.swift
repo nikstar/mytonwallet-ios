@@ -5,15 +5,13 @@ import Observation
 @main
 struct MyTonWalletApp: App {
     
+    
     private let model: Model = Model.load()
 //    private let model: Model = Model.testUI()
     
     var body: some Scene {
         WindowGroup {
             RootView()
-                .overlay(alignment: .topTrailing) {
-                    DebugView()
-                }
                 .environmentObject(model)
 //                .environmentObject(api)
         }

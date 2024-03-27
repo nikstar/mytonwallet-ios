@@ -5,6 +5,8 @@ struct RootView: View {
     
     @EnvironmentObject private var model: Model
     
+    @AppStorage("debugOverlay") private var debugOverlay = false
+    
     enum Tab: Int, Hashable {
         case wallet, assets, browser, settings
     }
@@ -28,7 +30,7 @@ struct RootView: View {
                 .tabItem { Label("Browser", image: "Tab.Browser") }
                 .tag(Tab.browser)
 
-            UnderConstructionView()
+            SettingsTab()
                 .toolbarColorScheme(.light, for: .tabBar)
                 .tabItem { Label("Settings", image: "Tab.Settings") }
                 .tag(Tab.settings)
@@ -51,6 +53,9 @@ struct RootView: View {
                 persistentState.save()
             }
         }
-
+        .overlay(alignment: .topTrailing) {
+            DebugView()
+        }
+        
     }
 }

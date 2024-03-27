@@ -58,6 +58,8 @@ struct LoginFlow: View {
 
 fileprivate struct Start: View {
     
+    @AppStorage("debugOverlay") private var debugOverlay = false
+    
     private var api: Api { model.api }
     @EnvironmentObject private var model: Model
     @EnvironmentObject private var loginFlowModel: LoginFlowModel
@@ -94,10 +96,14 @@ fileprivate struct Start: View {
         } message: {
             Text(unhandledErrorMessage)
         }
-//        .navigationTitle("")
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .navigationBar)
+        .overlay(alignment: .bottom) {
+            Toggle("Debug Overlay", isOn: $debugOverlay)
+                .offset(y: 50)
+                .padding(.horizontal, 32)
+        }
     }
     
     func onCreate() async {
@@ -138,6 +144,8 @@ struct SecretWords: View {
     
     @Namespace private var submitButton
     
+    @State private var validWords: Set<String> = []
+    
     var body: some View {
         ScrollViewReader { scrollView in
             ScrollView {
@@ -147,9 +155,6 @@ struct SecretWords: View {
                         .onAppear {
                             navigationTitle = ""
                         }
-//                        .onDisappear {
-//                            navigationTitle = "Import Wallet"
-//                        }
                         .padding(.bottom, 12)
                         .padding(.top, 24)
 
@@ -236,6 +241,9 @@ struct SecretWords: View {
                     focusedTextField = 0
                 }
             }
+        }
+        .task {
+            // load words
         }
     }
     

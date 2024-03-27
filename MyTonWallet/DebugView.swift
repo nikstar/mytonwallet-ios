@@ -4,89 +4,93 @@ import SwiftUI
 
 struct DebugView: View {
     
+    @AppStorage("debugOverlay") private var debugOverlay = false
+    
     private var api: Api { model.api }
     @EnvironmentObject private var model: Model
 
     var body: some View {
-        VStack(alignment: .trailing) {
-            
-            Button(action: {
-                UserDefaults.standard.removePersistentDomain(forName: "group.me.nikstar.mytonwallet")
-                exit(0)
-            }) {
-                Text("Reset store and exit")
-            }
-            
-            Button(asyncAction: {
-                await model.logOut()
-            }) {
-                Text("Log out")
-            }
-            
-            Button(asyncAction: {
-                do {
-                    let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
-                    model.logIn(accountId: accountId, address: address)
-                    print(accountId)
-                } catch {
-                    print(error)
-                }
-            }) {
-                Text("Log in with test wallet")
-            }
-            
-            Button(asyncAction: {
-                do {
-                    let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic2, password: model.persistentState.encryptionPassword)
-                    model.logIn(accountId: accountId, address: address)
-                    print(accountId, address)
-                } catch {
-                    print(error)
-                }
-            }) {
-                Text("Log in with test wallet 2")
-            }
-            
-            Button(asyncAction: {
-                do {
-                    let tokens = try await api.fetchTokenBalances(accountId: model.persistentState.accountId!)
-                    print(tokens)
-                } catch {
-                    print(error)
-                }
-            }) {
-                Text("fetchTokenBalances")
-            }
-            
-            Button(asyncAction: {
+        if debugOverlay {
+            VStack(alignment: .trailing) {
                 
-                do {
-                    let address = try await api.fetchAddress(accountId: model.persistentState.accountId!)
-                    let v = try await api.getTransactions(address: address, limit: 20)
-                    print(v as Any)
-                } catch {
-                    print(error)
+                Button(action: {
+                    UserDefaults.standard.removePersistentDomain(forName: "group.me.nikstar.mytonwallet")
+                    exit(0)
+                }) {
+                    Text("Reset store and exit")
                 }
-            }) {
-                Text("getTransactions")
-            }
-            
-            Button(asyncAction: {
                 
-                do {
-                    try await api.callApiReturningVoid("resetAccounts")
+                Button(asyncAction: {
+                    await model.logOut()
+                }) {
+                    Text("Log out")
+                }
+                
+                Button(asyncAction: {
+                    do {
+                        let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
+                        model.logIn(accountId: accountId, address: address)
+                        print(accountId)
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("Log in with test wallet")
+                }
+                
+                Button(asyncAction: {
+                    do {
+                        let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic2, password: model.persistentState.encryptionPassword)
+                        model.logIn(accountId: accountId, address: address)
+                        print(accountId, address)
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("Log in with test wallet 2")
+                }
+                
+                Button(asyncAction: {
+                    do {
+                        let tokens = try await api.fetchTokenBalances(accountId: model.persistentState.accountId!)
+                        print(tokens)
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("fetchTokenBalances")
+                }
+                
+                Button(asyncAction: {
                     
-                } catch {
-                    print(error)
+                    do {
+                        let address = try await api.fetchAddress(accountId: model.persistentState.accountId!)
+                        let v = try await api.getTransactions(address: address, limit: 20)
+                        print(v as Any)
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("getTransactions")
                 }
-            }) {
-                Text("resetAccounts")
+                
+                Button(asyncAction: {
+                    
+                    do {
+                        try await api.callApiReturningVoid("resetAccounts")
+                        
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("resetAccounts")
+                }
+                
             }
+            .foregroundStyle(Color.black.opacity(0.5))
+            .tint(Color.black.opacity(0.5))
+            .background(Color.black.opacity(0.1), in: Rectangle())
             
         }
-        .foregroundStyle(Color.black.opacity(0.5))
-        .tint(Color.black.opacity(0.5))
-        .background(Color.black.opacity(0.1), in: Rectangle())
-        
     }
 }
