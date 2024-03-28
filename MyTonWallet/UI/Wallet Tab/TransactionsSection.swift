@@ -76,7 +76,7 @@ struct TransactionsSection: View {
                 } header: {
                     Group {
                         if let first = activities.first?.date {
-                            Text(first.formatted(.dateTime.year().month(.wide).day()))
+                            Text(first.formatted(ActivitySectionHeaderFormatStyle()))
                                 .font(.title3.bold())
                                 .padding(.horizontal, 16)
                                 .padding(.top, 24)
@@ -251,6 +251,27 @@ struct TransactionRow: View {
             EmptyView()
         }
     }
+}
+
+
+struct ActivitySectionHeaderFormatStyle: FormatStyle {
+    
+    func format(_ value: Date) -> String {
+        let now = Date()
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: now)
+        let currentYear = calendar.dateComponents([.year], from: now)
+        if value >= startOfToday {
+            return "Today"
+        } else if value >= startOfToday.addingTimeInterval(-24 * 3600) {
+            return "Yesterday"
+        } else if calendar.date(value, matchesComponents: currentYear) {
+            return value.formatted(.dateTime.day(.defaultDigits).month(.wide))
+        } else {
+            return value.formatted(.dateTime.day(.defaultDigits).month(.wide).year())
+        }
+    }
+    
 }
 
 
