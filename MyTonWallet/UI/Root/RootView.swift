@@ -61,6 +61,7 @@ struct RootView: View {
         .overlay(alignment: .topTrailing) {
             DebugView()
         }
+        .preferredColorScheme(.light)
         
     }
 }

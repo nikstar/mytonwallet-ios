@@ -105,6 +105,11 @@ struct TransactionsSection: View {
             }
             .padding(.top, 100)
             .padding(.horizontal, 50)
+        } else if model.persistentState.accountId != nil && model.assumeEmpty == false && groupedActivities.isEmpty {
+            ProgressView()
+                .controlSize(.regular)
+                .padding(.top, 160)
+
         }
     }
 }
