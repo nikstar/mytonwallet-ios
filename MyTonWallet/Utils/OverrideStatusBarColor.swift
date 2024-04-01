@@ -3,20 +3,10 @@
 import SwiftUI
 
 
-extension View {
-    
-    func overrideStatusBarColor(_ style: UIStatusBarStyle) -> Self {
-//        UIApplication.shared.statusBarStyle = style
-        return self
-    }
-    
-}
-
-
 struct OverrideStatusBarColorPreference: PreferenceKey {
     static func reduce(value: inout UIStatusBarStyle?, nextValue: () -> UIStatusBarStyle?) {
         // do nothing or ...?
-//        if value == nil { value = nextValue() }
+        // if value == nil { value = nextValue() }
     }
 }
 

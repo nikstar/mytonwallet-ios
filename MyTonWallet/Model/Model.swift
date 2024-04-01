@@ -70,7 +70,9 @@ final class Model: ObservableObject {
         }
         loadTokensTask = Task.detached { [weak self] in
             do {
-                try await self?.loadTokens()
+                try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
+                    try await self?.loadTokens()
+                }
             } catch {
                 log.fault("\(error)")
             }
@@ -143,7 +145,9 @@ final class Model: ObservableObject {
         loadTokensTask?.cancel()
         loadTokensTask = Task.detached { [weak self] in
             do {
-                try await self?.loadTokens()
+                try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
+                    try await self?.loadTokens()
+                }
             } catch {
                 log.fault("\(error)")
             }

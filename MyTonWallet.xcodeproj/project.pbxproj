@@ -24,7 +24,7 @@
 		58511A892BA37F1400E08053 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* App.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
 		58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */; };
-		58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */; };
+		58659BF42BAAD670006E14C1 /* Logger+file,funcLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF32BAAD670006E14C1 /* Logger+file,funcLog.swift */; };
 		58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */; };
 		58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */; };
 		58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */; };
@@ -34,6 +34,7 @@
 		58B4ABE52BBAE0970007BF54 /* AssetsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE42BBAE0960007BF54 /* AssetsSection.swift */; };
 		58B4ABE72BBAE0CB0007BF54 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE62BBAE0CB0007BF54 /* AppDelegate.swift */; };
 		58B4ABE92BBAE0EF0007BF54 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE82BBAE0EF0007BF54 /* SceneDelegate.swift */; };
+		58B4ABEB2BBAE9840007BF54 /* withRetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABEA2BBAE9840007BF54 /* withRetry.swift */; };
 		58B6041B2BA437C100049146 /* js-core in Resources */ = {isa = PBXBuildFile; fileRef = 58B6041A2BA437C100049146 /* js-core */; };
 		58B934B02BB4AE290086DEBC /* Pow in Frameworks */ = {isa = PBXBuildFile; productRef = 58B934AF2BB4AE290086DEBC /* Pow */; };
 		58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B934B22BB4B56D0086DEBC /* TokenImage.swift */; };
@@ -91,7 +92,7 @@
 		58511A882BA37F1400E08053 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSCoreConnection.swift; sourceTree = "<group>"; };
-		58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+file_fileLog.swift"; sourceTree = "<group>"; };
+		58659BF32BAAD670006E14C1 /* Logger+file,funcLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+file,funcLog.swift"; sourceTree = "<group>"; };
 		58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+orThrow.swift"; sourceTree = "<group>"; };
 		58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+with.swift"; sourceTree = "<group>"; };
 		58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Button+asyncAction.swift"; sourceTree = "<group>"; };
@@ -101,6 +102,7 @@
 		58B4ABE42BBAE0960007BF54 /* AssetsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSection.swift; sourceTree = "<group>"; };
 		58B4ABE62BBAE0CB0007BF54 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58B4ABE82BBAE0EF0007BF54 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		58B4ABEA2BBAE9840007BF54 /* withRetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = withRetry.swift; sourceTree = "<group>"; };
 		58B6041A2BA437C100049146 /* js-core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "js-core"; sourceTree = "<group>"; };
 		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		58B934B22BB4B56D0086DEBC /* TokenImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenImage.swift; sourceTree = "<group>"; };
@@ -303,9 +305,10 @@
 		58659BF22BAAD647006E14C1 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				58659BF32BAAD670006E14C1 /* Logger+file_fileLog.swift */,
+				58659BF32BAAD670006E14C1 /* Logger+file,funcLog.swift */,
 				58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */,
 				58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */,
+				58B4ABEA2BBAE9840007BF54 /* withRetry.swift */,
 				58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */,
 			);
 			path = Utils;
@@ -423,6 +426,7 @@
 				58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */,
 				58D2D0222BB1A55300F613DE /* NormalizedActivity.swift in Sources */,
 				58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */,
+				58B4ABEB2BBAE9840007BF54 /* withRetry.swift in Sources */,
 				58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */,
 				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
 				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
@@ -444,7 +448,7 @@
 				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
 				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
 				58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */,
-				58659BF42BAAD670006E14C1 /* Logger+file_fileLog.swift in Sources */,
+				58659BF42BAAD670006E14C1 /* Logger+file,funcLog.swift in Sources */,
 				58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */,
 				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue.swift in Sources */,
 				58DDF7742BA86FEA003D9628 /* WithOffsetReporting.swift in Sources */,

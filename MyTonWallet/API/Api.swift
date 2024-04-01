@@ -17,10 +17,12 @@ final class Api: ObservableObject {
         self.network = network
         self.updates =  jsCore.updates.compactMap { raw in
             do {
-                let string = try raw.as(String.self)
-                let data = string.data(using: .utf8)!
-                let decoder = JSONDecoder()
-                return try decoder.decode(ApiUpdate.self, from: data)
+                return try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
+                    let string = try raw.as(String.self)
+                    let data = string.data(using: .utf8)!
+                    let decoder = JSONDecoder()
+                    return try decoder.decode(ApiUpdate.self, from: data)
+                }
             } catch {
                 log.fault("Failed to decode api error=\(error) update: \("\(raw)")")
                 return nil
