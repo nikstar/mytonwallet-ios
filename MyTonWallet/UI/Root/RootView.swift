@@ -5,6 +5,10 @@ struct RootView: View {
     
     @EnvironmentObject private var model: Model
     
+    @EnvironmentObject private var appDelegate: AppDelegate
+    @EnvironmentObject private var sceneDelegate: MtwSceneDelegate
+    
+    
     @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
     
     enum Tab: Int, Hashable {
@@ -62,6 +66,6 @@ struct RootView: View {
             DebugView()
         }
         .preferredColorScheme(.light)
-        
+        .modifier(OverrideStatusBarColor())
     }
 }

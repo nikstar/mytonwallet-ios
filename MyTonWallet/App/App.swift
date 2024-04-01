@@ -5,15 +5,16 @@ import Observation
 @main
 struct MyTonWalletApp: App {
     
+    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
     private let model: Model = Model.load()
-//    private let model: Model = Model.testUI()
+    //    private let model: Model = Model.testUI()
     
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(model)
-//                .environmentObject(api)
+            //                .environmentObject(api)
         }
     }
 }
@@ -21,5 +22,9 @@ struct MyTonWalletApp: App {
 
 extension UserDefaults {
     /// User defaults shared with app extensions
-    public static let group: UserDefaults = UserDefaults(suiteName: "group.me.nikstar.mytonwallet")! 
+    public static let group: UserDefaults = UserDefaults(suiteName: "group.me.nikstar.mytonwallet")!
 }
+
+
+
+

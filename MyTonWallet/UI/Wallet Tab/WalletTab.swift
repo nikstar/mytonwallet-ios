@@ -12,6 +12,7 @@ private let bottomColor = Color.white
 struct WalletTab: View {
     
     @EnvironmentObject private var model: Model
+    @EnvironmentObject private var sceneDelegate: MtwSceneDelegate
     
     @State private var scrollPosition: CGPoint = .zero
     
@@ -30,6 +31,11 @@ struct WalletTab: View {
     @State private var unhandledErrorMessage: String = ""
     
     @Namespace private var contentCoordinateSpace
+    
+    private var shouldOverrideStatusBarColorToWhiteIfVisible: Bool {
+        model.persistentState.accountId != nil && !scrolledToTransactions
+    }
+    @State private var overrideStatusBarColor: UIStatusBarStyle? = nil
     
     var body: some View {
         
@@ -102,6 +108,16 @@ struct WalletTab: View {
             Text(unhandledErrorMessage)
         }
         .animation(.default, value: model.walletTokens)
+        .onChange(of: shouldOverrideStatusBarColorToWhiteIfVisible) { shouldOverrideStatusBarColorToWhite in
+            overrideStatusBarColor = shouldOverrideStatusBarColorToWhite ? .lightContent : nil
+        }
+        .onAppear {
+            overrideStatusBarColor = shouldOverrideStatusBarColorToWhiteIfVisible ? .lightContent : nil
+        }
+        .onDisappear {
+            overrideStatusBarColor = nil
+        }
+        .preference(key: OverrideStatusBarColorPreference.self, value: overrideStatusBarColor)
     }
     
     @ViewBuilder
@@ -117,121 +133,6 @@ struct WalletTab: View {
 }
 
 
-struct TotalWalletValue: View {
-    
-    var topOffset: CGFloat
-    var progressRaw: CGFloat
-    
-    var totalValue: CurrencyValue?
-    var label: String
-    var transitioned: Bool
-    
-    var body: some View {
-//        let _ = Self._printChanges()
-        
-        
-        
-        let progress = easeInOutBezier(progressRaw)
-        
-        let size1 = linear(progress, from: 34, to: 17)
-        let size2 = linear(progress, from: 17, to: 13)
-        let padding = linear(progressRaw, from: 8, to: 0)
-        
-        VStack(spacing: padding) {
-            Text(totalValue?.value
-                .formatted(
-                    .currency(code: "USD")
-                    .presentation(.narrow)
-                    .decimalSeparator(strategy: .automatic)
-                    .rounded(rule: .towardZero)
-                    .precision(.fractionLength(0..<2))
-                )
-                 ?? "$9,999"
-            )
-            .font(.system(size: size1, weight: .semibold))
-            .foregroundStyle(transitioned ? Color.black : Color.white)
-            .maybeRedacted(totalValue == nil)
-            
-            Text(label)
-                .font(.system(size: size2, weight: .regular))
-                .foregroundStyle(transitioned ? .secondary : Color(white: 1, opacity: 0.66))
-        }
-        .environment(\.colorScheme, .light)
-        .offset(y: topOffset)
-        .animation(.easeInOut(duration: 0.250), value: transitioned)
-    }
-    
-}
-
-struct AssetsSection: View {
-    
-    @EnvironmentObject private var model: Model
-
-    var body: some View {
-        VStack(spacing: 0) {
-            accountValue
-            VStack(spacing: 16) {
-                actionButtons
-                walletTokens
-            }
-        }
-        .padding(.bottom, 16)
-        .padding(.bottom, 20)
-        .background(Color.mainWalletBackground, in: Rectangle())
-    }
-    
-    var accountValue: some View {
-        VStack(spacing: 8) {
-            Text("$9999")
-                .font(.largeTitle.weight(.semibold))
-            Text("Main Wallet")
-                .font(.body)
-                .foregroundStyle(.opacity(0.66))
-        }
-        .redacted(reason: .placeholder)
-        .opacity(0) // kept for layout
-        .padding(.horizontal, 16)
-        .padding(.bottom, 16)
-    }
-    
-    var actionButtons: some View {
-        HStack(spacing: 8) {
-            ActionButton(title: "add", icon: "Action.Add", action: {})
-            ActionButton(title: "send", icon: "Action.Send", action: {})
-            ActionButton(title: "earn", icon: "Action.Earn", action: {})
-            ActionButton(title: "swap", icon: "Action.Swap", action: {})
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, 16)
-        .padding(.top, 16)
-    }
-    
-    var walletTokens: some View {
-        Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 0) {
-            ForEach(model.walletTokens.values, id: \.self) { token in
-                WalletTokenRow(walletToken: token)
-                GridRow {
-                    Color.clear
-                        .frame(maxWidth: 0, maxHeight: 0)
-                    
-                    if token != model.walletTokens.values.last {
-                        CellDivider()
-                            .gridCellColumns(2)
-                    }
-               }
-            }
-            
-
-        }
-        .frame(maxWidth: .infinity)
-        .background {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color(white: 0, opacity: 0.25))
-                .blendMode(.softLight)
-        }
-        .padding(.horizontal, 16)
-    }
-}
 
 
 struct ActionButton: View {
