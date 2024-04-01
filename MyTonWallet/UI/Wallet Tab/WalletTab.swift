@@ -38,13 +38,13 @@ struct WalletTab: View {
         Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
             ScrollView {
                 VStack(spacing: -20) {
-                    WithOffsetReporting(in: .named(contentCoordinateSpace), offset: $labelOffset) {
+                    WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { labelOffset = $0 }) {
                         AssetsSection()
                             .overlay {
                                 Color.white.opacity(transitionToTransactionsProgress)
                             }
                     }
-                    WithOffsetReporting(in: .named(contentCoordinateSpace), offset: $transactionsOffset) {
+                    WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { transactionsOffset = $0 }) {
                         TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
                     }
                 }
