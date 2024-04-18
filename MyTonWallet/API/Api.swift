@@ -31,29 +31,8 @@ final class Api: ObservableObject {
     }
     
     var jsCore = JSCoreConnection()
-//    private var httpApiV2 = HTTPApi(API_V2)
     
     private let jsonDecoder = JSONDecoder()
-    
-    func callApi<T>(_ method: String, _ args: Any..., returning: T.Type) async throws -> T {
-        if let value = try await jsCore.callApi(method: method, args: args) {
-            do {
-                return try value.as(T.self)
-            } catch {
-                throw ApiError.returnTypeMismatch(method: method, args: args, expected: T.self, got: value)
-            }
-        } else {
-            throw ApiError.returnValueNil(method: method, args: args)
-        }
-    }
-    
-    func callApi(_ method: String, _ args: Any...) async throws -> JSReturnValue {
-        if let value = try await jsCore.callApi(method: method, args: args) {
-            return value
-        } else {
-            throw ApiError.returnValueNil(method: method, args: args)
-        }
-    }
     
     func callApiReturningVoid(_ method: String, _ args: Any...) async throws {
         if let value = try await jsCore.callApi(method: method, args: args) {
@@ -61,7 +40,7 @@ final class Api: ObservableObject {
         }
     }
     
-    func callApiReturningJSON(_ method: String, _ args: Any...) async throws -> Data {
+    private func callApiReturningJSON(_ method: String, _ args: Any...) async throws -> Data {
         if let value = try await jsCore.callApiJSON(method: method, args: args) {
             return try value.as(String.self).data(using: .utf8)!
         } else {
@@ -85,31 +64,45 @@ extension Api {
     // MARK: - Auth
     
     func generateMnemomic() async throws -> [String] {
-        try await callApi("generateMnemonic", returning: [String].self)
+        try await callApi("generateMnemonic", decoding: [String].self)
     }
     
     /// Creates new wallet. When importing existing mnemonic use ``importMnemonic(mnemonic:password:)`` instead.
     func createWallet(mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
-        let result = try await callApi("createWallet", network.rawValue, mnemonic, password)
-        if let accountId = try? result.accountId.as(String.self), let address = try? result.address.as(String.self) {
+        
+        struct Response: Codable {
+            var accountId: String?
+            var address: String?
+            var error: String?
+        }
+        
+        let result = try await callApi("createWallet", network.rawValue, mnemonic, password, decoding: Response.self)
+        if let accountId = result.accountId, let address = result.address {
             return (accountId, TonAddress(address))
-        } else if let error = try? result.error.as(String.self) {
+        } else if let error = result.error {
             throw ApiError.apiReturnedError(error)
         } else {
-            throw ApiError.apiReturnParsingFailure(returnValue: result)
+            throw ApiError.apiReturnParsingFailure(returnValue: JSReturnValue(result))
         }
     }
 
     func validateMnemonic(mnemonic: [String]) async throws -> Bool {
-        try await callApi("validateMnemonic", mnemonic, returning: Bool.self)
+        try await callApi("validateMnemonic", mnemonic, decoding: Bool.self)
     }
     
     /// Attemps to guess best wallet version.
     func importMnemonic(mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
-        let result = try await callApi("importMnemonic", network.rawValue, mnemonic, password)
-        if let accountId = try? result.accountId.as(String.self), let address = try? TonAddress(result.address.as(String.self)) {
+        
+        struct Response: Codable {
+            var accountId: String?
+            var address: String?
+            var error: String?
+        }
+        
+        let result = try await callApi("importMnemonic", network.rawValue, mnemonic, password, decoding: Response.self)
+        if let accountId = result.accountId, let address = result.address.map(TonAddress.init(_:)) {
             return (accountId, address)
-        } else if let error = try? result.error.as(String.self) {
+        } else if let error = result.error {
             throw ApiError.apiReturnedError(error)
         } else {
             throw ApiError.apiReturnParsingFailure(returnValue: result)
@@ -126,7 +119,7 @@ extension Api {
     
     func getActiveAccountId() async throws -> String? {
         do {
-            return try await callApi("getActiveAccountId", returning: String?.self)
+            return try await callApi("getActiveAccountId", decoding: String?.self)
         } catch ApiError.returnValueNil {
             return nil
         }
@@ -137,7 +130,7 @@ extension Api {
     }
     
     func fetchAddress(accountId: String) async throws -> TonAddress {
-        try await TonAddress(callApi("fetchAddress", accountId, returning: String.self))
+        try await TonAddress(callApi("fetchAddress", accountId, decoding: String.self))
     }
     
     // MARK: - Tokens
