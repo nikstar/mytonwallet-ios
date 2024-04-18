@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Observation
+import Perception
 
 private let log = fileLog()
 
@@ -11,7 +12,7 @@ private let bottomColor = Color.white
 
 struct WalletTab: View {
     
-    @EnvironmentObject private var model: Model
+    @Environment(AccountModel.self) private var model
     @EnvironmentObject private var sceneDelegate: MtwSceneDelegate
     
     @State private var scrollPosition: CGPoint = .zero
@@ -33,91 +34,93 @@ struct WalletTab: View {
     @Namespace private var contentCoordinateSpace
     
     private var shouldOverrideStatusBarColorToWhiteIfVisible: Bool {
-        model.persistentState.accountId != nil && !scrolledToTransactions
+        model.account != nil && !scrolledToTransactions
     }
     @State private var overrideStatusBarColor: UIStatusBarStyle? = nil
     
     var body: some View {
-        
-//        let _ = Self._printChanges()
-        
-        Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
-            ScrollView {
-                VStack(spacing: -20) {
-                    WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { labelOffset = $0 }) {
-                        AssetsSection()
-                            .overlay {
-                                Color.white.opacity(transitionToTransactionsProgress)
-                            }
-                    }
-                    WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { transactionsOffset = $0 }) {
-                        TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
+        WithPerceptionTracking {
+            
+            //        let _ = Self._printChanges()
+            
+            Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
+                ScrollView {
+                    VStack(spacing: -20) {
+                        WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { labelOffset = $0 }) {
+                            AssetsSection()
+                                .overlay {
+                                    Color.white.opacity(transitionToTransactionsProgress)
+                                }
+                        }
+                        WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { transactionsOffset = $0 }) {
+                            TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
+                        }
                     }
                 }
-            }
-            
-            .onChange(of: transactionsOffset) { transactionsOffset in
-                if transactionsOffset.y - 10 < 44 && scrolledToTransactions == false {
+                
+                .onChange(of: transactionsOffset) { transactionsOffset in
+                    if transactionsOffset.y - 10 < 44 && scrolledToTransactions == false {
                         scrolledToTransactions = true
-                } else if transactionsOffset.y - 10 >= 44 && scrolledToTransactions == true {
-                    scrolledToTransactions = false
+                    } else if transactionsOffset.y - 10 >= 44 && scrolledToTransactions == true {
+                        scrolledToTransactions = false
+                    }
                 }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .foregroundStyle(Color.white)
-
-        } topBarContent: {
-            HStack {
-                Button(action: {}) {
-                    Label("Settings", image: "Toolbar.Settings")
-                        .labelStyle(.iconOnly)
-                }
-
-                Spacer()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .foregroundStyle(Color.white)
                 
-                Button(action: {}) {
-                    Label("Scan QR", image: "Toolbar.Scan")
-                        .labelStyle(.iconOnly)
+            } topBarContent: {
+                HStack {
+                    Button(action: {}) {
+                        Label("Settings", image: "Toolbar.Settings")
+                            .labelStyle(.iconOnly)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {}) {
+                        Label("Scan QR", image: "Toolbar.Scan")
+                            .labelStyle(.iconOnly)
+                    }
+                    
                 }
-
-            }
-            .padding(.horizontal, 16)
-            .foregroundColor(scrolledToTransactions ? .blue : .white)
-        }
-
-        .coordinateSpace(name: contentCoordinateSpace)
-        .background( // for overscrolling at the bottom
-            VStack(spacing: 0) {
-                Color.mainWalletBackground
-                Color.white
-                
-            }
-            .ignoresSafeArea()
-            .overlay {
-                Color.white.opacity(transitionToTransactionsProgress)
+                .padding(.horizontal, 16)
+                .foregroundColor(scrolledToTransactions ? .blue : .white)
             }
             
-        )
-        .overlay(alignment: .top) { // animating account balance size
-            mainAccountValueAnimated
+            .coordinateSpace(name: contentCoordinateSpace)
+            .background( // for overscrolling at the bottom
+                VStack(spacing: 0) {
+                    Color.mainWalletBackground
+                    Color.white
+                    
+                }
+                    .ignoresSafeArea()
+                    .overlay {
+                        Color.white.opacity(transitionToTransactionsProgress)
+                    }
+                
+            )
+            .overlay(alignment: .top) { // animating account balance size
+                mainAccountValueAnimated
+            }
+            .animation(.easeOut(duration: 0.25), value: scrolledToTransactions)
+            .alert("Error", isPresented: $unhandledErrorAlertPresented) {
+                Button("OK", role: .cancel, action: { unhandledErrorAlertPresented = false })
+            } message: {
+                Text(unhandledErrorMessage)
+            }
+            .animation(.default, value: model.walletTokens)
+            .onChange(of: shouldOverrideStatusBarColorToWhiteIfVisible) { shouldOverrideStatusBarColorToWhite in
+                overrideStatusBarColor = shouldOverrideStatusBarColorToWhite ? .lightContent : nil
+            }
+            .onAppear {
+                overrideStatusBarColor = shouldOverrideStatusBarColorToWhiteIfVisible ? .lightContent : nil
+            }
+            .onDisappear {
+                overrideStatusBarColor = nil
+            }
+            .preference(key: OverrideStatusBarColorPreference.self, value: overrideStatusBarColor)
         }
-        .animation(.easeOut(duration: 0.25), value: scrolledToTransactions)
-        .alert("Error", isPresented: $unhandledErrorAlertPresented) {
-            Button("OK", role: .cancel, action: { unhandledErrorAlertPresented = false })
-        } message: {
-            Text(unhandledErrorMessage)
-        }
-        .animation(.default, value: model.walletTokens)
-        .onChange(of: shouldOverrideStatusBarColorToWhiteIfVisible) { shouldOverrideStatusBarColorToWhite in
-            overrideStatusBarColor = shouldOverrideStatusBarColorToWhite ? .lightContent : nil
-        }
-        .onAppear {
-            overrideStatusBarColor = shouldOverrideStatusBarColorToWhiteIfVisible ? .lightContent : nil
-        }
-        .onDisappear {
-            overrideStatusBarColor = nil
-        }
-        .preference(key: OverrideStatusBarColorPreference.self, value: overrideStatusBarColor)
     }
     
     @ViewBuilder
@@ -176,7 +179,7 @@ func linear(_ progress: CGFloat, from: CGFloat, to: CGFloat) -> CGFloat {
     (1.0 - progress) * from + progress * to
 }
 
-#Preview {
-    WalletTab()
-        .environmentObject(Model.testUI())
-}
+//#Preview {
+//    WalletTab()
+//        .environmentObject(Model.testUI())
+//}

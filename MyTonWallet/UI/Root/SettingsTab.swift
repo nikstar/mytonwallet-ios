@@ -1,20 +1,22 @@
 
 import SwiftUI
-
+import Perception
 
 struct SettingsTab: View {
 
     @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var model
     
     var body: some View {
-        List {
-            Toggle("Debug overlay", isOn: $debugOverlay)
-            Button(asyncAction: { await model.logOut() }) {
-                Text("Log out")
+        WithPerceptionTracking {
+            List {
+                Toggle("Debug overlay", isOn: $debugOverlay)
+                Button(asyncAction: { await model.logOut() }) {
+                    Text("Log out")
+                }
             }
+            .listStyle(.insetGrouped)
         }
-        .listStyle(.insetGrouped)
     }
     
 }

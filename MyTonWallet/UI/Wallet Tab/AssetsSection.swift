@@ -1,24 +1,26 @@
 
 import SwiftUI
-
+import Perception
 
 
 
 struct AssetsSection: View {
     
-    @EnvironmentObject private var model: Model
+    @Environment(AccountModel.self) private var model
 
     var body: some View {
-        VStack(spacing: 0) {
-            accountValue
-            VStack(spacing: 16) {
-                actionButtons
-                walletTokens
+        WithPerceptionTracking {
+            VStack(spacing: 0) {
+                accountValue
+                VStack(spacing: 16) {
+                    actionButtons
+                    walletTokens
+                }
             }
+            .padding(.bottom, 16)
+            .padding(.bottom, 20)
+            .background(Color.mainWalletBackground, in: Rectangle())
         }
-        .padding(.bottom, 16)
-        .padding(.bottom, 20)
-        .background(Color.mainWalletBackground, in: Rectangle())
     }
     
     var accountValue: some View {

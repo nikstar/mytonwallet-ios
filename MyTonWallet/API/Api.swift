@@ -8,22 +8,36 @@ private let log = fileLog()
 
 final class Api: ObservableObject {
         
-    var updates: AsyncCompactMapSequence<AsyncStream<JSReturnValue>, ApiUpdate>!
+    var callbacks: [UUID: (ApiUpdate) -> ()] = [:]
+    var updatesTask: Task<Void, Never>? = nil
     
-    init(network: ApiNetwork) {
-        self.updates =  jsCore.updates.compactMap { raw in
-            do {
-                return try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
-                    let string = try raw.as(String.self)
-                    let data = string.data(using: .utf8)!
-                    let decoder = JSONDecoder()
-                    return try decoder.decode(ApiUpdate.self, from: data)
+    init() {
+        self.updatesTask = Task.detached {
+            for await raw in self.jsCore.updates {
+                do {
+                    let update = try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
+                        let string = try raw.as(String.self)
+                        let data = string.data(using: .utf8)!
+                        let decoder = JSONDecoder()
+                        return try decoder.decode(ApiUpdate.self, from: data)
+                    }
+                    self.callbacks.values.forEach { $0(update) }
+                } catch {
+                    log.fault("Failed to decode api error=\(error) update: \("\(raw)")")
                 }
-            } catch {
-                log.fault("Failed to decode api error=\(error) update: \("\(raw)")")
-                return nil
             }
         }
+    }
+    
+    func getUpdates() -> (updates: AsyncStream<ApiUpdate>, cancellationHandle: UUID) {
+        let id = UUID()
+        let (stream, continuation) = AsyncStream.makeStream(of: ApiUpdate.self)
+        callbacks[id] = { continuation.yield($0) }
+        return (stream, id)
+    }
+    
+    func stopUpdates(cancellationHandle: UUID) {
+        callbacks[cancellationHandle] = nil
     }
     
     var jsCore = JSCoreConnection()
@@ -31,7 +45,7 @@ final class Api: ObservableObject {
     private let jsonDecoder = JSONDecoder()
     
     func callApiReturningVoid(_ method: String, _ args: Any...) async throws {
-        if let value = try await jsCore.callApi(method: method, args: args) {
+        if let value = try await jsCore.callApiJSON(method: method, args: args) {
             throw ApiError.unexpectedReturnValue(method: method, args: args, got: value)
         }
     }
@@ -116,6 +130,14 @@ extension Api {
     func getActiveAccountId() async throws -> String? {
         do {
             return try await callApi("getActiveAccountId", decoding: String?.self)
+        } catch ApiError.returnValueNil {
+            return nil
+        }
+    }
+    
+    func getCurrentNetwork() async throws -> ApiNetwork? {
+        do {
+            return try await callApi("getCurrentNetwork", decoding: ApiNetwork?.self)
         } catch ApiError.returnValueNil {
             return nil
         }

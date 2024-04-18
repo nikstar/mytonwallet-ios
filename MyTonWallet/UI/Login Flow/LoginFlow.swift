@@ -1,7 +1,7 @@
 
 import SwiftUI
 import Pow
-
+import Perception
 
 private let log = fileLog()
 
@@ -26,7 +26,7 @@ enum LoginFlowState: Hashable, Codable {
 
 struct LoginFlow: View {
     
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var model
     @StateObject private var loginFlowModel: LoginFlowModel = LoginFlowModel()
     
     
@@ -63,7 +63,7 @@ fileprivate struct Start: View {
     @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
     
     private var api: Api { model.api }
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var model    
     @EnvironmentObject private var loginFlowModel: LoginFlowModel
     
     @State private var unhandledErrorAlertPresented: Bool = false
@@ -114,7 +114,8 @@ fileprivate struct Start: View {
     func onCreate() async {
         do {
             let words = try await api.generateMnemomic()
-            let (accountId, address) = try await api.createWallet(network: ApiNetwork(rawValue: self.model.network)!, mnemonic: words, password: model.persistentState.encryptionPassword)
+            #warning("not supported testnet")
+            let (accountId, address) = try await api.createWallet(network: .mainnet, mnemonic: words, password: model.encryptionPassword)
             loginFlowModel.preliminaryAccountId = accountId
             loginFlowModel.preliminaryAddress = address
             loginFlowModel.isNewAccount = true
@@ -137,7 +138,7 @@ fileprivate struct Start: View {
 struct SecretWords: View {
     
     private var api: Api { model.api }
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var model
     @EnvironmentObject private var loginFlowModel: LoginFlowModel
     
     @State private var words: [String] = .init(repeating: "", count: 24)
@@ -252,7 +253,7 @@ struct SecretWords: View {
         }
         .task {
             do {
-                self.validWords = Set(try await model.api.getMnemonicWordList())
+                self.validWords = try await Set(model.api.getMnemonicWordList())
             } catch {
                 log.fault("getMnemonicWordList \(error)")
             }
@@ -262,7 +263,8 @@ struct SecretWords: View {
     func onContinue() async {
         do {
             if try await api.validateMnemonic(mnemonic: words) {
-                let (accountId, address) = try await api.importMnemonic(network: ApiNetwork(rawValue: self.model.network)!, mnemonic: words, password: model.persistentState.encryptionPassword)
+                #warning("mainnet only")
+                let (accountId, address) = try await api.importMnemonic(network: .mainnet, mnemonic: words, password: model.encryptionPassword)
                 loginFlowModel.preliminaryAccountId = accountId
                 loginFlowModel.preliminaryAddress = address
                 loginFlowModel.isNewAccount = false
@@ -281,7 +283,7 @@ struct SecretWords: View {
 
 struct Congratulations: View {
     
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var model
     @EnvironmentObject private var loginFlowModel: LoginFlowModel
 
     var body: some View {
@@ -325,9 +327,14 @@ struct Congratulations: View {
             log.fault("logic error - accountId or address not set")
             return
         }
-        model.persistentState.userPassword = nil
+        model.userPassword = nil
         Task {
-            await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
+            do {
+                try await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
+                
+            } catch {
+                log.fault("login error \(error)")
+            }
         }
     }
 }
@@ -403,7 +410,7 @@ struct SetupPassword: View {
 
 struct ConfirmPassword: View {
     
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var model
     @EnvironmentObject private var loginFlowModel: LoginFlowModel
     
     @State private var passwordValue: String = ""
@@ -455,9 +462,9 @@ struct ConfirmPassword: View {
             log.fault("logic error - accountId or address not set")
             return
         }
-        model.persistentState.userPassword = loginFlowModel.preliminaryUserPassword
+        model.userPassword = loginFlowModel.preliminaryUserPassword
         Task {
-            await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
+            try! await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
         }
     }
 }

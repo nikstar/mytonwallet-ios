@@ -1,5 +1,6 @@
 
 import SwiftUI
+import Perception
 
 
 struct DebugView: View {
@@ -7,7 +8,7 @@ struct DebugView: View {
     @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
     
     private var api: Api { model.api }
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var model
 
     var body: some View {
         if debugOverlay {
@@ -31,8 +32,8 @@ struct DebugView: View {
                 
                 Button(asyncAction: {
                     do {
-                        let (accountId, address) = try await api.importMnemonic(network: .mainnet, mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
-                        await model.logIn(accountId: accountId, address: address, assumeEmpty: false)
+                        let (accountId, address) = try await api.importMnemonic(network: .mainnet, mnemonic: mnemonic1, password: model.encryptionPassword)
+                        try await model.logIn(accountId: accountId, address: address, assumeEmpty: false)
                         print(accountId)
                     } catch {
                         print(error)
@@ -43,19 +44,19 @@ struct DebugView: View {
                 
                 Button(asyncAction: {
                     await model.logOut()
-                    model.switchToNetwork(network: .mainnet)
+//                    model.switchToNetwork(network: .mainnet)
                 }) {
                     Text("Switch to mainnet")
                 }
                 
                 Button(asyncAction: {
                     await model.logOut()
-                    model.switchToNetwork(network: .testnet)
+//                    model.switchToNetwork(network: .testnet)
                 }) {
                     Text("Switch to testnet")
                 }
                 
-                Text("Current: \(model.network)").italic()
+//                Text("Current: \(model.network)").italic()
             }
             .foregroundStyle(Color.black.opacity(0.5))
             .tint(Color.black.opacity(0.5))

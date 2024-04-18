@@ -62,22 +62,7 @@ final class JSCoreConnection: NSObject {
     }
     
     
-    func callApi(method: String, args: [Any]) async throws -> JSReturnValue? {
-        do {
-            await waitUntilReady()
-            let result = try await webView.callAsyncJavaScript("return await window.wallet.callApi('\(method)', ...args)", arguments: ["args": args], contentWorld: .page)
-            if let result {
-                return JSReturnValue(result)
-            } else {
-                return nil
-            }
-        } catch let error as WKError where error.errorCode == WKError.Code.javaScriptExceptionOccurred.rawValue {
-            throw ApiError.javascriptException(error, exceptionMessage: (error.errorUserInfo["WKJavaScriptExceptionMessage"] as? String) ?? error.localizedDescription)
-        } catch {
-            throw ApiError.webkitError(error as NSError)
-        }
-    }
-    
+
     func callApiJSON(method: String, args: [Any]) async throws -> JSReturnValue? {
         do {
             await waitUntilReady()

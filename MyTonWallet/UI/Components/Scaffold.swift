@@ -65,7 +65,7 @@ struct Scaffold<S: ShapeStyle, V: View, V2: View>: View {
 }
 
 
-#Preview {
-    WalletTab()
-        .environmentObject(Model.testUI())
-}
+//#Preview {
+//    WalletTab()
+//        .environmentObject(Model.testUI())
+//}

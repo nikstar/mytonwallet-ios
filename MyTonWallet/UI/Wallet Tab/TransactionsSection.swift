@@ -1,13 +1,16 @@
 
 import SwiftUI
 import OrderedCollections
+import Perception
 
 struct TransactionsSection: View {
     
     var transitionToTransactionsProgress: CGFloat
     
     
-    @EnvironmentObject private var model: Model
+    @Environment(GlobalModel.self) private var globalModel
+    @Environment(AccountModel.self) private var currentAccountModel
+    
     
     @State private var presentedTransaction: NormalizedActivity? = nil
     
@@ -20,36 +23,37 @@ struct TransactionsSection: View {
 //            .toolbarColorScheme(.light, for: .bottomBar)
 //            .toolbarColorScheme(.light, for: .tabBar)
 
-        list
-//            .padding(.top, -10)
-        .padding(.bottom, 32)
-        .frame(minHeight: 700)
-        .foregroundStyle(.black)
-        .background(Color.white)
-        .clipShape(
-            UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16), style: .continuous)
-        )
-        .sheet(item: $presentedTransaction) { presentedTransaction in
-            TransactionDetailsSheet(transaction: presentedTransaction)
-//            EmptyView()
+        WithPerceptionTracking {
+            list
+            //            .padding(.top, -10)
+                .padding(.bottom, 32)
+                .frame(minHeight: 700)
+                .foregroundStyle(.black)
+                .background(Color.white)
+                .clipShape(
+                    UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16), style: .continuous)
+                )
+                .sheet(item: $presentedTransaction) { presentedTransaction in
+                    TransactionDetailsSheet(transaction: presentedTransaction)
+                    //            EmptyView()
+                }
+                .onAppear {
+                    self.groupedActivities = OrderedDictionary(grouping: currentAccountModel.activities.values, by: { activity -> DateComponents in
+                        let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
+                        return Calendar.current.dateComponents([.year, .month, .day], from: date)
+                    })
+                }
+                .onChange(of: currentAccountModel.activities) { activities in
+                    self.groupedActivities = OrderedDictionary(grouping: activities.values, by: { activity -> DateComponents in
+                        let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
+                        return Calendar.current.dateComponents([.year, .month, .day], from: date)
+                    })
+                }
+                .animation(.default, value: groupedActivities)
+                .overlay(alignment: .top) {
+                    emptyState
+                }
         }
-        .onAppear {
-            self.groupedActivities = OrderedDictionary(grouping: model.activities.values, by: { activity -> DateComponents in
-                let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
-                return Calendar.current.dateComponents([.year, .month, .day], from: date)
-            })
-        }
-        .onChange(of: model.activities) { activities in
-            self.groupedActivities = OrderedDictionary(grouping: activities.values, by: { activity -> DateComponents in
-                let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
-                return Calendar.current.dateComponents([.year, .month, .day], from: date)
-            })
-        }
-        .animation(.default, value: groupedActivities)
-        .overlay(alignment: .top) {
-            emptyState
-        }
-
 //        .environment(\.colorScheme, .light)
     }
     
@@ -96,7 +100,7 @@ struct TransactionsSection: View {
     }
     
     @ViewBuilder var emptyState: some View {
-        if model.persistentState.accountId != nil && model.assumeEmpty && groupedActivities.isEmpty {
+        if currentAccountModel.account != nil && currentAccountModel.assumeEmpty && groupedActivities.isEmpty {
             VStack(spacing: 16) {
                 Sticker("Created", play: .playOnce)
                 Text("You have no transactions yet.")
@@ -105,7 +109,7 @@ struct TransactionsSection: View {
             }
             .padding(.top, 100)
             .padding(.horizontal, 50)
-        } else if model.persistentState.accountId != nil && model.assumeEmpty == false && groupedActivities.isEmpty {
+        } else if currentAccountModel.account != nil && currentAccountModel.assumeEmpty == false && groupedActivities.isEmpty {
             ProgressView()
                 .controlSize(.regular)
                 .padding(.top, 160)
@@ -280,9 +284,9 @@ struct ActivitySectionHeaderFormatStyle: FormatStyle {
 }
 
 
-#Preview {
-    ScrollView {
-        TransactionsSection(transitionToTransactionsProgress: 1)
-            .environmentObject(Model.testUI())
-    }
-}
+//#Preview {
+//    ScrollView {
+//        TransactionsSection(transitionToTransactionsProgress: 1)
+//            .environmentObject(Model.testUI())
+//    }
+//}
