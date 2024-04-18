@@ -22,7 +22,15 @@ struct WithOffsetReporting<V: View>: View {
         content()
             .background {
                 GeometryReader { geom in
-                    Color.clear.preference(key: OffsetPreferenceKey.self, value: geom.frame(in: `in`).origin)
+                    Color.clear
+                        .onChange(of: geom.frame(in: `in`).origin) { v in
+                            onOffsetChange(v)
+                        }
+                        .onAppear {
+                            let v = geom.frame(in: `in`).origin
+                            onOffsetChange(v)
+                        }
+//                    Color.clear.preference(key: OffsetPreferenceKey.self, value: geom.frame(in: `in`).origin)
                 }
             }
             .onPreferenceChange(OffsetPreferenceKey.self, perform: onOffsetChange)

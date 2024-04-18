@@ -3,7 +3,7 @@ import SwiftUI
 
 
 
-struct TotalWalletValue: View {
+struct TotalWalletValue: View, Animatable {
     
     var topOffset: CGFloat
     var progressRaw: CGFloat
@@ -11,6 +11,8 @@ struct TotalWalletValue: View {
     var totalValue: CurrencyValue?
     var label: String
     var transitioned: Bool
+    
+    var animatableData: AnimatablePair<CGFloat, CGFloat> { .init(topOffset, progressRaw) }
     
     var body: some View {
 //        let _ = Self._printChanges()

@@ -31,6 +31,10 @@ final class AccountModel {
     
     func changeAccount(newAccount: MtwAccount?) {
         self.account = newAccount
+        self.assumeEmpty = false
+        self.nfts = []
+        self.activities = [:]
+        self.walletTokens = [:]
         loadTokensTask = Task.detached { [weak self] in
             do {
                 try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {

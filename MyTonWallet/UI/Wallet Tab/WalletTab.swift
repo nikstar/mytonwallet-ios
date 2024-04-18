@@ -44,30 +44,7 @@ struct WalletTab: View {
             //        let _ = Self._printChanges()
             
             Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
-                ScrollView {
-                    VStack(spacing: -20) {
-                        WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { labelOffset = $0 }) {
-                            AssetsSection()
-                                .overlay {
-                                    Color.white.opacity(transitionToTransactionsProgress)
-                                }
-                        }
-                        WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: { transactionsOffset = $0 }) {
-                            TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
-                        }
-                    }
-                }
-                
-                .onChange(of: transactionsOffset) { transactionsOffset in
-                    if transactionsOffset.y - 10 < 44 && scrolledToTransactions == false {
-                        scrolledToTransactions = true
-                    } else if transactionsOffset.y - 10 >= 44 && scrolledToTransactions == true {
-                        scrolledToTransactions = false
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .foregroundStyle(Color.white)
-                
+                WalletTabContent(onLabelOffsetChange: { labelOffset = $0 }, ontransactionsOffsetChange: { transactionsOffset = $0 }, contentCoordinateSpace: contentCoordinateSpace, transitionToTransactionsProgress: transitionToTransactionsProgress)
             } topBarContent: {
                 HStack {
                     Button(action: {}) {
@@ -120,12 +97,22 @@ struct WalletTab: View {
                 overrideStatusBarColor = nil
             }
             .preference(key: OverrideStatusBarColorPreference.self, value: overrideStatusBarColor)
+            
         }
+        .onChange(of: transactionsOffset) { transactionsOffset in
+            if transactionsOffset.y - 10 < 44 && scrolledToTransactions == false {
+                scrolledToTransactions = true
+            } else if transactionsOffset.y - 10 >= 44 && scrolledToTransactions == true {
+                scrolledToTransactions = false
+            }
+        }
+
     }
     
     @ViewBuilder
     var mainAccountValueAnimated: some View {
         
+//        EmptyView()
         let endOffset = 4.0
         let topOffset = max(labelOffset.y, endOffset)
         let progressRaw = clamp(1 - ((topOffset - endOffset) / 44))
@@ -136,6 +123,53 @@ struct WalletTab: View {
 }
 
 
+struct WalletTabContent: View {
+    
+    var onLabelOffsetChange: (CGPoint) -> ()
+    var ontransactionsOffsetChange: (CGPoint) -> ()
+    var contentCoordinateSpace: Namespace.ID
+    var transitionToTransactionsProgress: Double
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: -20) {
+                WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: onLabelOffsetChange) {
+                    Group {
+//                        if #available(iOS 17.0, *) {
+                            AssetsSection()
+                                .overlay {
+                                    Color.white.opacity(transitionToTransactionsProgress)
+                                }
+                            
+//                                .scrollTransition(.animated, axis: .vertical) { effect, phase in
+//                                    switch phase {
+//                                    case .topLeading:
+//                                        effect.scaleEffect(0.5)
+//                                    case .identity:
+//                                        effect.scaleEffect(1.0)
+//                                    case .bottomTrailing:
+//                                        effect.scaleEffect(0.5)
+//                                    }
+//                                }
+//                        } else {
+//                            AssetsSection()
+//                                .overlay {
+//                                    Color.white.opacity(transitionToTransactionsProgress)
+//                                }
+//                        }
+                    }
+                }
+                WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: ontransactionsOffsetChange) {
+                    TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
+                }
+            }
+        }
+        
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .foregroundStyle(Color.white)
+        
+    }
+}
 
 
 struct ActionButton: View {
