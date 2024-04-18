@@ -31,7 +31,7 @@ struct DebugView: View {
                 
                 Button(asyncAction: {
                     do {
-                        let (accountId, address) = try await api.importMnemonic(mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
+                        let (accountId, address) = try await api.importMnemonic(network: .mainnet, mnemonic: mnemonic1, password: model.persistentState.encryptionPassword)
                         await model.logIn(accountId: accountId, address: address, assumeEmpty: false)
                         print(accountId)
                     } catch {

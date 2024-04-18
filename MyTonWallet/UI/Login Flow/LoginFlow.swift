@@ -114,7 +114,7 @@ fileprivate struct Start: View {
     func onCreate() async {
         do {
             let words = try await api.generateMnemomic()
-            let (accountId, address) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
+            let (accountId, address) = try await api.createWallet(network: ApiNetwork(rawValue: self.model.network)!, mnemonic: words, password: model.persistentState.encryptionPassword)
             loginFlowModel.preliminaryAccountId = accountId
             loginFlowModel.preliminaryAddress = address
             loginFlowModel.isNewAccount = true
@@ -262,7 +262,7 @@ struct SecretWords: View {
     func onContinue() async {
         do {
             if try await api.validateMnemonic(mnemonic: words) {
-                let (accountId, address) = try await api.createWallet(mnemonic: words, password: model.persistentState.encryptionPassword)
+                let (accountId, address) = try await api.importMnemonic(network: ApiNetwork(rawValue: self.model.network)!, mnemonic: words, password: model.persistentState.encryptionPassword)
                 loginFlowModel.preliminaryAccountId = accountId
                 loginFlowModel.preliminaryAddress = address
                 loginFlowModel.isNewAccount = false

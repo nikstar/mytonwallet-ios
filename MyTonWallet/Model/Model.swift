@@ -9,7 +9,7 @@ private let log = fileLog()
 final class Model: ObservableObject {
     
     @Published var persistentState: PersitstentState
-    @Published var uiState: UIState
+//    @Published var uiState: UIState
     
     @Published var knownTokens: [Slug: ApiToken] = [:]
     @Published var walletVersions: ApiUpdateWalletVersions? = nil
@@ -60,7 +60,7 @@ final class Model: ObservableObject {
     
     init(persistentState: PersitstentState, uiState: UIState) {
         self.persistentState = persistentState
-        self.uiState = uiState
+//        self.uiState = uiState
         if network == "testnet" {
             switchToNetwork(network: .testnet)
         }
@@ -169,7 +169,7 @@ final class Model: ObservableObject {
             return
         }
         
-        let toncoinBalance = try await api.getWalletBalance(address: address)
+        let toncoinBalance = try await api.getWalletBalance(network: ApiNetwork(rawValue: self.network)!, address: address)
         let tokens = try await api.fetchTokenBalances(accountId: accountId)
         
         await MainActor.run {

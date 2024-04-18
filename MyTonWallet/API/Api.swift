@@ -7,14 +7,10 @@ private let log = fileLog()
 //private let API_V2 = "https://tonhttpapi.mytonwallet.org/api/v2/"
 
 final class Api: ObservableObject {
-    
-    let network: ApiNetwork
-    
+        
     var updates: AsyncCompactMapSequence<AsyncStream<JSReturnValue>, ApiUpdate>!
     
-    
     init(network: ApiNetwork) {
-        self.network = network
         self.updates =  jsCore.updates.compactMap { raw in
             do {
                 return try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
@@ -68,7 +64,7 @@ extension Api {
     }
     
     /// Creates new wallet. When importing existing mnemonic use ``importMnemonic(mnemonic:password:)`` instead.
-    func createWallet(mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
+    func createWallet(network: ApiNetwork, mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
         
         struct Response: Codable {
             var accountId: String?
@@ -91,7 +87,7 @@ extension Api {
     }
     
     /// Attemps to guess best wallet version.
-    func importMnemonic(mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
+    func importMnemonic(network: ApiNetwork, mnemonic: [String], password: String) async throws -> (accountId: String, address: TonAddress) {
         
         struct Response: Codable {
             var accountId: String?
@@ -147,7 +143,7 @@ extension Api {
         try await callApi("fetchTokenBalances", accountId, decoding: [FetchTokens].self)
     }
     
-    func getWalletBalance(address: TonAddress) async throws -> Int {
+    func getWalletBalance(network: ApiNetwork, address: TonAddress) async throws -> Int {
         try await callApi("getWalletBalance", network.rawValue, address.string, decoding: ApiBigint.self).value
     }
     
@@ -184,7 +180,3 @@ extension Api {
 }
 
 
-enum ApiNetwork: String, RawRepresentable {
-    case mainnet
-    case testnet
-}
