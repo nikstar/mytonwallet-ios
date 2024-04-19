@@ -50,3 +50,17 @@ struct TotalWalletValue: View, Animatable {
     }
     
 }
+
+/// Clamp value to 0...1
+private func clamp(_ value: CGFloat) -> CGFloat {
+    min(1, max(0, value))
+}
+
+
+private func easeInOutBezier(_ t: CGFloat) -> CGFloat {
+    t * t * (3.0 - 2.0 * t)
+}
+
+private func linear(_ progress: CGFloat, from: CGFloat, to: CGFloat) -> CGFloat {
+    (1.0 - progress) * from + progress * to
+}

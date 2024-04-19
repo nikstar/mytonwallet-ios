@@ -26,6 +26,8 @@
 		581867A72BD11279001A1A91 /* GlobalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867A62BD11279001A1A91 /* GlobalModel.swift */; };
 		581867AA2BD113DE001A1A91 /* Perception in Frameworks */ = {isa = PBXBuildFile; productRef = 581867A92BD113DE001A1A91 /* Perception */; };
 		581867AC2BD11D45001A1A91 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AB2BD11D45001A1A91 /* AccountModel.swift */; };
+		581867AF2BD18EA7001A1A91 /* Scaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AD2BD18EA7001A1A91 /* Scaffold.swift */; };
+		581867B02BD18EA7001A1A91 /* TopAppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AE2BD18EA7001A1A91 /* TopAppBar.swift */; };
 		58511A892BA37F1400E08053 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* App.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
 		58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */; };
@@ -60,7 +62,7 @@
 		58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */; };
 		58DDF7742BA86FEA003D9628 /* WithOffsetReporting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7732BA86FEA003D9628 /* WithOffsetReporting.swift */; };
 		58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7752BA87572003D9628 /* ParentOffset.swift */; };
-		58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7772BA87A29003D9628 /* Scaffold.swift */; };
+		58DDF7782BA87A2A003D9628 /* ScaffoldOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7772BA87A29003D9628 /* ScaffoldOld.swift */; };
 		58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7792BA88130003D9628 /* GenericEnvironment.swift */; };
 		58DDF77D2BA8E491003D9628 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 58DDF77C2BA8E491003D9628 /* Algorithms */; };
 		58DDF7802BA8E782003D9628 /* BitCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 58DDF77F2BA8E782003D9628 /* BitCollections */; };
@@ -97,6 +99,8 @@
 		581867A42BD10D0E001A1A91 /* ApiNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiNetwork.swift; sourceTree = "<group>"; };
 		581867A62BD11279001A1A91 /* GlobalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalModel.swift; sourceTree = "<group>"; };
 		581867AB2BD11D45001A1A91 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
+		581867AD2BD18EA7001A1A91 /* Scaffold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaffold.swift; sourceTree = "<group>"; };
+		581867AE2BD18EA7001A1A91 /* TopAppBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopAppBar.swift; sourceTree = "<group>"; };
 		58511A852BA37F1400E08053 /* MyTonWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTonWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58511A882BA37F1400E08053 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -131,7 +135,7 @@
 		58DDF7712BA86B90003D9628 /* OffsetScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetScrollView.swift; sourceTree = "<group>"; };
 		58DDF7732BA86FEA003D9628 /* WithOffsetReporting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithOffsetReporting.swift; sourceTree = "<group>"; };
 		58DDF7752BA87572003D9628 /* ParentOffset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentOffset.swift; sourceTree = "<group>"; };
-		58DDF7772BA87A29003D9628 /* Scaffold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scaffold.swift; sourceTree = "<group>"; };
+		58DDF7772BA87A29003D9628 /* ScaffoldOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaffoldOld.swift; sourceTree = "<group>"; };
 		58DDF7792BA88130003D9628 /* GenericEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericEnvironment.swift; sourceTree = "<group>"; };
 		58DDF78D2BA97802003D9628 /* TransactionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsSection.swift; sourceTree = "<group>"; };
 		58DDF78F2BA97B16003D9628 /* CellDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDivider.swift; sourceTree = "<group>"; };
@@ -172,8 +176,10 @@
 			isa = PBXGroup;
 			children = (
 				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
-				58DDF7772BA87A29003D9628 /* Scaffold.swift */,
+				58DDF7772BA87A29003D9628 /* ScaffoldOld.swift */,
 				58DDF78F2BA97B16003D9628 /* CellDivider.swift */,
+				581867AD2BD18EA7001A1A91 /* Scaffold.swift */,
+				581867AE2BD18EA7001A1A91 /* TopAppBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -453,6 +459,7 @@
 				58B4ABE02BBAC5B00007BF54 /* StatusBarAppearanceManager.swift in Sources */,
 				58FBD28C2BADE215005F5F09 /* OverrideStatusBarColor.swift in Sources */,
 				580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */,
+				581867B02BD18EA7001A1A91 /* TopAppBar.swift in Sources */,
 				58FBD2902BAECE22005F5F09 /* DebugView.swift in Sources */,
 				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* WalletTab.swift in Sources */,
@@ -463,7 +470,7 @@
 				5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
 				58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */,
-				58DDF7782BA87A2A003D9628 /* Scaffold.swift in Sources */,
+				58DDF7782BA87A2A003D9628 /* ScaffoldOld.swift in Sources */,
 				581867AC2BD11D45001A1A91 /* AccountModel.swift in Sources */,
 				581867A32BD10CED001A1A91 /* MtwAccount.swift in Sources */,
 				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
@@ -477,6 +484,7 @@
 				58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */,
 				58DDF7662BA81FDF003D9628 /* UIState.swift in Sources */,
 				58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */,
+				581867AF2BD18EA7001A1A91 /* Scaffold.swift in Sources */,
 				580044032BB0DDAC00C364CE /* TokenAmount.swift in Sources */,
 				58B4ABE52BBAE0970007BF54 /* AssetsSection.swift in Sources */,
 				580043F72BB0CD9000C364CE /* ApiToken.swift in Sources */,
