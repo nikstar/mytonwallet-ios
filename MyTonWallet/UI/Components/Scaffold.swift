@@ -1,31 +1,31 @@
-//
-//import SwiftUI
-//
-//struct ScaffoldScrollConnectionPreference: PreferenceKey {
-//    static var defaultValue: CGRect = .zero
-//    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
-//        // takes first value
-//    }
-//}
-//enum ScaffoldScrollOffsetEnvironmentKey: EnvironmentKey {
-//    static let defaultValue: CGFloat = 0
-//}
-//enum ScaffoldTopBarMaxHeightEnvironmentKey: EnvironmentKey {
-//    static let defaultValue: CGFloat? = nil
-//}
-//extension EnvironmentValues {
-//    var scaffoldScrollOffset: CGFloat {
-//        get { self[ScaffoldScrollOffsetEnvironmentKey.self] }
-//        set { self[ScaffoldScrollOffsetEnvironmentKey.self] = newValue }
-//    }
-//    
-//    var scaffoldTopBarMaxHeight: CGFloat? {
-//        get { self[ScaffoldTopBarMaxHeightEnvironmentKey.self] }
-//        set { self[ScaffoldTopBarMaxHeightEnvironmentKey.self] = newValue }
-//    }
-//}
-//
-//
+
+import SwiftUI
+
+struct ScaffoldScrollConnectionPreference: PreferenceKey {
+    static var defaultValue: CGRect = .zero
+    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
+        // takes first value
+    }
+}
+enum ScaffoldScrollOffsetEnvironmentKey: EnvironmentKey {
+    static let defaultValue: CGFloat = 0
+}
+enum ScaffoldTopBarMaxHeightEnvironmentKey: EnvironmentKey {
+    static let defaultValue: CGFloat? = nil
+}
+extension EnvironmentValues {
+    var scaffoldScrollOffset: CGFloat {
+        get { self[ScaffoldScrollOffsetEnvironmentKey.self] }
+        set { self[ScaffoldScrollOffsetEnvironmentKey.self] = newValue }
+    }
+    
+    var scaffoldTopBarMaxHeight: CGFloat? {
+        get { self[ScaffoldTopBarMaxHeightEnvironmentKey.self] }
+        set { self[ScaffoldTopBarMaxHeightEnvironmentKey.self] = newValue }
+    }
+}
+
+
 //struct TopBar2: View {
 //    
 //    @Environment(\.scaffoldScrollOffset) var scaffoldScrollOffset: CGFloat
@@ -105,48 +105,66 @@
 //}
 //
 //
-//public struct Scaffold<Content: View, TopBarContent: View>: View {
-//    
-//    @ViewBuilder
-//    public var content: () -> Content
-//    
-//    @ViewBuilder
-//    public var topBar: () -> TopBarContent
-//    
-//    @State private var scrollOffset: CGRect = .zero
-//    @State private var height: CGFloat = 0
-//    
-//    public var body: some View {
-//        content()
-//            .frame(maxWidth: .infinity)
+public struct Scaffold<Content: View, TopBarContent: View, BottomBarContent: View>: View {
+    
+    @ViewBuilder
+    public var content: () -> Content
+    
+    @ViewBuilder
+    public var topBar: () -> TopBarContent
+    
+    @ViewBuilder
+    public var bottomBar: () -> BottomBarContent
+    
+    public init(content: @escaping () -> Content, topBar: @escaping () -> TopBarContent, bottomBar: @escaping () -> BottomBarContent) {
+        self.content = content
+        self.topBar = topBar
+        self.bottomBar = bottomBar
+    }
+    
+    @State private var scrollOffset: CGRect = .zero
+    @State private var height: CGFloat = 0
+    
+    
+    
+    public var body: some View {
+        content()
+//            .border(Color.pink)
+            .frame(maxWidth: .infinity)
 //            .safeAreaInset(edge: .top, spacing: 0) {
 //                topBarPlaceholder
 //            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                bottomBar()
+//                    .border(Color.orange)
+            }
 //            .overlay {
 //                Color.clear.safeAreaInset(edge: .top, spacing: 0) {
 //                    topBar()
+//                        .border(Color.black)
 //                        .environment(\.scaffoldScrollOffset, scrollOffset.minY)
 //                        .environment(\.scaffoldTopBarMaxHeight, height)
 //                }
 //            }
-//            .coordinateSpace(name: "scaffold")
-//            .onPreferenceChange(ScaffoldScrollConnectionPreference.self) { value in
-//                scrollOffset = value
-//            }
-//    }
-//    
-//    private var topBarPlaceholder: some View {
-//        topBar()
-//            .overlay {
-//                GeometryReader { geom in
-//                    Color.clear.onAppear {
-//                        height = geom.size.height
-//                    }.onChange(of: geom.size.height) { h in height = h }
-//                }
-//            }
-//            .hidden()
-//    }
-//}
+            .coordinateSpace(name: "scaffold")
+            .onPreferenceChange(ScaffoldScrollConnectionPreference.self) { value in
+                scrollOffset = value
+            }
+    }
+    
+    private var topBarPlaceholder: some View {
+        topBar()
+//            .border(Color.red)
+            .overlay {
+                GeometryReader { geom in
+                    Color.clear.onAppear {
+                        height = geom.size.height
+                    }.onChange(of: geom.size.height) { h in height = h }
+                }
+            }
+            .hidden()
+    }
+}
 //
 //
 //extension View {
@@ -182,3 +200,22 @@
 //        }
 //    )
 //}
+
+extension Scaffold where TopBarContent == ZeroView {
+    
+    public init(content: @escaping () -> Content, bottomBar: @escaping () -> BottomBarContent) {
+        self.content = content
+        self.topBar = ZeroView.init
+        self.bottomBar = bottomBar
+    }
+    
+}
+
+
+
+public struct ZeroView: View {
+    public var body: some View {
+        Color.clear
+            .frame(minWidth: 0, idealWidth: 0, maxWidth: 0, minHeight: 0, idealHeight: 0, maxHeight: 0)
+    }
+}

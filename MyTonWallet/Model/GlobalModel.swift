@@ -76,23 +76,45 @@ final class GlobalModel {
     }
     
     func activateAccount(_ id: MtwAccount.ID) async throws {
-        if let account = accounts[id] {
-            try await api.activateAccount(accountId: account.apiAccount)
-            currentAccountId = account.id
-        }
+        let account = try accounts[id].orThrow()
+        try await api.activateAccount(accountId: account.apiAccount)
+        currentAccountId = account.id
     }
     
-    func logIn(accountId: String, address: TonAddress, assumeEmpty: Bool) async throws {
+    func registerAccountAndActivate(accountId: String, address: TonAddress, assumeEmpty: Bool) async throws {
         await logOut()
         
         try await api.activateAccount(accountId: accountId)
         
         let id = UUID()
-//        let network = try await api.getCurrentNetwork().orThrow()
-        #warning("assumes mainnet")
-        let account = MtwAccount(id: id, crationDate: .now, apiNetwork: .mainnet, apiAccount: accountId)
+
+        //        let network = try await api.getCurrentNetwork().orThrow() -- hangs??
+        let network: ApiNetwork = accountId.contains("testnet") ? .testnet : .mainnet // might not be resilient
+        let fallbackName = self.accounts.isEmpty ? "Main Account" : "Account \(self.accounts.count + 1)"
+        let account = MtwAccount(id: id, name: "", fallbackName: fallbackName, crationDate: .now, apiNetwork: network, apiAccount: accountId)
         accounts[id] = account
         currentAccountId = id
+    }
+    
+    func createNewAccountAndActivate(network: ApiNetwork) async throws {
+        
+        let words = try await api.generateMnemomic()
+        let (accountId, _) = try await api.createWallet(network: network, mnemonic: words, password: encryptionPassword)
+        try await api.activateAccount(accountId: accountId)
+        
+        let id = UUID()
+
+        let fallbackName = self.accounts.isEmpty ? "Main Account" : "Account \(self.accounts.count + 1)"
+        let account = MtwAccount(id: id, name: "", fallbackName: fallbackName, crationDate: .now, apiNetwork: network, apiAccount: accountId)
+        accounts[id] = account
+        currentAccountId = id
+
+    }
+        
+    func updateCurrentAccountName(_ name: String) {
+        if let currentAccountId {
+            accounts[currentAccountId]?.name = name
+        }
     }
     
     @MainActor

@@ -21,28 +21,45 @@ struct RootView: View {
     
     var body: some View {
         WithPerceptionTracking {
-            TabView(selection: $currentTab) {
-                WalletTab()
-                    .tabItem { Label("Wallet", image: "Tab.Wallet") }
-                    .tag(Tab.wallet)
-                
-                
-                UnderConstructionView()
-                    .toolbarColorScheme(.light, for: .tabBar)
-                    .tabItem { Label("Assets", image: "Tab.Assets") }
-                    .tag(Tab.assets)
-                
-                UnderConstructionView()
-                    .toolbarColorScheme(.light, for: .tabBar)
-                    .tabItem { Label("Browser", image: "Tab.Browser") }
-                    .tag(Tab.browser)
-                
-                SettingsTab()
-                    .toolbarColorScheme(.light, for: .tabBar)
-                    .tabItem { Label("Settings", image: "Tab.Settings") }
-                    .tag(Tab.settings)
-                
+            Scaffold {
+                content
+            } bottomBar: {
+                MtwTabBar(selectedTab: $currentTab)
             }
+//            TabView(selection: $currentTab) {
+//                WalletTab()
+//                    .tabItem { Label("Wallet", image: "Tab.Wallet") }
+//                    .tag(Tab.wallet)
+//                
+//                
+//                UnderConstructionView()
+//                    .toolbarColorScheme(.light, for: .tabBar)
+//                    .tabItem { Label("Assets", image: "Tab.Assets") }
+//                    .tag(Tab.assets)
+//                
+//                UnderConstructionView()
+//                    .toolbarColorScheme(.light, for: .tabBar)
+//                    .tabItem { Label("Browser", image: "Tab.Browser") }
+//                    .tag(Tab.browser)
+//                
+//                SettingsTab()
+//                    .toolbarColorScheme(.light, for: .tabBar)
+//                    .tabItem {
+//                        Label("Settings", image: "Tab.Settings")
+//                            .overlay {
+//                                Color.black
+//                                    .onLongPressGesture {
+//                                        print("long tap")
+//                                    }
+//                            }
+//                            
+//                    }
+//                    .tag(Tab.settings)
+//                
+//            }
+//            .safeAreaInset(edge: .bottom) {
+//                MtwTabBar(selectedTab: $currentTab)
+//            }
             .onChange(of: model.currentAccountId) { _ in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     currentTab = .wallet
@@ -71,5 +88,30 @@ struct RootView: View {
             .preferredColorScheme(.light)
             .modifier(OverrideStatusBarColor())
         }
+    }
+    
+    @ViewBuilder
+    var content: some View {
+        ZStack(alignment: .top) {
+            Color.clear
+            
+            WalletTab()
+                .maybeHidden(isVisible: currentTab == .wallet)
+            
+            UnderConstructionView()
+                .maybeHidden(isVisible: currentTab == .assets || currentTab == .browser)
+            
+            SettingsTab()
+                .maybeHidden(isVisible: currentTab == .settings)
+        }
+        .animation(nil, value: currentTab)
+    }
+}
+
+
+extension View {
+    @ViewBuilder
+    func maybeHidden(isVisible: Bool) -> some View {
+        self.opacity(isVisible ? 1 : 0)
     }
 }

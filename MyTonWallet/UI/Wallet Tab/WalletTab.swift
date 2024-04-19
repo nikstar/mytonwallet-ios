@@ -117,7 +117,7 @@ struct WalletTab: View {
         let topOffset = max(labelOffset.y, endOffset)
         let progressRaw = clamp(1 - ((topOffset - endOffset) / 44))
         
-        TotalWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.totalValue, label: "Main Wallet", transitioned: scrolledToTransactions)
+        TotalWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.totalValue, label: model.account?.displayName ?? "Main wallet", transitioned: scrolledToTransactions)
 
     }
 }

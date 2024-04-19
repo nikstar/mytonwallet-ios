@@ -180,6 +180,16 @@ struct SecretWords: View {
                                 .focused($focusedTextField, equals: i)
                                 .foregroundStyle(focusedTextField == i || words[i].isEmpty || validWords.isEmpty || validWords.contains(words[i]) ? Color.black : Color.red)
                                 .onChange(of: words[i]) { value in
+                                    let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
+                                    if insertedWords.count == words.count {
+                                        focusedTextField = nil
+                                        words = insertedWords.map(String.init)
+                                        withAnimation(.default) {
+                                            scrollView.scrollTo(submitButton, anchor: .bottom)
+                                        }
+                                        return
+                                    }
+                                    
                                     if focusedTextField == i {
                                         let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
                                         if insertedWords.count == words.count {
@@ -258,6 +268,155 @@ struct SecretWords: View {
                 log.fault("getMnemonicWordList \(error)")
             }
         }
+        .onChange(of: focusedTextField) { v in
+            print(v as Any)
+        }
+    }
+    
+    func onContinue() async {
+        do {
+            if try await api.validateMnemonic(mnemonic: words) {
+                #warning("mainnet only")
+                let (accountId, address) = try await api.importMnemonic(network: .mainnet, mnemonic: words, password: model.encryptionPassword)
+                loginFlowModel.preliminaryAccountId = accountId
+                loginFlowModel.preliminaryAddress = address
+                loginFlowModel.isNewAccount = false
+                loginFlowModel.path = [.created]
+            } else {
+                showAlert = true
+            }
+        } catch {
+            log.fault("Uncaught error importing secret phrase: \(error)")
+        }
+    }
+}
+
+struct SecretWords2: View {
+    
+    private var api: Api { model.api }
+    @Environment(GlobalModel.self) private var model
+    @EnvironmentObject private var loginFlowModel: LoginFlowModel
+    
+    @State private var words: [String] = .init(repeating: "", count: 24)
+    @State private var showAlert: Bool = false
+    
+    @State private var navigationTitle: String = ""
+    
+    @FocusState private var focusedTextField: Int?
+    
+    @Namespace private var submitButton
+    
+    @State private var validWords: Set<String> = []
+    
+    var body: some View {
+        ScrollViewReader { scrollView in
+            ScrollView {
+                VStack(spacing: 0) {
+                    Text("24 Secret Words")
+                        .font(.title.bold())
+                        .onAppear {
+                            navigationTitle = ""
+                        }
+                        .padding(.bottom, 12)
+                        .padding(.top, 24)
+
+                    Text("You can restore access to your wallet by entering the 24 secret words that you wrote down when creating the wallet.")
+                        .padding(.bottom, 32)
+
+                    ForEach(0..<24) { i in
+                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                            Text("\(i+1)  ")
+                                .font(.body.monospacedDigit())
+                                .foregroundColor(.secondary)
+                                .frame(minWidth: 26, alignment: .trailing)
+                            TextField("", text: $words[i])
+                                .textCase(.lowercase)
+                                .textInputAutocapitalization(.never)
+                                .frame(maxWidth: .infinity)
+                                .focused($focusedTextField, equals: i)
+                                .foregroundStyle(focusedTextField == i || words[i].isEmpty || validWords.isEmpty || validWords.contains(words[i]) ? Color.black : Color.red)
+                                .onChange(of: words[i]) { value in
+                                    if focusedTextField == i {
+                                        let insertedWords = value.split(omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
+                                        if insertedWords.count == words.count {
+                                            focusedTextField = nil
+//                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                words = insertedWords.map(String.init)
+                                                withAnimation(.default) {
+                                                    scrollView.scrollTo(submitButton, anchor: .bottom)
+                                                }
+//                                            }
+                                        } else if insertedWords.count > 1 {
+                                            var words = self.words
+                                            for (j, w) in insertedWords.enumerated() {
+                                                if i+j >= words.count { break }
+                                                words[i+j] = String(w)
+                                            }
+                                            self.words = words
+                                            focusedTextField = min(i + insertedWords.count, words.count - 1)
+                                            if i + insertedWords.count >= words.count - 3 {
+                                                withAnimation(.default) {
+                                                    scrollView.scrollTo(submitButton, anchor: .bottom)
+                                                }
+                                            }
+                                        } else if value.last == " "  {
+                                            words[i] = String(value.dropLast())
+                                            focusedTextField = min(i + 1, words.count - 1)
+                                            if i + 1 >= words.count - 2 {
+                                                withAnimation(.default) {
+                                                    scrollView.scrollTo(submitButton, anchor: .bottom)
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                        }
+                        .padding(.all, 14)
+                        .background {
+                            Color(UIColor.tertiarySystemFill).cornerRadius(10)
+                        }
+                        .padding(.bottom, 16)
+                    }
+                    .multilineTextAlignment(.leading)
+                    
+                    
+                    Button(asyncAction: onContinue) {
+                        Text("Continue")
+                    }
+                    .buttonStyle(.wallet())
+                    .padding(.top, 16)
+                    .padding(.bottom, 32)
+                    .id(submitButton)
+                }
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+                .padding(.bottom, 8)
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Wrong Phrase"),
+                        message: Text("Looks like you entered an invalid mnemonic phrase."),
+                        dismissButton: .cancel(Text("Close"))
+                    )
+                }
+                .navigationTitle(navigationTitle)
+                .navigationBarBackButtonHidden(false)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar(.visible, for: .navigationBar)
+                .onAppear {
+                    focusedTextField = 0
+                }
+            }
+        }
+        .task {
+            do {
+                self.validWords = try await Set(model.api.getMnemonicWordList())
+            } catch {
+                log.fault("getMnemonicWordList \(error)")
+            }
+        }
+        .onChange(of: focusedTextField) { v in
+            print(v as Any)
+        }
     }
     
     func onContinue() async {
@@ -330,7 +489,7 @@ struct Congratulations: View {
         model.userPassword = nil
         Task {
             do {
-                try await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
+                try await model.registerAccountAndActivate(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
                 
             } catch {
                 log.fault("login error \(error)")
@@ -464,7 +623,7 @@ struct ConfirmPassword: View {
         }
         model.userPassword = loginFlowModel.preliminaryUserPassword
         Task {
-            try! await model.logIn(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
+            try! await model.registerAccountAndActivate(accountId: accountId, address: address, assumeEmpty: loginFlowModel.isNewAccount)
         }
     }
 }

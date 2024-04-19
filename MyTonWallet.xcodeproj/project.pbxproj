@@ -75,6 +75,7 @@
 		58DDF78E2BA97802003D9628 /* TransactionsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF78D2BA97802003D9628 /* TransactionsSection.swift */; };
 		58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF78F2BA97B16003D9628 /* CellDivider.swift */; };
 		58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */; };
+		58E6E7BA2BD2CFD4003FD94F /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58E6E7B92BD2CFD4003FD94F /* TabBar.swift */; };
 		58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BA2BAC3D66000246C4 /* Secret.swift */; };
 		58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */; };
 		58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */; };
@@ -140,6 +141,7 @@
 		58DDF78D2BA97802003D9628 /* TransactionsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsSection.swift; sourceTree = "<group>"; };
 		58DDF78F2BA97B16003D9628 /* CellDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellDivider.swift; sourceTree = "<group>"; };
 		58DDF7912BA9AD92003D9628 /* TransactionDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailsView.swift; sourceTree = "<group>"; };
+		58E6E7B92BD2CFD4003FD94F /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		58F4F5BA2BAC3D66000246C4 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		58F4F5BC2BAC6001000246C4 /* RequestProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestProxy.swift; sourceTree = "<group>"; };
 		58F4F5BE2BAC7DD3000246C4 /* HTTPApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPApi.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				58DDF7692BA82F8D003D9628 /* RootView.swift */,
+				58E6E7B92BD2CFD4003FD94F /* TabBar.swift */,
 				58D4E6EB2BB449AB00831B07 /* SettingsTab.swift */,
 			);
 			path = Root;
@@ -267,6 +270,7 @@
 			children = (
 				581867A62BD11279001A1A91 /* GlobalModel.swift */,
 				581867AB2BD11D45001A1A91 /* AccountModel.swift */,
+				581867A22BD10CED001A1A91 /* MtwAccount.swift */,
 				58DDF7632BA81EB9003D9628 /* Model.swift */,
 				580D090E2BAD8B1A00575E4B /* PersitstentState.swift */,
 				580044022BB0DDAC00C364CE /* TokenAmount.swift */,
@@ -275,7 +279,6 @@
 				58DDF7652BA81FDF003D9628 /* UIState.swift */,
 				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
 				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue.swift */,
-				581867A22BD10CED001A1A91 /* MtwAccount.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 				58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */,
 				581867A52BD10D0E001A1A91 /* ApiNetwork.swift in Sources */,
 				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
+				58E6E7BA2BD2CFD4003FD94F /* TabBar.swift in Sources */,
 				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
 				58B4ABE72BBAE0CB0007BF54 /* AppDelegate.swift in Sources */,
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,

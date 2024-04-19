@@ -33,14 +33,28 @@ struct DebugView: View {
                 Button(asyncAction: {
                     do {
                         let (accountId, address) = try await api.importMnemonic(network: .mainnet, mnemonic: mnemonic1, password: model.encryptionPassword)
-                        try await model.logIn(accountId: accountId, address: address, assumeEmpty: false)
+                        try await model.registerAccountAndActivate(accountId: accountId, address: address, assumeEmpty: false)
                         print(accountId)
                     } catch {
                         print(error)
                     }
                 }) {
-                    Text("Log in with test wallet")
+                    Text("Log in with test wallet 1")
                 }
+                
+                Button(asyncAction: {
+                    do {
+                        let (accountId, address) = try await api.importMnemonic(network: .mainnet, mnemonic: mnemonic2, password: model.encryptionPassword)
+                        try await model.registerAccountAndActivate(accountId: accountId, address: address, assumeEmpty: false)
+                        print(accountId)
+                    } catch {
+                        print(error)
+                    }
+                }) {
+                    Text("Log in with test wallet 2")
+                }
+                
+                
                 
                 Button(asyncAction: {
                     await model.logOut()
