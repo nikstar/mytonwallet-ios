@@ -3,29 +3,20 @@ import SwiftUI
 import OrderedCollections
 import Perception
 
-struct TransactionsSection: View {
-    
-    var transitionToTransactionsProgress: CGFloat
-    
+struct ActivitiesSection: View {
     
     @Environment(GlobalModel.self) private var globalModel
     @Environment(AccountModel.self) private var currentAccountModel
     
-    
-    @State private var presentedTransaction: MtwActivity? = nil
-    
+    @State private var presentedActivity: MtwActivity? = nil
     
     @State private var groupedActivities: OrderedDictionary<DateComponents, [MtwActivity]> = [:]
     
     var body: some View {
-//        return Color.mainWalletBackground
-//            .frame(minHeight: 1000)
-//            .toolbarColorScheme(.light, for: .bottomBar)
-//            .toolbarColorScheme(.light, for: .tabBar)
+        let _ = Self._printChanges()
 
         WithPerceptionTracking {
             list
-            //            .padding(.top, -10)
                 .padding(.bottom, 32)
                 .frame(minHeight: 700, alignment: .top)
                 .foregroundStyle(.black)
@@ -33,9 +24,8 @@ struct TransactionsSection: View {
                 .clipShape(
                     UnevenRoundedRectangle(cornerRadii: .init(topLeading: 16, bottomLeading: 0, bottomTrailing: 0, topTrailing: 16), style: .continuous)
                 )
-                .sheet(item: $presentedTransaction) { presentedTransaction in
-                    TransactionDetailsSheet(transaction: presentedTransaction)
-                    //            EmptyView()
+                .sheet(item: $presentedActivity) { presentedTransaction in
+                    ActivityDetailsSheet(activity: presentedTransaction)
                 }
                 .onAppear {
                     self.groupedActivities = OrderedDictionary(grouping: currentAccountModel.activities.values, by: { activity -> DateComponents in
@@ -54,11 +44,10 @@ struct TransactionsSection: View {
                     emptyState
                 }
         }
-//        .environment(\.colorScheme, .light)
     }
     
     var list: some View {
-        LazyVStack(alignment: .leading, spacing: 0, pinnedViews: [/*.sectionHeaders*/]) {
+        LazyVStack(alignment: .leading, spacing: 0) {
             
             ForEach(groupedActivities.keys, id: \.self) { (date: DateComponents) in
                 let activities = groupedActivities[date] ?? []
@@ -67,7 +56,7 @@ struct TransactionsSection: View {
                         TransactionRow(activity: activity)
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                presentedTransaction = activity
+                                presentedActivity = activity
                             }
                             .overlay(alignment: .bottom) {
                                 if activity != activities.last {

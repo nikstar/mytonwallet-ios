@@ -12,28 +12,19 @@ struct OffsetPreferenceKey: PreferenceKey {
 }
 
 
-struct WithOffsetReporting<V: View>: View {
+struct WithOffsetReporting<V: View, P: PreferenceKey>: View where P.Value == CGPoint {
     
     var `in`: CoordinateSpace
-    var onOffsetChange: (CGPoint) -> ()
+    var preference: P.Type
     @ViewBuilder var content: () -> V
     
     var body: some View {
         content()
             .background {
                 GeometryReader { geom in
-                    Color.clear
-                        .onChange(of: geom.frame(in: `in`).origin) { v in
-                            onOffsetChange(v)
-                        }
-                        .onAppear {
-                            let v = geom.frame(in: `in`).origin
-                            onOffsetChange(v)
-                        }
-//                    Color.clear.preference(key: OffsetPreferenceKey.self, value: geom.frame(in: `in`).origin)
+                    Color.clear.preference(key: P.self, value: geom.frame(in: `in`).origin)
                 }
             }
-            .onPreferenceChange(OffsetPreferenceKey.self, perform: onOffsetChange)
     }
 }
 

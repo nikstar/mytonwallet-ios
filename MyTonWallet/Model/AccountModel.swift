@@ -137,8 +137,9 @@ final class AccountModel {
                     case .nfts(let u):
                         guard u.accountId == account?.apiAccount else { break }
                         self.nfts = u.nfts
-                    case .region(let u):
-                        log.debug("updateRegion isLimited=\(u.isLimited)")
+                    case .region(_):
+//                        log.debug("updateRegion isLimited=\(u.isLimited)")
+                        break
                     case .swapTokens(let u):
                         for (slug, token) in u.tokens {
                             self.swapTokens[slug] = token

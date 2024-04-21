@@ -26,41 +26,44 @@ struct WalletTab: View {
         return easeInOutBezier(progressRaw)
     }
     
-    private var topBarColor: Color { Color(UIColor.blend(color1: UIColor(topColor), intensity1: 1 - transitionToTransactionsProgress, color2: UIColor(bottomColor), intensity2: transitionToTransactionsProgress)) }
-    
     @State private var unhandledErrorAlertPresented: Bool = false
     @State private var unhandledErrorMessage: String = ""
-    
-    @Namespace private var contentCoordinateSpace
-    
+        
     private var shouldOverrideStatusBarColorToWhiteIfVisible: Bool {
         model.account != nil && !scrolledToTransactions
     }
     @State private var overrideStatusBarColor: UIStatusBarStyle? = nil
+    private var adjustedTxOffset: CGFloat {
+        if transitionToTransactionsProgress == 0 {
+            200.0
+        } else if transactionsOffset.y < -10 {
+            -10.0
+        } else {
+            transactionsOffset.y
+        }
+    }
     
     var body: some View {
+        let _ = Self._printChanges()
         WithPerceptionTracking {
-            
-            //        let _ = Self._printChanges()
-            
-            Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
-                WalletTabContent(onLabelOffsetChange: { labelOffset = $0 }, ontransactionsOffsetChange: { transactionsOffset = $0 }, contentCoordinateSpace: contentCoordinateSpace, transitionToTransactionsProgress: transitionToTransactionsProgress)
+        
+            WalletTabScaffold(transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions, transitionProgress: transitionToTransactionsProgress, transactionsOffset: adjustedTxOffset) {
+                WalletTabContent()
             } topBarContent: {
                 topBar
             }
             
-            .coordinateSpace(name: contentCoordinateSpace)
+            .coordinateSpace(name: "walletTabContent")
             .background( // for overscrolling at the bottom
                 VStack(spacing: 0) {
                     Color.mainWalletBackground
                     Color.white
                     
                 }
-                    .ignoresSafeArea()
-                    .overlay {
-                        Color.white.opacity(transitionToTransactionsProgress)
-                    }
-                
+                .ignoresSafeArea()
+                .overlay {
+                    Color.white.opacity(transitionToTransactionsProgress)
+                }    
             )
             .overlay(alignment: .top) { // animating account balance size
                 mainAccountValueAnimated
@@ -84,6 +87,12 @@ struct WalletTab: View {
             .preference(key: OverrideStatusBarColorPreference.self, value: overrideStatusBarColor)
             
         }
+        .onPreferenceChange(_LabelOffset.self, perform: { value in
+            labelOffset = value
+        })
+        .onPreferenceChange(_ActivitiesOffset.self, perform: { value in
+            transactionsOffset = value
+        })
         .onChange(of: transactionsOffset) { transactionsOffset in
             if transactionsOffset.y - 10 < 44 && scrolledToTransactions == false {
                 scrolledToTransactions = true
@@ -126,48 +135,40 @@ struct WalletTab: View {
 }
 
 
+enum _LabelOffset: PreferenceKey {
+    static var defaultValue: CGPoint = .zero
+    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
+    }
+}
+
+
+enum _ActivitiesOffset: PreferenceKey {
+    static var defaultValue: CGPoint = .zero
+    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
+        let p1 = value
+        let p2 = nextValue()
+        value = .init(x: max(p1.x, p2.x), y: max(p1.y, p2.y))
+    }
+}
+
+
 struct WalletTabContent: View {
     
-    var onLabelOffsetChange: (CGPoint) -> ()
-    var ontransactionsOffsetChange: (CGPoint) -> ()
-    var contentCoordinateSpace: Namespace.ID
-    var transitionToTransactionsProgress: Double
+//    var onLabelOffsetChange: (CGPoint) -> ()
+//    var ontransactionsOffsetChange: (CGPoint) -> ()
     
     var body: some View {
+        let _ = Self._printChanges()
         ScrollView {
             VStack(spacing: -20) {
-                WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: onLabelOffsetChange) {
-                    Group {
-//                        if #available(iOS 17.0, *) {
-                            AssetsSection()
-                                .overlay {
-                                    Color.white.opacity(transitionToTransactionsProgress)
-                                }
-                            
-//                                .scrollTransition(.animated, axis: .vertical) { effect, phase in
-//                                    switch phase {
-//                                    case .topLeading:
-//                                        effect.scaleEffect(0.5)
-//                                    case .identity:
-//                                        effect.scaleEffect(1.0)
-//                                    case .bottomTrailing:
-//                                        effect.scaleEffect(0.5)
-//                                    }
-//                                }
-//                        } else {
-//                            AssetsSection()
-//                                .overlay {
-//                                    Color.white.opacity(transitionToTransactionsProgress)
-//                                }
-//                        }
-                    }
+                WithOffsetReporting(in: .named("walletTabContent"), preference: _LabelOffset.self) {
+                    AssetsSection()
                 }
-                WithOffsetReporting(in: .named(contentCoordinateSpace), onOffsetChange: ontransactionsOffsetChange) {
-                    TransactionsSection(transitionToTransactionsProgress: transitionToTransactionsProgress)
+                WithOffsetReporting(in: .named("walletTabContent"), preference: _ActivitiesOffset.self) {
+                    ActivitiesSection()
                 }
             }
         }
-        
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .foregroundStyle(Color.white)
         
@@ -182,6 +183,7 @@ struct ActionButton: View {
     var action: () -> ()
     
     var body: some View {
+        let _ = Self._printChanges()
         Button(action: action) {
             VStack(spacing: 4) {
                 Image(icon)
