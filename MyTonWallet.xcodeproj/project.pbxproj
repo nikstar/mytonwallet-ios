@@ -17,6 +17,8 @@
 		5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5800440A2BB173ED00C364CE /* ApiNft.swift */; };
 		5804E83A2BD49CEB00A44D76 /* Optional+or.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E8392BD49CEB00A44D76 /* Optional+or.swift */; };
 		5804E83E2BD4C8F500A44D76 /* ActivityDetailsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E83D2BD4C8F500A44D76 /* ActivityDetailsSheet.swift */; };
+		5804E8412BD4F2B600A44D76 /* AddCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E8402BD4F2B600A44D76 /* AddCrypto.swift */; };
+		5804E8432BD4F47C00A44D76 /* DismissToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E8422BD4F47C00A44D76 /* DismissToolbarItem.swift */; };
 		580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D090C2BAD8A6400575E4B /* LoginFlow.swift */; };
 		580D090F2BAD8B1A00575E4B /* PersitstentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D090E2BAD8B1A00575E4B /* PersitstentState.swift */; };
 		580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */; };
@@ -96,6 +98,8 @@
 		5800440A2BB173ED00C364CE /* ApiNft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiNft.swift; sourceTree = "<group>"; };
 		5804E8392BD49CEB00A44D76 /* Optional+or.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+or.swift"; sourceTree = "<group>"; };
 		5804E83D2BD4C8F500A44D76 /* ActivityDetailsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailsSheet.swift; sourceTree = "<group>"; };
+		5804E8402BD4F2B600A44D76 /* AddCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCrypto.swift; sourceTree = "<group>"; };
+		5804E8422BD4F47C00A44D76 /* DismissToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissToolbarItem.swift; sourceTree = "<group>"; };
 		580D090C2BAD8A6400575E4B /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
 		580D090E2BAD8B1A00575E4B /* PersitstentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersitstentState.swift; sourceTree = "<group>"; };
 		580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginFlow+Buttons.swift"; sourceTree = "<group>"; };
@@ -181,8 +185,10 @@
 		580043FA2BB0D8FA00C364CE /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				58B934B22BB4B56D0086DEBC /* TokenImage.swift */,
 				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
 				58DDF78F2BA97B16003D9628 /* CellDivider.swift */,
+				5804E8422BD4F47C00A44D76 /* DismissToolbarItem.swift */,
 				581867AD2BD18EA7001A1A91 /* Scaffold.swift */,
 				581867AE2BD18EA7001A1A91 /* TopAppBar.swift */,
 			);
@@ -204,12 +210,10 @@
 			children = (
 				58DDF7672BA82DF1003D9628 /* WalletTab.swift */,
 				58DDF7772BA87A29003D9628 /* WalletTabScaffold.swift */,
-				58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */,
-				58B4ABE42BBAE0960007BF54 /* AssetsSection.swift */,
-				580044002BB0DB8300C364CE /* WalletTokenRow.swift */,
-				58B934B22BB4B56D0086DEBC /* TokenImage.swift */,
+				5804E8442BD4FB4400A44D76 /* Top section */,
 				5804E83B2BD4C80800A44D76 /* Activities section */,
 				5804E83C2BD4C83F00A44D76 /* Activity details */,
+				5804E83F2BD4F29300A44D76 /* Add Crypto */,
 			);
 			path = "Wallet Tab";
 			sourceTree = "<group>";
@@ -243,6 +247,24 @@
 				58DDF7912BA9AD92003D9628 /* ActivityDetailsView.swift */,
 			);
 			path = "Activity details";
+			sourceTree = "<group>";
+		};
+		5804E83F2BD4F29300A44D76 /* Add Crypto */ = {
+			isa = PBXGroup;
+			children = (
+				5804E8402BD4F2B600A44D76 /* AddCrypto.swift */,
+			);
+			path = "Add Crypto";
+			sourceTree = "<group>";
+		};
+		5804E8442BD4FB4400A44D76 /* Top section */ = {
+			isa = PBXGroup;
+			children = (
+				58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */,
+				58B4ABE42BBAE0960007BF54 /* AssetsSection.swift */,
+				580044002BB0DB8300C364CE /* WalletTokenRow.swift */,
+			);
+			path = "Top section";
 			sourceTree = "<group>";
 		};
 		580D09102BAD907B00575E4B /* Login Flow */ = {
@@ -470,6 +492,7 @@
 				581867A72BD11279001A1A91 /* GlobalModel.swift in Sources */,
 				58DDF7762BA87572003D9628 /* ParentOffset.swift in Sources */,
 				580D090F2BAD8B1A00575E4B /* PersitstentState.swift in Sources */,
+				5804E8432BD4F47C00A44D76 /* DismissToolbarItem.swift in Sources */,
 				58D4E6EC2BB449AB00831B07 /* SettingsTab.swift in Sources */,
 				58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */,
 				5804E83A2BD49CEB00A44D76 /* Optional+or.swift in Sources */,
@@ -519,6 +542,7 @@
 				580044012BB0DB8400C364CE /* WalletTokenRow.swift in Sources */,
 				580044052BB0EA1400C364CE /* ApiBigint.swift in Sources */,
 				58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */,
+				5804E8412BD4F2B600A44D76 /* AddCrypto.swift in Sources */,
 				580044092BB10BD200C364CE /* ApiActivity.swift in Sources */,
 				58B4ABE92BBAE0EF0007BF54 /* SceneDelegate.swift in Sources */,
 				580D09142BAD912800575E4B /* Sticker.swift in Sources */,

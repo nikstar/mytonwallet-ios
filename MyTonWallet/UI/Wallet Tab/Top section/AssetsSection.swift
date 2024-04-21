@@ -8,6 +8,12 @@ struct AssetsSection: View {
     
     @Environment(AccountModel.self) private var model
 
+    @State private var showAddCrypto = false
+    
+    
+    
+    
+
     var body: some View {
         WithPerceptionTracking {
             VStack(spacing: 0) {
@@ -21,6 +27,11 @@ struct AssetsSection: View {
             .padding(.bottom, 20)
             .background(Color.mainWalletBackground, in: Rectangle())
         }
+        .sheet(isPresented: $showAddCrypto) {
+            AddCryptoSheet()
+                .foregroundColor(nil)
+        }
+
     }
     
     var accountValue: some View {
@@ -39,7 +50,7 @@ struct AssetsSection: View {
     
     var actionButtons: some View {
         HStack(spacing: 8) {
-            ActionButton(title: "add", icon: "Action.Add", action: {})
+            ActionButton(title: "add", icon: "Action.Add", action: { showAddCrypto = true })
             ActionButton(title: "send", icon: "Action.Send", action: {})
             ActionButton(title: "earn", icon: "Action.Earn", action: {})
             ActionButton(title: "swap", icon: "Action.Swap", action: {})
@@ -47,6 +58,7 @@ struct AssetsSection: View {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
         .padding(.top, 16)
+
     }
     
     var walletTokens: some View {

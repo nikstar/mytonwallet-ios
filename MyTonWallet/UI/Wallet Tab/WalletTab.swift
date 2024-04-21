@@ -100,7 +100,6 @@ struct WalletTab: View {
                 scrolledToTransactions = false
             }
         }
-
     }
     
     @ViewBuilder
