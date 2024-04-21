@@ -46,22 +46,7 @@ struct WalletTab: View {
             Scaffold2(topBarBackgroundColor: topBarColor, transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions) {
                 WalletTabContent(onLabelOffsetChange: { labelOffset = $0 }, ontransactionsOffsetChange: { transactionsOffset = $0 }, contentCoordinateSpace: contentCoordinateSpace, transitionToTransactionsProgress: transitionToTransactionsProgress)
             } topBarContent: {
-                HStack {
-                    Button(action: {}) {
-                        Label("Settings", image: "Toolbar.Settings")
-                            .labelStyle(.iconOnly)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {}) {
-                        Label("Scan QR", image: "Toolbar.Scan")
-                            .labelStyle(.iconOnly)
-                    }
-                    
-                }
-                .padding(.horizontal, 16)
-                .foregroundColor(scrolledToTransactions ? .blue : .white)
+                topBar
             }
             
             .coordinateSpace(name: contentCoordinateSpace)
@@ -118,7 +103,25 @@ struct WalletTab: View {
         let progressRaw = clamp(1 - ((topOffset - endOffset) / 44))
         
         TotalWalletValue(topOffset: topOffset, progressRaw: progressRaw, totalValue: model.totalValue, label: model.account?.displayName ?? "Main wallet", transitioned: scrolledToTransactions)
-
+    }
+    
+    @ViewBuilder
+    var topBar: some View {
+        HStack {
+            Button(action: {}) {
+                Label("Settings", image: "Toolbar.Settings")
+                    .labelStyle(.iconOnly)
+            }
+            
+            Spacer()
+            
+            Button(action: {}) {
+                Label("Scan QR", image: "Toolbar.Scan")
+                    .labelStyle(.iconOnly)
+            }
+        }
+        .padding(.horizontal, 16)
+        .foregroundColor(scrolledToTransactions ? .blue : .white)
     }
 }
 

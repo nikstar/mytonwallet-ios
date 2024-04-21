@@ -45,6 +45,10 @@ extension ApiUpdate: Decodable {
             throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "unknownTokenType = \(type)"))
         }
     }
+    
+    var kind: String {
+        Mirror(reflecting: self).children.first?.label ?? ""
+    }
 }
 
 

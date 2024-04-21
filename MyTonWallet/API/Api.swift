@@ -19,7 +19,15 @@ final class Api: ObservableObject {
                         let string = try raw.as(String.self)
                         let data = string.data(using: .utf8)!
                         let decoder = JSONDecoder()
-                        return try decoder.decode(ApiUpdate.self, from: data)
+                        let update = try decoder.decode(ApiUpdate.self, from: data)
+                        
+                        #warning("make optional")
+                        let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
+                        try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
+                        try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-\(update.kind).json"))
+                        UIPasteboard.general.url = tmp
+
+                        return update
                     }
                     self.callbacks.values.forEach { $0(update) }
                 } catch {

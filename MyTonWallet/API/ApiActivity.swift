@@ -8,15 +8,34 @@ struct ApiActivity: Hashable, Identifiable, Codable {
     var timestamp: Int
     var kind: String
     var txId: String?
+    var shouldHide: Bool?
+    
+    // tx only
     var isIncoming: Bool?
     var fromAddress: TonAddress?
     var toAddress: TonAddress?
     var amount: ApiBigint?
     var comment: String?
+    var encryptedComment: String?
     var slug: String?
     var fee: ApiBigint?
     var normalizedAddress: TonAddress?
-    //    var metadata: [String: Any]
+    //    var metadata: [String: Any]? ?
+    
+    
+    // swap only
+    var lt: Int?
+    var from: Slug?
+    var fromAmount: String?
+    var to: Slug?
+    var toAmount: String?
+    var status: String?
+    var txIds: [String]?
+    var exchanger: String?
+//    var msgHash: String? ?
+    var networkFee: Double?
+    
+    
     
 //    init(from decoder: Decoder) throws {
 //        let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -38,18 +57,19 @@ struct ApiActivity: Hashable, Identifiable, Codable {
 
 extension ApiActivity {
     
-    enum ActivityType {
-        case sent, received
-//        case sentNft, receivedNft, swap
-    }
-    
-    var type: ActivityType {
-        if isIncoming == true {
-            .received
-        } else {
-            .sent
-        }
-    }
+//    enum ActivityType {
+//        case sent, received
+//        case swap
+////        case sentNft, receivedNft, swap
+//    }
+//    
+//    var type: ActivityType {
+//        if isIncoming == true {
+//            .received
+//        } else {
+//            .sent
+//        }
+//    }
     
 }
 

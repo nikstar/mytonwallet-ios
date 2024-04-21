@@ -5,7 +5,7 @@ import SimpleToast
 
 struct TransactionDetailsSheet: View {
     
-    var transaction: NormalizedActivity
+    var transaction: MtwActivity
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -95,40 +95,75 @@ struct TransactionDetailsSheet: View {
 
 struct TransactionDetailsView: View {
     
-    var activity: NormalizedActivity
+    var activity: MtwActivity
     
     @State private var toastPresented: Bool = false
 
     @AppStorage("debugOverlay", store: .group) private var debugOverlay = false
-    
+    @Environment(AccountModel.self) private var model
 
     var body: some View {
         List {
             Section {} header: {
                 VStack(spacing: 8) {
-                    if activity.isIncoming {
-                        Text(activity.tokenAmount?.formatted(.tokenAmount(explicitPlus: true)) ?? "--")
-                            .font(.largeTitle.weight(.semibold))
-                            .foregroundStyle(activity.isIncoming ? Color.green : Color.black)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    } else {
-                        Text(activity.tokenAmount?.formatted(.tokenAmount(noSign: true)) ?? "--")
-                            .font(.largeTitle.weight(.semibold))
-                            .foregroundStyle(activity.isIncoming ? Color.green : Color.black)
-                            .frame(maxWidth: .infinity, alignment: .center)
+                    Group {
+                        switch activity.kind {
+                        case .transaction:
+                            if activity.isIncoming {
+                                Text(activity.tokenAmount?.formatted(.tokenAmount(explicitPlus: true)) ?? "---")
+                                    .foregroundStyle(Color.transactionGreen)
+                            } else {
+                                Text(activity.tokenAmount?.formatted(.tokenAmount(noSign: true)) ?? "---")
+                            }
+                            
+                        case .swap:
+//                            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
+                            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
+//                            let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
+                            let toAmount = activity.raw.toAmount.flatMap(Double.init)
+                            
+                            if let to, let toAmount {
+                                Text("+\(toAmount) \(to)")
+                                    .foregroundStyle(Color.transactionGreen)
+                            }
+                            
+                        case .other(_):
+                            EmptyView()
+                        }
                     }
+                    .font(.largeTitle.weight(.semibold))
+                    .frame(maxWidth: .infinity, alignment: .center)
                     
-                    Text(activity.tokenAmount?.valueInCurrency?.formatted() ?? "--")
-                        .font(.body)
-                        .foregroundStyle(activity.isIncoming ? Color.green : Color.transactionSecondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    
+                    Group {
+                        switch activity.kind {
+                        case .transaction:
+                            Text(activity.tokenAmount?.valueInCurrency?.formatted() ?? "---")
+                                .foregroundStyle(activity.isIncoming ? Color.transactionGreen : Color.transactionSecondary)
+
+                        case .swap:
+                            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
+//                            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
+                            let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
+//                            let toAmount = activity.raw.toAmount.flatMap(Double.init)
+                            
+                            if let from, let fromAmount {
+                                Text("\(-fromAmount) \(from)")
+                                    .foregroundStyle(Color.transactionSecondary)
+                            }
+
+                        case .other(_):
+                            EmptyView()
+
+                        }
+                    }
+                    .font(.body)
+                    .frame(maxWidth: .infinity, alignment: .center)                    
                 }
                 .textCase(nil)
                 .padding(.vertical, 24)
             }
             
-            if let comment = activity.activity.comment {
+            if let comment = activity.raw.comment {
                 Section {
                     Text(verbatim: comment)
                         .contentShape(Rectangle())
@@ -145,29 +180,32 @@ struct TransactionDetailsView: View {
             Section {
                 
                 if activity.isIncoming {
-                    LabeledContent {
-                        Text(activity.activity.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
-                            .font(.body.monospaced())
-                    } label: {
-                        Text("Sender")//.frame(width: 42, alignment: .leading)
+                    if let from = activity.raw.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) {
+                        LabeledContent {
+                            Text(from)
+                                .font(.body.monospaced())
+                        } label: {
+                            Text("Sender")//.frame(width: 42, alignment: .leading)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            UIPasteboard.general.string = activity.raw.fromAddress?.string
+                            toastPresented = true
+                        }
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        UIPasteboard.general.string = activity.activity.fromAddress?.string
-                        toastPresented = true
-                    }
-                    
                 } else { // is outgoing
-                    LabeledContent {
-                        Text(activity.activity.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
-                            .font(.body.monospaced())
-                    } label: {
-                        Text("Recipient")
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        UIPasteboard.general.string = activity.activity.toAddress?.string
-                        toastPresented = true
+                    if let to = activity.raw.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) {
+                        LabeledContent {
+                            Text(to)
+                                .font(.body.monospaced())
+                        } label: {
+                            Text("Recipient")
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            UIPasteboard.general.string = activity.raw.toAddress?.string
+                            toastPresented = true
+                        }
                     }
                 }
                 
@@ -179,7 +217,7 @@ struct TransactionDetailsView: View {
                     .foregroundStyle(.primary)
                 
                 
-                if let tx = activity.activity.txId?.split(separator: ":").last.map(String.init), let url = URL(string: "https://tonscan.org/tx/\(tx)") {
+                if let tx = activity.raw.txId?.split(separator: ":").last.map(String.init), let url = URL(string: "https://tonscan.org/tx/\(tx)") {
                     Link(destination: url) {
                         Text("View in Explorer")
                     }
@@ -193,62 +231,62 @@ struct TransactionDetailsView: View {
             if debugOverlay {
                 Section {
                     LabeledContent {
-                        Text(activity.activity.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                        Text(activity.raw.fromAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
                             .font(.body.monospaced())
                     } label: {
                         Text("From")//.frame(width: 42, alignment: .leading)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        UIPasteboard.general.string = activity.activity.fromAddress?.string
+                        UIPasteboard.general.string = activity.raw.fromAddress?.string
                         toastPresented = true
                     }
                     
                     LabeledContent {
-                        Text(activity.activity.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                        Text(activity.raw.toAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
                             .font(.body.monospaced())
                     } label: {
                         Text("To")
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        UIPasteboard.general.string = activity.activity.toAddress?.string
+                        UIPasteboard.general.string = activity.raw.toAddress?.string
                         toastPresented = true
                     }
                     
                     LabeledContent {
-                        Text(activity.activity.normalizedAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
+                        Text(activity.raw.normalizedAddress?.formatted(.tonAddress(prefix: 6, suffix: 6)) ?? "-")
                             .font(.body.monospaced())
                     } label: {
                         Text("Normalized")//.frame(width: 42, alignment: .leading)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        UIPasteboard.general.string = activity.activity.normalizedAddress?.string
+                        UIPasteboard.general.string = activity.raw.normalizedAddress?.string
                         toastPresented = true
                     }
                     
                     LabeledContent {
-                        Text(activity.activity.txId ?? "-")
+                        Text(activity.raw.txId ?? "-")
                             .font(.body.monospaced())
                     } label: {
                         Text("TxId").frame(width: 42, alignment: .leading)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        UIPasteboard.general.string = activity.activity.txId
+                        UIPasteboard.general.string = activity.raw.txId
                         toastPresented = true
                     }
                     
                     LabeledContent {
-                        Text(activity.activity.txId?.split(separator: ":").last ?? "-")
+                        Text(activity.raw.txId?.split(separator: ":").last ?? "-")
                             .font(.body.monospaced())
                     } label: {
                         Text("Tx").frame(width: 42, alignment: .leading)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        UIPasteboard.general.string = activity.activity.txId?.split(separator: ":").last.map(String.init)
+                        UIPasteboard.general.string = activity.raw.txId?.split(separator: ":").last.map(String.init)
                         toastPresented = true
                     }
                     
@@ -265,7 +303,7 @@ struct TransactionDetailsView: View {
                     
                     LabeledContent("Amount", value: activity.tokenAmount?.formatted() ?? "-")
                         .foregroundStyle(.primary)
-                    LabeledContent("Fee", value: "\((Double(activity.activity.fee?.value ?? 0) / 1_000_000_000).formatted()) TON" )
+                    LabeledContent("Fee", value: "\((Double(activity.raw.fee?.value ?? 0) / 1_000_000_000).formatted()) TON" )
                         .foregroundStyle(.primary)
                 } header: {
                     Text("Debug")

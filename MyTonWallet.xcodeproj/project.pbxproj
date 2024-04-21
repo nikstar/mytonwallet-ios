@@ -15,6 +15,7 @@
 		580044052BB0EA1400C364CE /* ApiBigint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580044042BB0EA1400C364CE /* ApiBigint.swift */; };
 		580044092BB10BD200C364CE /* ApiActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580044082BB10BD200C364CE /* ApiActivity.swift */; };
 		5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5800440A2BB173ED00C364CE /* ApiNft.swift */; };
+		5804E83A2BD49CEB00A44D76 /* Optional+or.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E8392BD49CEB00A44D76 /* Optional+or.swift */; };
 		580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D090C2BAD8A6400575E4B /* LoginFlow.swift */; };
 		580D090F2BAD8B1A00575E4B /* PersitstentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D090E2BAD8B1A00575E4B /* PersitstentState.swift */; };
 		580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */; };
@@ -49,7 +50,7 @@
 		58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */; };
 		58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AD2BAB961D00DE08BF /* ApiError.swift */; };
 		58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AF2BAB971800DE08BF /* JSReturnValue.swift */; };
-		58D2D0222BB1A55300F613DE /* NormalizedActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */; };
+		58D2D0222BB1A55300F613DE /* MtwActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D2D0212BB1A55300F613DE /* MtwActivity.swift */; };
 		58D4E6EC2BB449AB00831B07 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D4E6EB2BB449AB00831B07 /* SettingsTab.swift */; };
 		58D4E6EE2BB4588B00831B07 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 58D4E6ED2BB4588B00831B07 /* PrivacyInfo.xcprivacy */; };
 		58DDF7642BA81EB9003D9628 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7632BA81EB9003D9628 /* Model.swift */; };
@@ -92,6 +93,7 @@
 		580044042BB0EA1400C364CE /* ApiBigint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiBigint.swift; sourceTree = "<group>"; };
 		580044082BB10BD200C364CE /* ApiActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiActivity.swift; sourceTree = "<group>"; };
 		5800440A2BB173ED00C364CE /* ApiNft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiNft.swift; sourceTree = "<group>"; };
+		5804E8392BD49CEB00A44D76 /* Optional+or.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+or.swift"; sourceTree = "<group>"; };
 		580D090C2BAD8A6400575E4B /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
 		580D090E2BAD8B1A00575E4B /* PersitstentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersitstentState.swift; sourceTree = "<group>"; };
 		580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginFlow+Buttons.swift"; sourceTree = "<group>"; };
@@ -123,7 +125,7 @@
 		58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TonAddress.swift; sourceTree = "<group>"; };
 		58D164AD2BAB961D00DE08BF /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		58D164AF2BAB971800DE08BF /* JSReturnValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSReturnValue.swift; sourceTree = "<group>"; };
-		58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalizedActivity.swift; sourceTree = "<group>"; };
+		58D2D0212BB1A55300F613DE /* MtwActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwActivity.swift; sourceTree = "<group>"; };
 		58D4E6EB2BB449AB00831B07 /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
 		58D4E6ED2BB4588B00831B07 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		58DDF7632BA81EB9003D9628 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
@@ -275,7 +277,7 @@
 				580D090E2BAD8B1A00575E4B /* PersitstentState.swift */,
 				580044022BB0DDAC00C364CE /* TokenAmount.swift */,
 				58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */,
-				58D2D0212BB1A55300F613DE /* NormalizedActivity.swift */,
+				58D2D0212BB1A55300F613DE /* MtwActivity.swift */,
 				58DDF7652BA81FDF003D9628 /* UIState.swift */,
 				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
 				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue.swift */,
@@ -331,6 +333,7 @@
 				58659BF32BAAD670006E14C1 /* Logger+file,funcLog.swift */,
 				58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */,
 				58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */,
+				5804E8392BD49CEB00A44D76 /* Optional+or.swift */,
 				58B4ABEA2BBAE9840007BF54 /* withRetry.swift */,
 				58FBD28B2BADE214005F5F09 /* OverrideStatusBarColor.swift */,
 			);
@@ -450,7 +453,8 @@
 				580D090F2BAD8B1A00575E4B /* PersitstentState.swift in Sources */,
 				58D4E6EC2BB449AB00831B07 /* SettingsTab.swift in Sources */,
 				58DDF7902BA97B16003D9628 /* CellDivider.swift in Sources */,
-				58D2D0222BB1A55300F613DE /* NormalizedActivity.swift in Sources */,
+				5804E83A2BD49CEB00A44D76 /* Optional+or.swift in Sources */,
+				58D2D0222BB1A55300F613DE /* MtwActivity.swift in Sources */,
 				58DDF7922BA9AD92003D9628 /* TransactionDetailsView.swift in Sources */,
 				58B4ABEB2BBAE9840007BF54 /* withRetry.swift in Sources */,
 				58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */,

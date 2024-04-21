@@ -12,10 +12,10 @@ struct TransactionsSection: View {
     @Environment(AccountModel.self) private var currentAccountModel
     
     
-    @State private var presentedTransaction: NormalizedActivity? = nil
+    @State private var presentedTransaction: MtwActivity? = nil
     
     
-    @State private var groupedActivities: OrderedDictionary<DateComponents, [NormalizedActivity]> = [:]
+    @State private var groupedActivities: OrderedDictionary<DateComponents, [MtwActivity]> = [:]
     
     var body: some View {
 //        return Color.mainWalletBackground
@@ -27,7 +27,7 @@ struct TransactionsSection: View {
             list
             //            .padding(.top, -10)
                 .padding(.bottom, 32)
-                .frame(minHeight: 700)
+                .frame(minHeight: 700, alignment: .top)
                 .foregroundStyle(.black)
                 .background(Color.white)
                 .clipShape(
@@ -39,13 +39,13 @@ struct TransactionsSection: View {
                 }
                 .onAppear {
                     self.groupedActivities = OrderedDictionary(grouping: currentAccountModel.activities.values, by: { activity -> DateComponents in
-                        let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
+                        let date = Date(timeIntervalSince1970: Double(activity.raw.timestamp / 1000))
                         return Calendar.current.dateComponents([.year, .month, .day], from: date)
                     })
                 }
                 .onChange(of: currentAccountModel.activities) { activities in
                     self.groupedActivities = OrderedDictionary(grouping: activities.values, by: { activity -> DateComponents in
-                        let date = Date(timeIntervalSince1970: Double(activity.activity.timestamp / 1000))
+                        let date = Date(timeIntervalSince1970: Double(activity.raw.timestamp / 1000))
                         return Calendar.current.dateComponents([.year, .month, .day], from: date)
                     })
                 }
@@ -121,15 +121,16 @@ struct TransactionsSection: View {
 
 struct TransactionRow: View {
     
-    var activity: NormalizedActivity
+    @Environment(AccountModel.self) private var model
+    
+    var activity: MtwActivity
     
     var body: some View {
         
         HStack(spacing: 10) {
-            TokenImage(token: activity.tokenAmount?.token)
-                .clipShape(Circle())
-                .frame(width: 40, height: 40)
-
+            
+            leftImage
+            
             HStack(alignment: .center, spacing: 0) {
                 
                 VStack(alignment: .leading, spacing: 0) {
@@ -160,44 +161,60 @@ struct TransactionRow: View {
     }
     
     @ViewBuilder
-    var topLeft: some View {
-        switch activity.activity.type {
-        case .received:
-            Text(activity.activity.fromAddress?.formatted() ?? "--")
-        case .sent:
-            Text(activity.activity.toAddress?.formatted() ?? "--")
+    var leftImage: some View {
+        let tx = activity.tokenAmount?.token
+        let swap = activity.raw.to.flatMap { slug in model.knownTokens[slug] }
 
-//        case .recieved(let i), .sent(let i):
-//            Text(i.counterparty.tonURL ?? i.counterparty.address)
-//        case .receivedNFT(let i), .sentNFT(let i):
-//            Text(i.counterparty.tonURL ?? i.counterparty.address)
-//        case .swapped(let i):
-//            HStack(alignment: .center, spacing: 5) {
-//                Text(i.sent.token.ticker)
-//                
-//                Text(Image(systemName: "chevron.right"))
-//                    .font(.footnote)
-//                    .fontWeight(.semibold)
-//                    .foregroundStyle(Color.transactionSecondary.opacity(0.3))
-//                Text(i.received.token.ticker)
-//                
-//            }
+        TokenImage(token: tx.or(swap))
+            .clipShape(Circle())
+            .frame(width: 40, height: 40)
+
+    }
+    
+    
+    @ViewBuilder
+    var topLeft: some View {
+        switch activity.kind {
+        case .transaction:
+            if activity.isIncoming {
+                Text(activity.raw.fromAddress?.formatted() ?? "--")
+            } else {
+                Text(activity.raw.toAddress?.formatted() ?? "--")
+
+            }
+        case .swap:
+            
+            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
+            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
+            
+            HStack(alignment: .center, spacing: 5) {
+                Text(from ?? "---")
+                    .maybeRedacted(from == nil)
+                
+                Text(Image(systemName: "chevron.right"))
+                    .font(.footnote)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.transactionSecondary.opacity(0.5))
+                
+                Text(to ?? "---")
+                    .maybeRedacted(to == nil)
+            }
+
+        case .other(let string):
+            Text("Unsupported activity type: \(string)")
+                .foregroundStyle(.secondary)
         }
     }
     
     @ViewBuilder
     var bottomLeft: some View {
-        let action: String = switch activity.activity.type {
-        case .received:
-            "Received"
-        case .sent:
-            "Sent"
-//        case .receivedNFT:
-//            "Received NFT"
-//        case .sentNFT:
-//            "Sent NFT"
-//        case .swapped:
-//            "Swapped"
+        let action: String = switch activity.kind {
+        case .transaction:
+            activity.isIncoming ? "Received" : "Sent"
+        case .swap:
+            "Swapped"
+        case .other(let s):
+            s
         }
         let timestamp = activity.date.formatted(.dateTime.hour().minute())
         Text("\(action) · \(timestamp)")
@@ -205,52 +222,58 @@ struct TransactionRow: View {
     
     @ViewBuilder
     var topRight: some View {
-        switch activity.activity.type {
-        case .received:
-            Text(activity.tokenAmount?.formatted(.tokenAmount(explicitPlus: true)) ?? "no amount")
-                .foregroundStyle(Color.transactionGreen)
-        case .sent:
-            Text(activity.tokenAmount?.formatted(.tokenAmount(noSign: true)) ?? "no amount")
-//        case .received:
-//            Text(i.value.formatted(.tokenValue(explicitPlus: true)))
-//                .foregroundStyle(Color.transactionGreen)
-//        case .sent:
-//            Text(i.value.formatted())
-//        case .receivedNFT(let i):
-//            Text(i.nft.name)
-//                .foregroundStyle(Color.transactionGreen)
-//        case .sentNFT(let i):
-//            Text(i.nft.name)
-//        case .swapped(let i):
-//            Text(i.received.formatted(.tokenValue(explicitPlus: true)))
-//                .foregroundStyle(Color.transactionGreen)
+        switch activity.kind {
+        case .transaction:
+            if activity.isIncoming {
+                Text(activity.tokenAmount?.formatted(.tokenAmount(explicitPlus: true)) ?? "---")
+                    .foregroundStyle(Color.transactionGreen)
+            } else {
+                Text(activity.tokenAmount?.formatted(.tokenAmount(noSign: true)) ?? "---")
+            }
+        
+        case .swap:
+            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
+            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
+            let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
+            let toAmount = activity.raw.toAmount.flatMap(Double.init)
+            
+            if let to, let toAmount {
+                Text("+\(toAmount) \(to)")
+                    .foregroundStyle(Color.transactionGreen)
+            }
+
+        case .other(_):
+            EmptyView()
         }
     }
     
     @ViewBuilder
     var bottomRight: some View {
-        switch activity.activity.type {
-        case .received:
-            Text(activity.tokenAmount?.valueInCurrency?.formatted() ?? "no amount")
-                .foregroundStyle(Color.transactionGreen)
-        case .sent:
-            Text(activity.tokenAmount?.valueInCurrency?.formatted() ?? "no amount")
-                .foregroundStyle(Color.transactionSecondary)
-//        case .receivedNFT(let i):
-//            Text(i.nft.collection?.name ?? "NFT")
-//                .foregroundStyle(Color.transactionGreen)
-//        case .sentNFT(let i):
-//            Text(i.nft.collection?.name ?? "NFT")
-//                .foregroundStyle(Color.transactionSecondary)
-//        case .swapped(let i):
-//            Text(i.sent.formatted(.tokenValue(asNegative: true)))
-//                .foregroundStyle(Color.transactionSecondary)
+        switch activity.kind {
+        case .transaction:
+            Text(activity.tokenAmount?.valueInCurrency?.formatted() ?? "---")
+                .foregroundStyle(activity.isIncoming ? Color.transactionGreen : Color.transactionSecondary)
+
+        case .swap:
+            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
+            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
+            let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
+            let toAmount = activity.raw.toAmount.flatMap(Double.init)
+            
+            if let from, let fromAmount {
+                Text("\(-fromAmount) \(from)")
+                    .foregroundStyle(Color.transactionSecondary)
+            }
+
+        case .other(_):
+            EmptyView()
+
         }
     }
     
     @ViewBuilder
     var rightImage: some View {
-        switch activity.activity.type {
+        switch activity.kind {
 //        case .receivedNFT(let i), .sentNFT(let i):
 //            let _ = Text(i.nft.image)
 //            Color.green

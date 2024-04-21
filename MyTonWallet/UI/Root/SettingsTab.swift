@@ -32,11 +32,19 @@ struct SettingsTab: View {
                             }
 
                             
+                            LabeledContent("Network", value: account.apiNetwork.rawValue)
+                            LabeledContent("Web API ID", value: account.apiAccount)
+                            
                             Button(asyncAction: { await model.logOut() }) {
                                 Text("Log out")
                             }
-                            LabeledContent("Network", value: account.apiNetwork.rawValue)
-                            LabeledContent("Web API ID", value: account.apiAccount)
+                            
+                            Button(asyncAction: { await model.logOut() }) {
+                                Text("Delete account")
+                                    .tint(Color.red)
+                            }
+                            
+                            
                         }
                     }
                     

@@ -16,7 +16,7 @@ final class AccountModel {
     
     var walletTokens: OrderedDictionary<String, TokenAmount> = [:]
     var baseCurrency: Currency = .usd
-    var activities: OrderedDictionary<NormalizedActivity.ID, NormalizedActivity> = [:]
+    var activities: OrderedDictionary<MtwActivity.ID, MtwActivity> = [:]
     var nfts: [ApiNft] = []
     var swapTokens: [String: ApiToken] = [:]
     
@@ -131,7 +131,7 @@ final class AccountModel {
 //                        print(self.activities.count, u.activities.count)
                         for newActivity in u.activities {
                             if (abs(newActivity.amount?.value ?? 0) <= 20) && (newActivity.slug == "toncoin") { continue }
-                            let normalized = NormalizedActivity(activity: newActivity, knownTokens: self.knownTokens)
+                            let normalized = MtwActivity(activity: newActivity, knownTokens: self.knownTokens)
                             self.activities[normalized.id] = normalized
                         }
                     case .nfts(let u):
@@ -183,7 +183,7 @@ final class AccountModel {
         await MainActor.run {
             for activity in activities {
                 if (abs(activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
-                let normalized = NormalizedActivity(activity: activity, knownTokens: self.knownTokens)
+                let normalized = MtwActivity(activity: activity, knownTokens: self.knownTokens)
                 self.activities[normalized.id] = normalized
             }
         }
