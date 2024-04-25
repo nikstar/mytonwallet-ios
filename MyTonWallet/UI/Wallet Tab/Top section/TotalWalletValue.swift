@@ -15,7 +15,7 @@ struct TotalWalletValue: View, Animatable {
     var animatableData: AnimatablePair<CGFloat, CGFloat> { .init(topOffset, progressRaw) }
     
     var body: some View {
-        let _ = Self._printChanges()
+        // let _ = Self._printChanges()
         
         let progress = easeInOutBezier(progressRaw)
         

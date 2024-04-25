@@ -13,7 +13,7 @@ struct ActivitiesSection: View {
     @State private var groupedActivities: OrderedDictionary<DateComponents, [MtwActivity]> = [:]
     
     var body: some View {
-        let _ = Self._printChanges()
+        // let _ = Self._printChanges()
 
         WithPerceptionTracking {
             list

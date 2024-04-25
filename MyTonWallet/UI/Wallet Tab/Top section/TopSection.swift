@@ -9,11 +9,10 @@ struct AssetsSection: View {
     @Environment(AccountModel.self) private var model
 
     @State private var showAddCrypto = false
+    @State private var showSend = false
+    @State private var showStake = false
+    @State private var showSwap = false
     
-    
-    
-    
-
     var body: some View {
         WithPerceptionTracking {
             VStack(spacing: 0) {
@@ -26,12 +25,20 @@ struct AssetsSection: View {
             .padding(.bottom, 16)
             .padding(.bottom, 20)
             .background(Color.mainWalletBackground, in: Rectangle())
+            .foregroundStyle(Color.white)
         }
         .sheet(isPresented: $showAddCrypto) {
             AddCryptoSheet()
-                .foregroundColor(nil)
         }
-
+        .sheet(isPresented: $showSend) {
+            SendSheet()
+        }
+        .sheet(isPresented: $showStake) {
+            AddCryptoSheet()
+        }
+        .sheet(isPresented: $showSwap) {
+            AddCryptoSheet()
+        }
     }
     
     var accountValue: some View {
@@ -51,9 +58,9 @@ struct AssetsSection: View {
     var actionButtons: some View {
         HStack(spacing: 8) {
             ActionButton(title: "add", icon: "Action.Add", action: { showAddCrypto = true })
-            ActionButton(title: "send", icon: "Action.Send", action: {})
-            ActionButton(title: "earn", icon: "Action.Earn", action: {})
-            ActionButton(title: "swap", icon: "Action.Swap", action: {})
+            ActionButton(title: "send", icon: "Action.Send", action: { showSend = true })
+            ActionButton(title: "earn", icon: "Action.Earn", action: { showStake = true })
+            ActionButton(title: "swap", icon: "Action.Swap", action: { showSwap = true })
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
@@ -87,3 +94,33 @@ struct AssetsSection: View {
         .padding(.horizontal, 16)
     }
 }
+
+
+
+struct ActionButton: View {
+    
+    var title: String
+    var icon: String
+    var action: () -> ()
+    
+    var body: some View {
+        // let _ = Self._printChanges()
+        Button(action: action) {
+            VStack(spacing: 4) {
+                Image(icon)
+                Text(title)
+                    .font(.caption)
+            }
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .background {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(Color(white: 0, opacity: 0.25))
+                    .blendMode(.softLight)
+            }
+            .contentShape(Rectangle())
+            .foregroundStyle(Color.white)
+        }
+    }
+}
+

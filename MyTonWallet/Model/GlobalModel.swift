@@ -82,7 +82,6 @@ final class GlobalModel {
     }
     
     func registerAccountAndActivate(accountId: String, address: TonAddress, assumeEmpty: Bool) async throws {
-        await logOut()
         
         try await api.activateAccount(accountId: accountId)
         

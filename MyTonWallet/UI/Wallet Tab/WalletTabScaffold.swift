@@ -30,9 +30,9 @@ struct WalletTabScaffold<V: View, V2: View>: View {
 //    }
     
     var body: some View {
-        let _ = Self._printChanges()
-        let _ = print(transition, showsTopBarSeparator, transitionProgress, transactionsOffset)
-        let _ = print()
+        // let _ = Self._printChanges()
+        // let _ = print(transition, showsTopBarSeparator, transitionProgress, transactionsOffset)
+        // let _ = print()
         
         content
             .safeAreaInset(edge: .top, alignment: .center, spacing: 0) {

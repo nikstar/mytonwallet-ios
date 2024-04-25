@@ -44,7 +44,7 @@ struct WalletTab: View {
     }
     
     var body: some View {
-        let _ = Self._printChanges()
+        // let _ = Self._printChanges()
         WithPerceptionTracking {
         
             WalletTabScaffold(transition: scrolledToTransactions, showsTopBarSeparator: scrolledToTransactions, transitionProgress: transitionToTransactionsProgress, transactionsOffset: adjustedTxOffset) {
@@ -157,7 +157,7 @@ struct WalletTabContent: View {
 //    var ontransactionsOffsetChange: (CGPoint) -> ()
     
     var body: some View {
-        let _ = Self._printChanges()
+        // let _ = Self._printChanges()
         ScrollView {
             VStack(spacing: -20) {
                 WithOffsetReporting(in: .named("walletTabContent"), preference: _LabelOffset.self) {
@@ -169,37 +169,11 @@ struct WalletTabContent: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .foregroundStyle(Color.white)
+        
         
     }
 }
 
-
-struct ActionButton: View {
-    
-    var title: String
-    var icon: String
-    var action: () -> ()
-    
-    var body: some View {
-        let _ = Self._printChanges()
-        Button(action: action) {
-            VStack(spacing: 4) {
-                Image(icon)
-                Text(title)
-                    .font(.caption)
-            }
-            .padding(.vertical, 8)
-            .frame(maxWidth: .infinity)
-            .background {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(Color(white: 0, opacity: 0.25))
-                    .blendMode(.softLight)
-            }
-            .contentShape(Rectangle())
-        }
-    }
-}
 
 
 

@@ -39,9 +39,10 @@
 		58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */; };
 		58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */; };
 		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
+		5897499F2BDADE2500C15923 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5897499E2BDADE2500C15923 /* QRView.swift */; };
 		58B4ABE02BBAC5B00007BF54 /* StatusBarAppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */; };
 		58B4ABE32BBAE0770007BF54 /* TotalWalletValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */; };
-		58B4ABE52BBAE0970007BF54 /* AssetsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE42BBAE0960007BF54 /* AssetsSection.swift */; };
+		58B4ABE52BBAE0970007BF54 /* TopSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE42BBAE0960007BF54 /* TopSection.swift */; };
 		58B4ABE72BBAE0CB0007BF54 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE62BBAE0CB0007BF54 /* AppDelegate.swift */; };
 		58B4ABE92BBAE0EF0007BF54 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE82BBAE0EF0007BF54 /* SceneDelegate.swift */; };
 		58B4ABEB2BBAE9840007BF54 /* withRetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABEA2BBAE9840007BF54 /* withRetry.swift */; };
@@ -50,6 +51,7 @@
 		58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B934B22BB4B56D0086DEBC /* TokenImage.swift */; };
 		58C8E6392BB2E6B200CDE5A0 /* SimpleToast in Frameworks */ = {isa = PBXBuildFile; productRef = 58C8E6382BB2E6B200CDE5A0 /* SimpleToast */; };
 		58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */; };
+		58CD63A12BDA855100F9C169 /* SendSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CD63A02BDA855100F9C169 /* SendSheet.swift */; };
 		58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AD2BAB961D00DE08BF /* ApiError.swift */; };
 		58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D164AF2BAB971800DE08BF /* JSReturnValue.swift */; };
 		58D2D0222BB1A55300F613DE /* MtwActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D2D0212BB1A55300F613DE /* MtwActivity.swift */; };
@@ -115,9 +117,10 @@
 		58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+with.swift"; sourceTree = "<group>"; };
 		58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Button+asyncAction.swift"; sourceTree = "<group>"; };
 		58659BFD2BAAD79B006E14C1 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
+		5897499E2BDADE2500C15923 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
 		58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarAppearanceManager.swift; sourceTree = "<group>"; };
 		58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalWalletValue.swift; sourceTree = "<group>"; };
-		58B4ABE42BBAE0960007BF54 /* AssetsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsSection.swift; sourceTree = "<group>"; };
+		58B4ABE42BBAE0960007BF54 /* TopSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSection.swift; sourceTree = "<group>"; };
 		58B4ABE62BBAE0CB0007BF54 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58B4ABE82BBAE0EF0007BF54 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		58B4ABEA2BBAE9840007BF54 /* withRetry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = withRetry.swift; sourceTree = "<group>"; };
@@ -125,6 +128,7 @@
 		58B6041C2BA43A5200049146 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		58B934B22BB4B56D0086DEBC /* TokenImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenImage.swift; sourceTree = "<group>"; };
 		58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TonAddress.swift; sourceTree = "<group>"; };
+		58CD63A02BDA855100F9C169 /* SendSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendSheet.swift; sourceTree = "<group>"; };
 		58D164AD2BAB961D00DE08BF /* ApiError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiError.swift; sourceTree = "<group>"; };
 		58D164AF2BAB971800DE08BF /* JSReturnValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSReturnValue.swift; sourceTree = "<group>"; };
 		58D2D0212BB1A55300F613DE /* MtwActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwActivity.swift; sourceTree = "<group>"; };
@@ -185,6 +189,7 @@
 				5804E8422BD4F47C00A44D76 /* DismissToolbarItem.swift */,
 				581867AD2BD18EA7001A1A91 /* Scaffold.swift */,
 				581867AE2BD18EA7001A1A91 /* TopAppBar.swift */,
+				5897499E2BDADE2500C15923 /* QRView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -208,6 +213,9 @@
 				5804E83B2BD4C80800A44D76 /* Activities section */,
 				5804E83C2BD4C83F00A44D76 /* Activity details */,
 				5804E83F2BD4F29300A44D76 /* Add Crypto */,
+				58CD639F2BDA845600F9C169 /* Send */,
+				58CD639D2BDA836800F9C169 /* Swap */,
+				58CD639E2BDA837E00F9C169 /* Stake */,
 			);
 			path = "Wallet Tab";
 			sourceTree = "<group>";
@@ -254,8 +262,8 @@
 		5804E8442BD4FB4400A44D76 /* Top section */ = {
 			isa = PBXGroup;
 			children = (
+				58B4ABE42BBAE0960007BF54 /* TopSection.swift */,
 				58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */,
-				58B4ABE42BBAE0960007BF54 /* AssetsSection.swift */,
 				580044002BB0DB8300C364CE /* WalletTokenRow.swift */,
 			);
 			path = "Top section";
@@ -306,9 +314,9 @@
 			isa = PBXGroup;
 			children = (
 				581867A62BD11279001A1A91 /* GlobalModel.swift */,
+				580044022BB0DDAC00C364CE /* TokenAmount.swift */,
 				581867AB2BD11D45001A1A91 /* AccountModel.swift */,
 				581867A22BD10CED001A1A91 /* MtwAccount.swift */,
-				580044022BB0DDAC00C364CE /* TokenAmount.swift */,
 				58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */,
 				58D2D0212BB1A55300F613DE /* MtwActivity.swift */,
 				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
@@ -381,6 +389,28 @@
 				58FBD28F2BAECE21005F5F09 /* DebugView.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		58CD639D2BDA836800F9C169 /* Swap */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Swap;
+			sourceTree = "<group>";
+		};
+		58CD639E2BDA837E00F9C169 /* Stake */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Stake;
+			sourceTree = "<group>";
+		};
+		58CD639F2BDA845600F9C169 /* Send */ = {
+			isa = PBXGroup;
+			children = (
+				58CD63A02BDA855100F9C169 /* SendSheet.swift */,
+			);
+			path = Send;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -503,7 +533,9 @@
 				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* WalletTab.swift in Sources */,
 				580043FF2BB0D9B500C364CE /* UIColor+blend.swift in Sources */,
+				58CD63A12BDA855100F9C169 /* SendSheet.swift in Sources */,
 				580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */,
+				5897499F2BDADE2500C15923 /* QRView.swift in Sources */,
 				58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */,
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
 				5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */,
@@ -525,7 +557,7 @@
 				58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */,
 				581867AF2BD18EA7001A1A91 /* Scaffold.swift in Sources */,
 				580044032BB0DDAC00C364CE /* TokenAmount.swift in Sources */,
-				58B4ABE52BBAE0970007BF54 /* AssetsSection.swift in Sources */,
+				58B4ABE52BBAE0970007BF54 /* TopSection.swift in Sources */,
 				580043F72BB0CD9000C364CE /* ApiToken.swift in Sources */,
 				580044012BB0DB8400C364CE /* WalletTokenRow.swift in Sources */,
 				580044052BB0EA1400C364CE /* ApiBigint.swift in Sources */,

@@ -38,7 +38,6 @@ struct MyTonWalletApp: App {
                             currentAccountModel.changeAccount(newAccount: newValue)
                             globalModel.save()
                         }.onChange(of: globalModel.accounts) { accs in
-                            print(accs)
                             globalModel.save()
                         }.onChange(of: currentAccountModel.account) { v in
                             print("account", v as Any)

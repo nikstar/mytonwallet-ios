@@ -32,11 +32,15 @@ struct ActivityDetailsSheet: View {
         switch activity.kind {
         case .transaction:
             Text(activity.isIncoming ? "Received" : "Sent")
-                                .font(.headline.weight(.semibold))
+                .font(.headline.weight(.semibold))
+
         case .swap:
             Text("Swapped")
+                .font(.headline.weight(.semibold))
+
         case .other(let string):
             Text("Activity: \(string)")
+                .font(.headline.weight(.semibold))
         }
     }
 }
