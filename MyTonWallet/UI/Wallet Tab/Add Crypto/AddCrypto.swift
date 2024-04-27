@@ -25,10 +25,10 @@ struct AddCryptoContent: View {
         WithPerceptionTracking {
             List {
                 Section("Your TON Address") {
-                    Color.clear.frame(height: 424)
-                        .disabled(true)
-                        .allowsHitTesting(false)
-                    
+                    //                    Color.clear.frame(height: 424)
+                    //                        .disabled(true)
+                    //                        .allowsHitTesting(false)
+                    qrCodeSection
                 }
                 
                 Section("Buy Crypto") {
@@ -68,41 +68,41 @@ struct AddCryptoContent: View {
                     }
                     
                     
+                    .listStyle(.insetGrouped)
                 }
             }
-        
-        .listStyle(.insetGrouped)
-        .overlay(alignment: .top) {
-                            VStack(spacing: 16) {
-                                VStack(spacing: 12) {
-                                    QRView(string: "hello wordlfdsaljadfskladj", image: "")
-                                        .frame(width: 262, height: 262)
-                                    Text("adresss")
-                                        .font(.system(size: 16, design: .monospaced))
-                                        .lineLimit(2...2)
-                                }
-        
-                                HStack(spacing: 12) {
-//                                    Button(action: {}) {
-                                        Text("Copy Address")
-                                            .fontWeight(.semibold)
-                                            .padding(.vertical, 14)
-                                            .frame(maxWidth: .infinity)
-                                            .contentShape(.rect)
-//                                    }
-//                                    Button(action: {}) {
-                                        Text("Share QR Code")
-                                            .fontWeight(.semibold)
-                                            .padding(.vertical, 14)
-                                            .frame(maxWidth: .infinity)
-                                            .contentShape(.rect)
-//                                    }
-                                }
-                                .foregroundStyle(Color.accentColor)
-                            }
-                            .padding(.top, 28)
-                    }
         }
-          
     }
+    
+    @ViewBuilder
+    var qrCodeSection: some View {
+        VStack(spacing: 16) {
+            VStack(spacing: 12) {
+                QRView(string: "hello wordlfdsaljadfskladj", image: "")
+                Text("adresssaddres\naddres")
+                    .font(.system(size: 16, design: .monospaced))
+                    .lineLimit(2...2)
+            }
+
+            HStack(spacing: 12) {
+//                                    Button(action: {}) {
+                    Text("Copy Address")
+                        .fontWeight(.semibold)
+                        .padding(.vertical, 14)
+                        .frame(maxWidth: .infinity)
+                        .contentShape(.rect)
+//                                    }
+//                                    Button(action: {}) {
+                    Text("Share QR Code")
+                        .fontWeight(.semibold)
+                        .padding(.vertical, 14)
+                        .frame(maxWidth: .infinity)
+                        .contentShape(.rect)
+//                                    }
+            }
+            .foregroundStyle(Color.accentColor)
+        }
+        .padding(.top, 28)
+    }
+
 }

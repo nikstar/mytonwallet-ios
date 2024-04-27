@@ -24,7 +24,9 @@ extension ApiUpdate: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(String.self, forKey: .type)
-        log.debug("Decoding update type = \(type)")
+        if type != "updateRegion" {
+            log.debug("Decoding update type = \(type)")
+        }
         switch type {
         case "updateTokens":
             self = try .tokens(.init(from: decoder))
@@ -93,5 +95,5 @@ struct ApiUpdateRegion: Decodable {
 
 struct ApiUpdateSwapTokens: Decodable {
     
-    var tokens: [String: ApiToken]
+    var tokens: [String: SwapToken]
 }

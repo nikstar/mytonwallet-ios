@@ -37,7 +37,7 @@ struct AssetsSection: View {
             AddCryptoSheet()
         }
         .sheet(isPresented: $showSwap) {
-            AddCryptoSheet()
+            SwapSheet()
         }
     }
     

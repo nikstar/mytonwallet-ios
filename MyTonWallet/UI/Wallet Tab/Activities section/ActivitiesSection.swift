@@ -221,9 +221,9 @@ struct TransactionRow: View {
             }
         
         case .swap:
-            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
+//            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
             let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
-            let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
+//            let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
             let toAmount = activity.raw.toAmount.flatMap(Double.init)
             
             if let to, let toAmount {
@@ -245,9 +245,9 @@ struct TransactionRow: View {
 
         case .swap:
             let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
-            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
+//            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
             let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
-            let toAmount = activity.raw.toAmount.flatMap(Double.init)
+//            let toAmount = activity.raw.toAmount.flatMap(Double.init)
             
             if let from, let fromAmount {
                 Text("\(-fromAmount) \(from)")

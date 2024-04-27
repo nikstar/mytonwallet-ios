@@ -140,10 +140,8 @@ final class AccountModel {
                     case .region(_):
 //                        log.debug("updateRegion isLimited=\(u.isLimited)")
                         break
-                    case .swapTokens(let u):
-                        for (slug, token) in u.tokens {
-                            self.swapTokens[slug] = token
-                        }
+                    case .swapTokens(_):
+                        break
                     }
                 }
             }
