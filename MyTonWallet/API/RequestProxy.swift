@@ -40,7 +40,11 @@ final class RequestProxy: NSObject, WKURLSchemeHandler {
 //            log.debug("data=\(String(data: body, encoding: .utf8) ?? "--")")
 //        }
         guard let originalUrl = request.url else {
-            urlSchemeTask.didFailWithError(WKError(.unknown))
+            catchingException {
+                urlSchemeTask.didFailWithError(WKError(.unknown))
+            } onException: { exception in
+                self.log.fault("recovered from URLSchemeTask exception: \(exception)")
+            }
             return
         }
         request.url = URL(string: originalUrl.absoluteString
@@ -59,16 +63,26 @@ final class RequestProxy: NSObject, WKURLSchemeHandler {
                 headers["Access-Control-Allow-Origin"] = "*"
                 let response = HTTPURLResponse(url: originalUrl, statusCode: upstreamResponse.statusCode, httpVersion: nil, headerFields: headers)!
                 if await runningTasks.exists(urlSchemeTask) {
-                    urlSchemeTask.didReceive(response)
-                    urlSchemeTask.didReceive(data)
-                    urlSchemeTask.didFinish()
+                    catchingException {
+                        urlSchemeTask.didReceive(response)
+                        urlSchemeTask.didReceive(data)
+                        urlSchemeTask.didFinish()
+                    } onException: { exception in
+                        self.log.fault("recovered from URLSchemeTask exception: \(exception)")
+                    }
+                    
+                    
                     await runningTasks.remove(urlSchemeTask)
                 }
             } else {
                 if await runningTasks.exists(urlSchemeTask) {
-                    urlSchemeTask.didReceive(response)
-                    urlSchemeTask.didReceive(data)
-                    urlSchemeTask.didFinish()
+                    catchingException {
+                        urlSchemeTask.didReceive(response)
+                        urlSchemeTask.didReceive(data)
+                        urlSchemeTask.didFinish()
+                    } onException: { exception in
+                        self.log.fault("recovered from URLSchemeTask exception: \(exception)")
+                    }
                     await runningTasks.remove(urlSchemeTask)
                 }
             }
@@ -76,7 +90,11 @@ final class RequestProxy: NSObject, WKURLSchemeHandler {
         } catch {
             log.error("\(request.httpMethod ?? "--") \(request.url?.absoluteString ?? "--") => error=\(error)" )
             if await runningTasks.exists(urlSchemeTask) {
-                urlSchemeTask.didFailWithError(error)
+                catchingException {
+                    urlSchemeTask.didFailWithError(error)
+                } onException: { exception in
+                    self.log.fault("recovered from URLSchemeTask exception: \(exception)")
+                }
                 await runningTasks.remove(urlSchemeTask)
             }
         }
