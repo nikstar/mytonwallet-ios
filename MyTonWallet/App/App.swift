@@ -35,6 +35,9 @@ struct MyTonWalletApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .overlay {
+                    DevelopmentView()
+                }
                 .environment(globalModel)
                 .environment(currentAccountModel)
                 .environment(swapTokensInfo)

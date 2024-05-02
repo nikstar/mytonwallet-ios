@@ -19,6 +19,7 @@
 		5804E83E2BD4C8F500A44D76 /* ActivityDetailsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E83D2BD4C8F500A44D76 /* ActivityDetailsSheet.swift */; };
 		5804E8412BD4F2B600A44D76 /* AddCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E8402BD4F2B600A44D76 /* AddCrypto.swift */; };
 		5804E8432BD4F47C00A44D76 /* DismissToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5804E8422BD4F47C00A44D76 /* DismissToolbarItem.swift */; };
+		580B06FE2BE384C30024DA9D /* ConfirmActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580B06FD2BE384C30024DA9D /* ConfirmActionView.swift */; };
 		580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D090C2BAD8A6400575E4B /* LoginFlow.swift */; };
 		580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */; };
 		580D09142BAD912800575E4B /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09122BAD912800575E4B /* Sticker.swift */; };
@@ -47,6 +48,7 @@
 		587539B92BDB401100A0B40E /* SwapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539B82BDB401100A0B40E /* SwapSheet.swift */; };
 		587539BB2BDBAFF600A0B40E /* KeyValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539BA2BDBAFF500A0B40E /* KeyValueView.swift */; };
 		5897499F2BDADE2500C15923 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5897499E2BDADE2500C15923 /* QRView.swift */; };
+		58A81F312BE3B1E300216431 /* DevelopmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A81F302BE3B1E300216431 /* DevelopmentView.swift */; };
 		58B4ABE02BBAC5B00007BF54 /* StatusBarAppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */; };
 		58B4ABE32BBAE0770007BF54 /* TotalWalletValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */; };
 		58B4ABE52BBAE0970007BF54 /* TopSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE42BBAE0960007BF54 /* TopSection.swift */; };
@@ -106,6 +108,7 @@
 		5804E83D2BD4C8F500A44D76 /* ActivityDetailsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailsSheet.swift; sourceTree = "<group>"; };
 		5804E8402BD4F2B600A44D76 /* AddCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCrypto.swift; sourceTree = "<group>"; };
 		5804E8422BD4F47C00A44D76 /* DismissToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissToolbarItem.swift; sourceTree = "<group>"; };
+		580B06FD2BE384C30024DA9D /* ConfirmActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmActionView.swift; sourceTree = "<group>"; };
 		580D090C2BAD8A6400575E4B /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
 		580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginFlow+Buttons.swift"; sourceTree = "<group>"; };
 		580D09122BAD912800575E4B /* Sticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
@@ -131,6 +134,7 @@
 		587539B82BDB401100A0B40E /* SwapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapSheet.swift; sourceTree = "<group>"; };
 		587539BA2BDBAFF500A0B40E /* KeyValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueView.swift; sourceTree = "<group>"; };
 		5897499E2BDADE2500C15923 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
+		58A81F302BE3B1E300216431 /* DevelopmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentView.swift; sourceTree = "<group>"; };
 		58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarAppearanceManager.swift; sourceTree = "<group>"; };
 		58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalWalletValue.swift; sourceTree = "<group>"; };
 		58B4ABE42BBAE0960007BF54 /* TopSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSection.swift; sourceTree = "<group>"; };
@@ -205,6 +209,7 @@
 				581867AE2BD18EA7001A1A91 /* TopAppBar.swift */,
 				5897499E2BDADE2500C15923 /* QRView.swift */,
 				587539BA2BDBAFF500A0B40E /* KeyValueView.swift */,
+				580B06FD2BE384C30024DA9D /* ConfirmActionView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -412,6 +417,7 @@
 				58B4ABE62BBAE0CB0007BF54 /* AppDelegate.swift */,
 				58B4ABE82BBAE0EF0007BF54 /* SceneDelegate.swift */,
 				58FBD28F2BAECE21005F5F09 /* DebugView.swift */,
+				58A81F302BE3B1E300216431 /* DevelopmentView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -563,6 +569,7 @@
 				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* WalletTab.swift in Sources */,
 				580043FF2BB0D9B500C364CE /* UIColor+blend.swift in Sources */,
+				58A81F312BE3B1E300216431 /* DevelopmentView.swift in Sources */,
 				58CD63A12BDA855100F9C169 /* SendSheet.swift in Sources */,
 				580D090D2BAD8A6400575E4B /* LoginFlow.swift in Sources */,
 				5897499F2BDADE2500C15923 /* QRView.swift in Sources */,
@@ -571,6 +578,7 @@
 				5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */,
 				587539B92BDB401100A0B40E /* SwapSheet.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
+				580B06FE2BE384C30024DA9D /* ConfirmActionView.swift in Sources */,
 				58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */,
 				58DDF7782BA87A2A003D9628 /* WalletTabScaffold.swift in Sources */,
 				581867AC2BD11D45001A1A91 /* AccountModel.swift in Sources */,
