@@ -8,6 +8,7 @@ final class SendViewModel {
     
     var currency: Slug? = nil
     
+    var path: NavigationPath = .init()
     
 }
 
@@ -23,15 +24,18 @@ struct SendSheet: View {
     
     private let viewModel: SendViewModel = .init()
     
-    @State private var path: [SendStep] = []
-    
     var body: some View {
-        NavigationStack(path: $path) {
-            SendStepView(step: .currency)
-                .navigationDestination(for: SendStep.self, destination: { step in
-                    SendStepView(step: step)
-                })
-                .environment(viewModel)
+        WithPerceptionTracking {
+            
+            @Perception.Bindable var model = self.viewModel
+            
+            NavigationStack(path: $model.path) {
+                SendStepView(step: .currency)
+                    .navigationDestination(for: SendStep.self, destination: { step in
+                        SendStepView(step: step)
+                    })
+                    .environment(viewModel)
+            }
         }
     }
     
@@ -69,14 +73,39 @@ struct SendStepCurrency: View {
         WithPerceptionTracking {
             List(account.walletTokens.values, id: \.self) { walletToken in
                 Text(walletToken.formatted())
-                
+                    .listSectionSeparator(.hidden)
             }
-            .searchable(text: $searchString, placement: .automatic)
-        }
+            .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
+            .listStyle(.plain)
+            .overlay(content: {
+                HStack(spacing: 0) {
+                    Color.black
+                    Color.white
+                }
+                .ignoresSafeArea()
+            })
+                    .safeAreaInset(edge: .bottom, spacing: 0) {
+                        Button(action: { viewModel.path.append(SendStep.recepient) }) {
+                            Text("Continue")
+                        }
+                        .buttonStyle(.mtwLarge)
+                        .disabled(true)
+                        .padding(16)
+                        .background {
+                            VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
+//                                .border(Color.red)
+//                                .frame(height: 50, alignment: .bottom)
+                                .border(Color.green)
+                                .padding(.top, -15)
+                                .ignoresSafeArea()
+                                .border(Color.red)
+                        }
+                    }
             .navigationTitle("Choose Currency")
             .navigationBarTitleDisplayMode(.inline)
             .dismissToolbarItem()
-
+        }
+        
     }
 }
 

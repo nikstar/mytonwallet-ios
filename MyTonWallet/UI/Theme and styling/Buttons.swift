@@ -7,13 +7,17 @@ struct MtwLargeButtonStyle<F: ShapeStyle, B: ShapeStyle>: ButtonStyle {
     var textStyle: F
     var backgroundStyle: B
     
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.headline)
             .foregroundStyle(textStyle)
             .padding(.all, 14)
             .frame(maxWidth: .infinity)
-            .background(backgroundStyle)
+            .background(
+                backgroundStyle.opacity(isEnabled ? 1.0 : 0.5)
+            )
             .overlay {
                 Color.black.opacity(0.1)
                     .blendMode(.multiply)

@@ -7,7 +7,7 @@ struct DevelopmentView: View {
     @State private var mode: ConfirmActionView.Mode = .codeEntry
     
     var body: some View {
-//        EmptyView()
+        return EmptyView()
         let _ = Self._printChanges()
 
         WithPerceptionTracking {

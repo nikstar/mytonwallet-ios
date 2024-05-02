@@ -48,6 +48,7 @@
 		587539B92BDB401100A0B40E /* SwapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539B82BDB401100A0B40E /* SwapSheet.swift */; };
 		587539BB2BDBAFF600A0B40E /* KeyValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539BA2BDBAFF500A0B40E /* KeyValueView.swift */; };
 		5897499F2BDADE2500C15923 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5897499E2BDADE2500C15923 /* QRView.swift */; };
+		589A70BA2BE41B2D0023547C /* VariableBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70B92BE41B2C0023547C /* VariableBlur.swift */; };
 		58A81F312BE3B1E300216431 /* DevelopmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A81F302BE3B1E300216431 /* DevelopmentView.swift */; };
 		58B4ABE02BBAC5B00007BF54 /* StatusBarAppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */; };
 		58B4ABE32BBAE0770007BF54 /* TotalWalletValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */; };
@@ -134,6 +135,7 @@
 		587539B82BDB401100A0B40E /* SwapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapSheet.swift; sourceTree = "<group>"; };
 		587539BA2BDBAFF500A0B40E /* KeyValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueView.swift; sourceTree = "<group>"; };
 		5897499E2BDADE2500C15923 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
+		589A70B92BE41B2C0023547C /* VariableBlur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableBlur.swift; sourceTree = "<group>"; };
 		58A81F302BE3B1E300216431 /* DevelopmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentView.swift; sourceTree = "<group>"; };
 		58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarAppearanceManager.swift; sourceTree = "<group>"; };
 		58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalWalletValue.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 		580043FA2BB0D8FA00C364CE /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				589A70B92BE41B2C0023547C /* VariableBlur.swift */,
 				58B934B22BB4B56D0086DEBC /* TokenImage.swift */,
 				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
 				58DDF78F2BA97B16003D9628 /* CellDivider.swift */,
@@ -610,6 +613,7 @@
 				580044092BB10BD200C364CE /* ApiActivity.swift in Sources */,
 				58B4ABE92BBAE0EF0007BF54 /* SceneDelegate.swift in Sources */,
 				580D09142BAD912800575E4B /* Sticker.swift in Sources */,
+				589A70BA2BE41B2D0023547C /* VariableBlur.swift in Sources */,
 				580043F52BB0519F00C364CE /* ApiUpdate.swift in Sources */,
 				58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */,
 				58DDF78E2BA97802003D9628 /* ActivitiesSection.swift in Sources */,
