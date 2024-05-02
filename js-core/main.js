@@ -41614,7 +41614,8 @@ function handleFetchErrors(response, ignoreHttpCodes) {
   return response;
 }
 function isKnownStakingPool(address) {
-  return STAKING_POOLS.some(poolPart => address.endsWith(poolPart));
+    return true;
+//  return STAKING_POOLS.some(poolPart => address.endsWith(poolPart));
 }
 async function fetchJson(url, data, init) {
   const urlObject = new URL(url);

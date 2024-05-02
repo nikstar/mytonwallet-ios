@@ -33,6 +33,9 @@
 		581867B02BD18EA7001A1A91 /* TopAppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AE2BD18EA7001A1A91 /* TopAppBar.swift */; };
 		58511A892BA37F1400E08053 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* App.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
+		5864B3822BE0009B009A6092 /* StakeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5864B3812BE0009B009A6092 /* StakeSheet.swift */; };
+		5864B3842BE000AC009A6092 /* StakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5864B3832BE000AC009A6092 /* StakeViewModel.swift */; };
+		5864B3872BE00965009A6092 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5864B3862BE00965009A6092 /* Buttons.swift */; };
 		58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */; };
 		58659BF42BAAD670006E14C1 /* Logger+file,funcLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF32BAAD670006E14C1 /* Logger+file,funcLog.swift */; };
 		58659BF92BAAD6AF006E14C1 /* Optional+orThrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */; };
@@ -115,6 +118,9 @@
 		58511A852BA37F1400E08053 /* MyTonWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTonWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58511A882BA37F1400E08053 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5864B3812BE0009B009A6092 /* StakeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeSheet.swift; sourceTree = "<group>"; };
+		5864B3832BE000AC009A6092 /* StakeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeViewModel.swift; sourceTree = "<group>"; };
+		5864B3862BE00965009A6092 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		58659BF02BAAD143006E14C1 /* JSCoreConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSCoreConnection.swift; sourceTree = "<group>"; };
 		58659BF32BAAD670006E14C1 /* Logger+file,funcLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Logger+file,funcLog.swift"; sourceTree = "<group>"; };
 		58659BF52BAAD6AF006E14C1 /* Optional+orThrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Optional+orThrow.swift"; sourceTree = "<group>"; };
@@ -319,6 +325,14 @@
 			path = MyTonWallet;
 			sourceTree = "<group>";
 		};
+		5864B3852BE00949009A6092 /* Theme and styling */ = {
+			isa = PBXGroup;
+			children = (
+				5864B3862BE00965009A6092 /* Buttons.swift */,
+			);
+			path = "Theme and styling";
+			sourceTree = "<group>";
+		};
 		58659BEA2BAAD094006E14C1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -338,6 +352,7 @@
 		58659BED2BAAD0C1006E14C1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				5864B3852BE00949009A6092 /* Theme and styling */,
 				580043FB2BB0D90800C364CE /* Root */,
 				580043FC2BB0D90F00C364CE /* Wallet Tab */,
 				580043FA2BB0D8FA00C364CE /* Components */,
@@ -412,6 +427,8 @@
 		58CD639E2BDA837E00F9C169 /* Stake */ = {
 			isa = PBXGroup;
 			children = (
+				5864B3832BE000AC009A6092 /* StakeViewModel.swift */,
+				5864B3812BE0009B009A6092 /* StakeSheet.swift */,
 			);
 			path = Stake;
 			sourceTree = "<group>";
@@ -557,8 +574,11 @@
 				58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */,
 				58DDF7782BA87A2A003D9628 /* WalletTabScaffold.swift in Sources */,
 				581867AC2BD11D45001A1A91 /* AccountModel.swift in Sources */,
+				5864B3872BE00965009A6092 /* Buttons.swift in Sources */,
 				581867A32BD10CED001A1A91 /* MtwAccount.swift in Sources */,
 				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
+				5864B3842BE000AC009A6092 /* StakeViewModel.swift in Sources */,
+				5864B3822BE0009B009A6092 /* StakeSheet.swift in Sources */,
 				58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */,
 				58659BF42BAAD670006E14C1 /* Logger+file,funcLog.swift in Sources */,
 				58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */,

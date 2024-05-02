@@ -142,6 +142,8 @@ final class AccountModel {
                         break
                     case .swapTokens(_):
                         break
+                    case .staking(_):
+                        break
                     }
                 }
             }
@@ -220,5 +222,15 @@ final class AccountModel {
         }
     }
 
+    // MARK: - Steaking
     
+    func getBackendStakingState() async throws -> Api.BackendStakingState {
+        let account = try (account?.apiAccount).orThrow()
+        return try await api.getBackendStakingState(accountId: account)
+    }
+    
+    func getStakingHistory(limit: Int?, offset: Int?) async throws -> [Api.ApiStakingHistory] {
+        let account = try (account?.apiAccount).orThrow()
+        return try await api.getStakingHistory(accountId: account, limit: limit, offset: offset)
+    }
 }

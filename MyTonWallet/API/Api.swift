@@ -7,7 +7,7 @@ private let log = fileLog()
 //private let API_V2 = "https://tonhttpapi.mytonwallet.org/api/v2/"
 
 final class Api: ObservableObject {
-        
+    
     var callbacks: [UUID: (ApiUpdate) -> ()] = [:]
     var updatesTask: Task<Void, Never>? = nil
     
@@ -21,12 +21,13 @@ final class Api: ObservableObject {
                         let decoder = JSONDecoder()
                         let update = try decoder.decode(ApiUpdate.self, from: data)
                         
-//                        #warning("make optional")
-                        let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
-                        try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
-                        try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-\(update.kind).json"))
-//                        UIPasteboard.general.url = tmp
-
+                        //                        #warning("make optional")
+                        if update.kind != "region" {
+                            let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
+                            try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
+                            try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-\(update.kind).json"))
+                            //                        UIPasteboard.general.url = tmp
+                        }
                         return update
                     }
                     self.callbacks.values.forEach { $0(update) }
@@ -103,7 +104,7 @@ extension Api {
             throw ApiError.apiReturnParsingFailure(returnValue: JSReturnValue(result))
         }
     }
-
+    
     func validateMnemonic(mnemonic: [String]) async throws -> Bool {
         try await callApi("validateMnemonic", mnemonic, decoding: Bool.self)
     }
@@ -179,23 +180,23 @@ extension Api {
     
     
     // MARK: - Wallet
-//    
-//    func getWalletInformation(address: TonAddress) async throws -> JSReturnValue {
-//        return try await httpApiV2.get("getWalletInformation", params: ["address": address.string])
-//    }
-//    
-//    func getTransactions(address: TonAddress, limit: Int? = nil, lt: Int? = nil, hash: String? = nil, archival: Bool? = nil) async throws -> JSReturnValue {
-//        var params: [String:String] = ["address": address.string]
-//        if let limit { params["limit"] = String(limit) }
-//        if let lt { params["lt"] = String(lt) }
-//        if let hash { params["hash"] = hash }
-//        if let archival, archival == true { params["archival"] = String(archival) }
-//        return try await httpApiV2.get("getTransactions", params: params)
-//    }
+    //
+    //    func getWalletInformation(address: TonAddress) async throws -> JSReturnValue {
+    //        return try await httpApiV2.get("getWalletInformation", params: ["address": address.string])
+    //    }
+    //
+    //    func getTransactions(address: TonAddress, limit: Int? = nil, lt: Int? = nil, hash: String? = nil, archival: Bool? = nil) async throws -> JSReturnValue {
+    //        var params: [String:String] = ["address": address.string]
+    //        if let limit { params["limit"] = String(limit) }
+    //        if let lt { params["lt"] = String(lt) }
+    //        if let hash { params["hash"] = hash }
+    //        if let archival, archival == true { params["archival"] = String(archival) }
+    //        return try await httpApiV2.get("getTransactions", params: params)
+    //    }
     
     // MARK: - Activity
     
-//    export async function fetchTokenActivitySlice(accountId: string, slug: string, fromTxId?: string, limit?: number) {
+    //    export async function fetchTokenActivitySlice(accountId: string, slug: string, fromTxId?: string, limit?: number) {
     func fetchTokenActivitySlice(accountId: String, slug: String = "toncoin", fromTxId: String? = nil, limit: Int? = nil) async throws -> [ApiActivity] {
         guard fromTxId == nil && limit == nil else {
             fatalError("unimplemented")
@@ -203,9 +204,41 @@ extension Api {
         return try await callApi("fetchTokenActivitySlice", accountId, slug, decoding: [ApiActivity].self)
     }
     
-//
+    //
     func fetchAllActivitySliceForTokens(accountId: String, tokens: [String], limit: Int? = nil) async throws -> [ApiActivity] {
         return try await callApi("fetchAllActivitySliceForTokens", accountId, tokens, limit as Any, decoding: [ApiActivity].self)
+    }
+    
+    // MARK: -  Staking
+    
+    struct BackendStakingState: Hashable, Codable {
+        var balance: ApiBigint?
+        var totalProfit: ApiBigint?
+        var type: String?
+        var nominatorsPool: NominatorsPool?
+        var loyaltyType: String?
+        var shouldUseNominators: Bool?
+        var stakedAt: Double?
+        
+        struct NominatorsPool: Hashable, Codable {
+            var address: String?
+            var apy: Double?
+            var start: Double?
+            var end: Double?
+        }
+    }
+    
+    func getBackendStakingState(accountId: String) async throws -> BackendStakingState {
+        return try await callApi("getBackendStakingState", accountId, decoding: BackendStakingState.self)
+    }
+    
+    struct ApiStakingHistory: Hashable, Codable {
+        var timestamp: Double?
+        var profit: String?
+    }
+    
+    func getStakingHistory(accountId: String, limit: Int?, offset: Int?) async throws -> [ApiStakingHistory] {
+        return try await callApi("getStakingHistory", accountId, limit ?? 100, offset ?? 0, decoding: [ApiStakingHistory].self)
     }
 }
 

@@ -339,8 +339,6 @@ struct SwapRoot: View {
                 KeyValueView("Minimum Received", "0")
             }
         }
-
-        
     }
 }
 

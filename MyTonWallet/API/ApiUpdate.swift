@@ -12,6 +12,7 @@ enum ApiUpdate {
     case newActivities(ApiUpdateNewActivities)
     case region(ApiUpdateRegion)
     case swapTokens(ApiUpdateSwapTokens)
+    case staking(ApiUpdateStaking)
 }
 
 
@@ -42,6 +43,8 @@ extension ApiUpdate: Decodable {
             self = try .region(.init(from: decoder))
         case "updateSwapTokens":
             self = try .swapTokens(.init(from: decoder))
+        case "updateStaking":
+            self = try .staking(.init(from: decoder))
         default:
             log.error("Unsupported update type = \(type)")
             throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "unknownTokenType = \(type)"))
@@ -96,4 +99,9 @@ struct ApiUpdateRegion: Decodable {
 struct ApiUpdateSwapTokens: Decodable {
     
     var tokens: [String: SwapToken]
+}
+
+
+struct ApiUpdateStaking: Decodable {
+    
 }
