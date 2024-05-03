@@ -34,6 +34,7 @@
 		581867B02BD18EA7001A1A91 /* TopAppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AE2BD18EA7001A1A91 /* TopAppBar.swift */; };
 		5849904D2BE4E06A00880815 /* Popovers in Frameworks */ = {isa = PBXBuildFile; productRef = 5849904C2BE4E06A00880815 /* Popovers */; };
 		584990552BE4EF9200880815 /* View+apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584990542BE4EF9200880815 /* View+apply.swift */; };
+		584990572BE5126400880815 /* TwoLineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584990562BE5126400880815 /* TwoLineRow.swift */; };
 		58511A892BA37F1400E08053 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58511A882BA37F1400E08053 /* App.swift */; };
 		58511A8D2BA37F1600E08053 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58511A8C2BA37F1600E08053 /* Assets.xcassets */; };
 		5864B3822BE0009B009A6092 /* StakeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5864B3812BE0009B009A6092 /* StakeSheet.swift */; };
@@ -124,6 +125,7 @@
 		581867AD2BD18EA7001A1A91 /* Scaffold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaffold.swift; sourceTree = "<group>"; };
 		581867AE2BD18EA7001A1A91 /* TopAppBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopAppBar.swift; sourceTree = "<group>"; };
 		584990542BE4EF9200880815 /* View+apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+apply.swift"; sourceTree = "<group>"; };
+		584990562BE5126400880815 /* TwoLineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoLineRow.swift; sourceTree = "<group>"; };
 		58511A852BA37F1400E08053 /* MyTonWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTonWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58511A882BA37F1400E08053 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		58511A8C2BA37F1600E08053 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				5897499E2BDADE2500C15923 /* QRView.swift */,
 				587539BA2BDBAFF500A0B40E /* KeyValueView.swift */,
 				580B06FD2BE384C30024DA9D /* ConfirmActionView.swift */,
+				584990562BE5126400880815 /* TwoLineRow.swift */,
 				589A70C22BE44F500023547C /* Tip.swift */,
 			);
 			path = Components;
@@ -638,6 +641,7 @@
 				580043F52BB0519F00C364CE /* ApiUpdate.swift in Sources */,
 				58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */,
 				58DDF78E2BA97802003D9628 /* ActivitiesSection.swift in Sources */,
+				584990572BE5126400880815 /* TwoLineRow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -795,6 +799,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "MyTonWallet/MyTonWallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -831,6 +836,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "MyTonWallet/MyTonWallet-Bridging-Header.h";
+				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -161,7 +161,7 @@ struct WalletTabContent: View {
         ScrollView {
             VStack(spacing: -20) {
                 WithOffsetReporting(in: .named("walletTabContent"), preference: _LabelOffset.self) {
-                    AssetsSection()
+                AssetsSection()
                 }
                 WithOffsetReporting(in: .named("walletTabContent"), preference: _ActivitiesOffset.self) {
                     ActivitiesSection()

@@ -233,4 +233,14 @@ final class AccountModel {
         let account = try (account?.apiAccount).orThrow()
         return try await api.getStakingHistory(accountId: account, limit: limit, offset: offset)
     }
+    
+    // MARK: Tokens
+    
+    func resolveApiToken(_ slug: Slug) -> ApiToken? {
+        return knownTokens[slug]
+    }
+    
+    func resolveWalletToken(_ slug: Slug) -> TokenAmount? {
+        return walletTokens[slug]
+    }
 }

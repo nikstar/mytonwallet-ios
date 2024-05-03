@@ -141,7 +141,7 @@ struct StakeRoot: View {
         }
     }
 
-    @ViewBuilder
+    @ViewBuilder @MainActor
     var historyContent: some View {
 
         let items = vm.history ?? []
