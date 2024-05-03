@@ -334,11 +334,46 @@ struct SwapRoot: View {
             if showsDetails {
                 KeyValueView("Price per ...", "0")
                 KeyValueView("Blockchain Fee", "0")
-                KeyValueView("Routing Fees", "Included")
-                KeyValueView("Price Impact", "0.11%")
-                KeyValueView("Minimum Received", "0")
+                
+                KeyValueView(key: {
+                    HStack(spacing: 8) {
+                        Text("Routing Fees")
+                        Tip(title: "Routing Fees", description: """
+                            This shows how much your trade might change the token price.
+                            
+                            Big trades can make the price go up or down more. Lower is usually better.
+                            """)
+                    }
+                }, value: {
+                    Text("Included")
+                })
+                KeyValueView(key: {
+                    HStack(spacing: 8) {
+                        Text("Price Impact")
+                        Tip(title: "Price Impact", description: """
+                            This shows how much your trade might change the token price.
+                            
+                            Big trades can make the price go up or down more. Lower is usually better.
+                            """)
+                    }
+                }, value: {
+                    Text("0.11%")
+                })
+                KeyValueView(key: {
+                    HStack(spacing: 8) {
+                        Text("Minimum Received")
+                        Tip(title: "Minimum Received", description: """
+                            This shows how much your trade might change the token price.
+                            
+                            Big trades can make the price go up or down more. Lower is usually better.
+                            """)
+                    }
+                }, value: {
+                    Text("0")
+                })
             }
         }
+        .buttonStyle(.plain)
     }
 }
 

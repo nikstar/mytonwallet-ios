@@ -15,22 +15,29 @@ struct DevelopmentView: View {
                 
                 Color.white.ignoresSafeArea()
                 
-                ConfirmActionView(title: mode == .codeEntry ? "Confirm Send" : "Sending", description: "123.4 TON to UQCD...qEBI", state: self.mode, onConfirm: {
-                    if self.mode == .codeEntry {
-                        mode = .processing
-                    } else {
-                        mode = .codeEntry
-                    }
-                })
+//                ConfirmActionView(title: mode == .codeEntry ? "Confirm Send" : "Sending", description: "123.4 TON to UQCD...qEBI", state: self.mode, onConfirm: {
+//                    if self.mode == .codeEntry {
+//                        mode = .processing
+//                    } else {
+//                        mode = .codeEntry
+//                    }
+//                })
+
+                Tip(title: "Price Impact", description: """
+                    This shows how much your trade might change the token price.
+                    
+                    Big trades can make the price go up or down more. Lower is usually better.
+                    """)   
             }
             .overlay(alignment: .top) {
                 Button(action: {
                     print("tap")
-                    mode = .codeEntry
+//                    mode = .codeEntry
                 }) {
                     Text("Reset")
                 }
             }
+            
         }
     }
     

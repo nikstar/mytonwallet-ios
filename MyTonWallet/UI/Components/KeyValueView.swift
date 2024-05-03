@@ -2,22 +2,27 @@
 import SwiftUI
 
 
-struct KeyValueView: View {
+struct KeyValueView<K: View, V: View>: View {
     
-    var key: String
-    var value: String
+    @ViewBuilder
+    var key: K
     
-    init(_ key: String, _ value: String) {
-        self.key = key
-        self.value = value
-    }
+    @ViewBuilder
+    var value: V
     
     var body: some View {
         HStack(spacing: 0) {
-            Text(key)
+            key
             Spacer(minLength: 4)
-            Text(value)
+            value
         }
+    }
+}
+
+extension KeyValueView where K == Text, V == Text {
+    init(_ key: String, _ value: String) {
+        self.key = Text(key)
+        self.value = Text(value)
     }
 }
 

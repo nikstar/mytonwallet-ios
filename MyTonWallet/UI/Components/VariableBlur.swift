@@ -32,15 +32,10 @@ public struct VariableBlurView: UIViewRepresentable {
 /// credit https://github.com/jtrivedi/VariableBlurView
 open class VariableBlurUIView: UIVisualEffectView {
 
-    var variableBlur: Any? = nil
-    
     public init(maxBlurRadius: CGFloat = 20, direction: VariableBlurDirection = .blurredTopClearBottom, startOffset: CGFloat = 0) {
         super.init(effect: UIBlurEffect(style: .regular))
 
-        // `CAFilter` is a private QuartzCore class that we dynamically declare in `CAFilter.h`.
-        //             let variableBlur = CAFilter.filter(withType: "variableBlur") as! NSObject
-
-        // Same but no need for `CAFilter.h`.
+        // `CAFilter` is a private QuartzCore class that dynamically create using Objective-C runtime.
         guard let CAFilter = NSClassFromString("CAFilter")! as? NSObject.Type else {
             print("[VariableBlur] Error: Can't find CAFilter class")
             return
@@ -69,9 +64,6 @@ open class VariableBlurUIView: UIVisualEffectView {
         for subview in subviews.dropFirst() {
             subview.alpha = 0
         }
-        
-        // Store a reference to variableBlur
-//        self.variableBlur x= variableBlur
     }
 
     required public init?(coder: NSCoder) {
@@ -102,5 +94,3 @@ open class VariableBlurUIView: UIVisualEffectView {
         return CIContext().createCGImage(ciGradientFilter.outputImage!, from: CGRect(x: 0, y: 0, width: width, height: height))!
     }
 }
-
-

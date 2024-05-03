@@ -41,9 +41,6 @@ struct MtwTabBar: View {
             .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 12))
             .contextMenu(menuItems: {
                 Section {
-                    Button(action: { showConfirmation = true }) {
-                        Label("Add Account", systemImage: "plus")
-                    }
                     if let a = model.currentAccount {
                         Button(action: {}) {
                             Label(a.displayName, systemImage: "person")
@@ -51,6 +48,12 @@ struct MtwTabBar: View {
                     }
                 }
                 
+                Section {
+                    Button(action: { showConfirmation = true }) {
+                        Label("Add Account", systemImage: "plus")
+                    }
+                }
+
                 Section {
                     ForEach(model.accounts.values) { account in
                         if account.id != model.currentAccountId {

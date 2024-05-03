@@ -17,6 +17,8 @@ enum SendStep: Int {
     case recepient
     case amount
     case details
+    case confirm
+    case success
 }
 
 
@@ -32,11 +34,15 @@ struct SendSheet: View {
             NavigationStack(path: $model.path) {
                 SendStepView(step: .currency)
                     .navigationDestination(for: SendStep.self, destination: { step in
-                        SendStepView(step: step)
+                        SendStepView(step: step)                    
+                            .environment(viewModel)
+
                     })
                     .environment(viewModel)
             }
+            
         }
+        
     }
     
 }
@@ -56,6 +62,10 @@ struct SendStepView: View {
             SendStepAmount()
         case .details:
             SendStepDetails()
+        case .confirm:
+            SendStepConfirm()
+        case .success:
+            SendStepSuccess()
         }
     }
     
@@ -84,23 +94,19 @@ struct SendStepCurrency: View {
                 }
                 .ignoresSafeArea()
             })
-                    .safeAreaInset(edge: .bottom, spacing: 0) {
-                        Button(action: { viewModel.path.append(SendStep.recepient) }) {
-                            Text("Continue")
-                        }
-                        .buttonStyle(.mtwLarge)
-                        .disabled(true)
-                        .padding(16)
-                        .background {
-                            VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
-//                                .border(Color.red)
-//                                .frame(height: 50, alignment: .bottom)
-                                .border(Color.green)
-                                .padding(.top, -15)
-                                .ignoresSafeArea()
-                                .border(Color.red)
-                        }
-                    }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                Button(action: { viewModel.path.append(SendStep.recepient) }) {
+                    Text("Continue")
+                }
+                .buttonStyle(.mtwLarge)
+//                        .disabled(true)
+                .padding(16)
+                .background {
+                    VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
+                        .padding(.top, -12)
+                        .ignoresSafeArea()
+                }
+            }
             .navigationTitle("Choose Currency")
             .navigationBarTitleDisplayMode(.inline)
             .dismissToolbarItem()
@@ -122,6 +128,20 @@ struct SendStepRecepient: View {
             TextField("Address", text: $text)
             
         }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Button(action: { viewModel.path.append(SendStep.amount) }) {
+                Text("Continue")
+            }
+            .buttonStyle(.mtwLarge)
+//                        .disabled(true)
+            .padding(16)
+            .background {
+                VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
+                    .padding(.top, -12)
+                    .ignoresSafeArea()
+            }
+        }
+
     }
 }
 
@@ -132,7 +152,23 @@ struct SendStepAmount: View {
     @Environment(SendViewModel.self) private var viewModel
     
     var body: some View {
-        EmptyView()
+        ScrollView {
+            Text("Amount")
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Button(action: { viewModel.path.append(SendStep.details) }) {
+                Text("Continue")
+            }
+            .buttonStyle(.mtwLarge)
+//                        .disabled(true)
+            .padding(16)
+            .background {
+                VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
+                    .padding(.top, -12)
+                    .ignoresSafeArea()
+            }
+        }
+
     }
 }
 
@@ -143,6 +179,58 @@ struct SendStepDetails: View {
     @Environment(SendViewModel.self) private var viewModel
     
     var body: some View {
-        EmptyView()
+        ScrollView {
+            Text("SendStepDetails")
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Button(action: { viewModel.path.append(SendStep.confirm) }) {
+                Text("Continue")
+            }
+            .buttonStyle(.mtwLarge)
+//                        .disabled(true)
+            .padding(16)
+            .background {
+                VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
+                    .padding(.top, -12)
+                    .ignoresSafeArea()
+            }
+        }
+
     }
 }
+
+struct SendStepConfirm: View {
+    
+    @Environment(AccountModel.self) private var account
+    @Environment(SendViewModel.self) private var viewModel
+    
+    var body: some View {
+        ConfirmActionView(title: "A", description: "AAA", state: .codeEntry, onConfirm: {
+            viewModel.path.append(SendStep.success)
+        })
+    }
+}
+
+
+struct SendStepSuccess: View {
+    
+    @Environment(AccountModel.self) private var account
+    @Environment(SendViewModel.self) private var viewModel
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        ScrollView {
+            Text("SendStepSuccess")
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            Button(action: { dismiss() }) {
+                Text("Close")
+            }
+            .buttonStyle(.mtwLarge)
+            .padding(16)
+        }
+
+    }
+}
+
