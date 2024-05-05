@@ -25,6 +25,7 @@
 		580D09142BAD912800575E4B /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09122BAD912800575E4B /* Sticker.swift */; };
 		580D09172BAD91BF00575E4B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09162BAD91BF00575E4B /* Lottie */; };
 		580D091A2BAD922100575E4B /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09192BAD922100575E4B /* Gzip */; };
+		581828F72BE804450061AAA3 /* CurrencyAmountTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581828F62BE804440061AAA3 /* CurrencyAmountTextField.swift */; };
 		581867A32BD10CED001A1A91 /* MtwAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867A22BD10CED001A1A91 /* MtwAccount.swift */; };
 		581867A52BD10D0E001A1A91 /* ApiNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867A42BD10D0E001A1A91 /* ApiNetwork.swift */; };
 		581867A72BD11279001A1A91 /* GlobalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867A62BD11279001A1A91 /* GlobalModel.swift */; };
@@ -118,6 +119,7 @@
 		580D090C2BAD8A6400575E4B /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
 		580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginFlow+Buttons.swift"; sourceTree = "<group>"; };
 		580D09122BAD912800575E4B /* Sticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
+		581828F62BE804440061AAA3 /* CurrencyAmountTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyAmountTextField.swift; sourceTree = "<group>"; };
 		581867A22BD10CED001A1A91 /* MtwAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwAccount.swift; sourceTree = "<group>"; };
 		581867A42BD10D0E001A1A91 /* ApiNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiNetwork.swift; sourceTree = "<group>"; };
 		581867A62BD11279001A1A91 /* GlobalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalModel.swift; sourceTree = "<group>"; };
@@ -212,11 +214,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		580043FA2BB0D8FA00C364CE /* Components */ = {
+		580043FA2BB0D8FA00C364CE /* UI Components */ = {
 			isa = PBXGroup;
 			children = (
 				589A70B92BE41B2C0023547C /* VariableBlur.swift */,
 				58B934B22BB4B56D0086DEBC /* TokenImage.swift */,
+				581828F62BE804440061AAA3 /* CurrencyAmountTextField.swift */,
 				58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */,
 				58DDF78F2BA97B16003D9628 /* CellDivider.swift */,
 				5804E8422BD4F47C00A44D76 /* DismissToolbarItem.swift */,
@@ -228,7 +231,7 @@
 				584990562BE5126400880815 /* TwoLineRow.swift */,
 				589A70C22BE44F500023547C /* Tip.swift */,
 			);
-			path = Components;
+			path = "UI Components";
 			sourceTree = "<group>";
 		};
 		580043FB2BB0D90800C364CE /* Root */ = {
@@ -252,7 +255,6 @@
 				5804E83F2BD4F29300A44D76 /* Add Crypto */,
 				58CD639F2BDA845600F9C169 /* Send */,
 				58CD639D2BDA836800F9C169 /* Swap */,
-				58CD639E2BDA837E00F9C169 /* Stake */,
 			);
 			path = "Wallet Tab";
 			sourceTree = "<group>";
@@ -378,7 +380,8 @@
 				5864B3852BE00949009A6092 /* Theme and styling */,
 				580043FB2BB0D90800C364CE /* Root */,
 				580043FC2BB0D90F00C364CE /* Wallet Tab */,
-				580043FA2BB0D8FA00C364CE /* Components */,
+				58CD639E2BDA837E00F9C169 /* Stake Feature */,
+				580043FA2BB0D8FA00C364CE /* UI Components */,
 				580043FD2BB0D93A00C364CE /* Utils */,
 				580D09102BAD907B00575E4B /* Login Flow */,
 			);
@@ -451,13 +454,13 @@
 			path = Swap;
 			sourceTree = "<group>";
 		};
-		58CD639E2BDA837E00F9C169 /* Stake */ = {
+		58CD639E2BDA837E00F9C169 /* Stake Feature */ = {
 			isa = PBXGroup;
 			children = (
 				5864B3832BE000AC009A6092 /* StakeViewModel.swift */,
 				5864B3812BE0009B009A6092 /* StakeSheet.swift */,
 			);
-			path = Stake;
+			path = "Stake Feature";
 			sourceTree = "<group>";
 		};
 		58CD639F2BDA845600F9C169 /* Send */ = {
@@ -591,6 +594,7 @@
 				580D09132BAD912800575E4B /* LoginFlow+Buttons.swift in Sources */,
 				581867B02BD18EA7001A1A91 /* TopAppBar.swift in Sources */,
 				58FBD2902BAECE22005F5F09 /* DebugView.swift in Sources */,
+				581828F72BE804450061AAA3 /* CurrencyAmountTextField.swift in Sources */,
 				58F4F5BB2BAC3D66000246C4 /* Secret.swift in Sources */,
 				58DDF7682BA82DF1003D9628 /* WalletTab.swift in Sources */,
 				580043FF2BB0D9B500C364CE /* UIColor+blend.swift in Sources */,

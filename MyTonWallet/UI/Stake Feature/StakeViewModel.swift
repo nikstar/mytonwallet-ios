@@ -5,6 +5,10 @@ import Perception
 enum StakeNavigation {
     case stake
     case unstake
+    case confirmStake
+    case confirmUnstake
+    case successStake
+    case successUnstake
 }
 
 @Perceptible
@@ -12,6 +16,9 @@ final class StakeViewModel {
     
     var currentStakingBalance: Double? = nil
     var history: [Api.ApiStakingHistory]? = nil
+    
+    var addAmount: Double? = nil
+    var unstakeAmount: Double? = nil
     
     @PerceptionIgnored private var account: AccountModel? = nil
     
@@ -24,7 +31,7 @@ final class StakeViewModel {
     func loadState() async {
         do {
             let v = try await account?.getBackendStakingState()
-            print(v)
+            print(v as Any)
         } catch {
             print(error)
         }
