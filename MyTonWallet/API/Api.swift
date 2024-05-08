@@ -26,7 +26,7 @@ final class Api: ObservableObject {
                             let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
                             try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
                             try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-\(update.kind).json"))
-                            //                        UIPasteboard.general.url = tmp
+//                                                    UIPasteboard.general.url = tmp
                         }
                         return update
                     }

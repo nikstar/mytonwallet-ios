@@ -240,7 +240,7 @@ final class AccountModel {
         return knownTokens[slug]
     }
     
-    func resolveWalletToken(_ slug: Slug) -> TokenAmount? {
-        return walletTokens[slug]
+    func resolveWalletToken(_ slug: Slug?) -> TokenAmount? {
+        return slug.flatMap { walletTokens[$0] }
     }
 }

@@ -4,7 +4,7 @@ import Foundation
 
 struct MtwActivity: Hashable, Codable, Identifiable {
     
-    enum Kind: Codable {
+    enum Kind: Equatable, Hashable, Codable {
         case transaction
         case swap
         case other(String)

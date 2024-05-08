@@ -35,78 +35,82 @@ struct MtwTabBar: View {
     @State private var showImport = false
     
     var settingsItem: some View {
-        TabBarItem(name: "Settings", image: "Tab.Settings", isSelected: selectedTab == .settings)
-            .contentShape(Rectangle())
-            .onTapGesture { selectedTab = .settings; showHint = true }
-            .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 12))
-            .contextMenu(menuItems: {
-                Section {
-                    if let a = model.currentAccount {
-                        Button(action: {}) {
-                            Label(a.displayName, systemImage: "person")
-                        }
-                    }
-                }
-                
-                Section {
-                    Button(action: { showConfirmation = true }) {
-                        Label("Add Account", systemImage: "plus")
-                    }
-                }
-
-                Section {
-                    ForEach(model.accounts.values) { account in
-                        if account.id != model.currentAccountId {
-                            Button(asyncAction: { try? await model.activateAccount(account.id) }) {
-                                Label(account.displayName.isEmpty ? account.apiAccount : account.displayName, systemImage: "star")
+        WithPerceptionTracking {
+            TabBarItem(name: "Settings", image: "Tab.Settings", isSelected: selectedTab == .settings)
+                .contentShape(Rectangle())
+                .onTapGesture { selectedTab = .settings; showHint = true }
+                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 12))
+                .contextMenu(menuItems: {
+                    Section {
+                        if let a = model.currentAccount {
+                            Button(action: {}) {
+                                Label(a.displayName, systemImage: "person")
                             }
                         }
                     }
-                } header: {
-                    Text("Switch account".uppercased()).font(.caption.smallCaps())
-                }
-            })
-            .confirmationDialog("", isPresented: $showConfirmation, titleVisibility: .hidden) {
-                Button(asyncAction: { try! await model.createNewAccountAndActivate(network: .mainnet) }) {
-                    Text("Create New Wallet")
-                }
-                Button(asyncAction: {
-                    showImport = true
-                }) {
-                    Text("Import Wallet")
-                }
-            }
-            .overlay(alignment: .top) {
-                if showHint {
-                    Text(model.accounts.count > 1 ? "Hold to quckly switch accounts" : "Hold to add another account")
-                        .font(.footnote)
-                        .multilineTextAlignment(.trailing)
-                        .foregroundStyle(.secondary)
                     
-                        .frame(width: 100, alignment: .center)
-                        .padding(4)
-                        .background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
-                        .background(RoundedRectangle(cornerRadius: 8).stroke(Color(white: 0.5), lineWidth: 0.333))
-                        .offset(x: -20, y: -40)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
+                    Section {
+                        Button(action: { showConfirmation = true }) {
+                            Label("Add Account", systemImage: "plus")
+                        }
+                    }
+                    
+                    Section {
+                        ForEach(model.accounts.values) { account in
+                            if account.id != model.currentAccountId {
+                                Button(asyncAction: { try? await model.activateAccount(account.id) }) {
+                                    Label(account.displayName.isEmpty ? account.apiAccount : account.displayName, systemImage: "star")
+                                }
+                            }
+                        }
+                    } header: {
+                        Text("Switch account".uppercased()).font(.caption.smallCaps())
+                    }
+                    
+                })
+                .id(model.currentAccount?.id) // force reload on account change
+                .confirmationDialog("", isPresented: $showConfirmation, titleVisibility: .hidden) {
+                    Button(asyncAction: { try! await model.createNewAccountAndActivate(network: .mainnet) }) {
+                        Text("Create New Wallet")
+                    }
+                    Button(asyncAction: {
+                        showImport = true
+                    }) {
+                        Text("Import Wallet")
+                    }
+                }
+                .overlay(alignment: .top) {
+                    if showHint {
+                        Text(model.accounts.count > 1 ? "Hold to quckly switch accounts" : "Hold to add another account")
+                            .font(.footnote)
+                            .multilineTextAlignment(.trailing)
+                            .foregroundStyle(.secondary)
+                        
+                            .frame(width: 100, alignment: .center)
+                            .padding(4)
+                            .background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
+                            .background(RoundedRectangle(cornerRadius: 8).stroke(Color(white: 0.5), lineWidth: 0.333))
+                            .offset(x: -20, y: -40)
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
+                                    showHint = false
+                                }
+                            }
+                            .onTapGesture {
                                 showHint = false
                             }
-                        }
-                        .onTapGesture {
-                            showHint = false
-                        }
+                    }
                 }
-            }
-            .fullScreenCover(isPresented: $showImport, content: {
-                OverlayImport(showImport: $showImport)
+                .fullScreenCover(isPresented: $showImport, content: {
+                    OverlayImport(showImport: $showImport)
                     
-            })
-            .onChange(of: selectedTab) { v in
-                if v != .settings {
-                    showHint = false
+                })
+                .onChange(of: selectedTab) { v in
+                    if v != .settings {
+                        showHint = false
+                    }
                 }
-            }
+        }
     }
 }
 

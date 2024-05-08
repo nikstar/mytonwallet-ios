@@ -41,3 +41,25 @@ extension ApiToken {
     static let toncoin = ApiToken(slug: "toncoin", name: "Toncoin", symbol: "TON", decimals: 9)
 }
 
+
+
+extension ApiToken {
+    var searchString: String {
+        let s = symbol + " " + name
+        return s.lowercased()
+    }
+}
+
+extension Sequence where Element == TokenAmount {
+    func filter(query: String) -> [TokenAmount] {
+        if query.isEmpty {
+            return Array(self)
+        }
+        let query = query.lowercased()
+        return self.filter {
+            $0.token.searchString.contains(query)
+        }
+    }
+}
+
+

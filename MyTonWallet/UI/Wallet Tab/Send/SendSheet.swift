@@ -1,64 +1,35 @@
 
 import SwiftUI
 import Perception
-
-
-@Perceptible
-final class SendViewModel {
-    
-    var currency: Slug? = nil
-    var walletToken: TokenAmount? = nil
-    var token: ApiToken? { walletToken?.token }
-    
-    var path: NavigationPath = .init()
-    
-    var messagegText: String = ""
-    var messageIsEncoded: Bool = false
-    
-}
-
-enum SendStep: Int {
-    case currency
-    case recepient
-    case amount
-    case details
-    case confirm
-    case success
-}
-
+import Pow
 
 struct SendSheet: View {
     
-    private let viewModel: SendViewModel = .init()
+    @State private var viewModel: SendViewModel? = nil
     
     @Environment(AccountModel.self) private var account
     
+    
     var body: some View {
         WithPerceptionTracking {
-            
-            @Perception.Bindable var model = self.viewModel
-            
-            NavigationStack(path: $model.path) {
-                SendStepView(step: .currency)
-                    .navigationDestination(for: SendStep.self, destination: { step in
-                        SendStepView(step: step)
-                            .environment(viewModel)
-                        
-                    })
-                    .environment(viewModel)
-            }
-            .onChange(of: viewModel.currency) { v in
-                if let v {
-                    viewModel.walletToken = account.resolveWalletToken(v)
-                } else {
-                    viewModel.walletToken = nil
+            if let viewModel {
+                @Perception.Bindable var model = viewModel
+                
+                NavigationStack(path: $model.path) {
+                    SendStepView(step: .currency)
+                        .navigationDestination(for: SendStep.self, destination: { step in
+                            SendStepView(step: step)
+                                .environment(viewModel)
+                            
+                        })
+                        .environment(viewModel)
                 }
             }
-            
         }
-        
+        .task {
+            viewModel = .init(account: account)
+        }
     }
-    
 }
 
 
@@ -71,7 +42,7 @@ struct SendStepView: View {
         case .currency:
             SendStepCurrency()
         case .recepient:
-            SendStepRecepient()
+            SendStepRecipient()
         case .amount:
             SendStepAmount()
         case .details:
@@ -88,17 +59,24 @@ struct SendStepView: View {
 
 struct SendStepCurrency: View {
     
-    @Environment(AccountModel.self) private var account
     @Environment(SendViewModel.self) private var viewModel
-    
+
     @State private var searchString = ""
     
+    private var displayTokens: [TokenAmount] {
+        print("get", viewModel.availableTokens.filter(query: searchString).count)
+        return viewModel.availableTokens.filter(query: searchString)
+    }
+    
+    @State private var reload = 0
+    
     var body: some View {
+        let _ = Self._printChanges()
+        
         WithPerceptionTracking {
-            List(account.walletTokens.values, id: \.self) { walletToken in
+            List(displayTokens, id: \.self) { walletToken in
                 Button(action: {
-                    viewModel.currency = walletToken.token.slug
-                    viewModel.path.append(SendStep.recepient)
+                    viewModel.setCurrency(walletToken.token.slug)
                 }) {
                     TwoLineRow(title: walletToken.token.name, subtitle: walletToken.formatted(), image: TokenImage(token: walletToken.token).clipShape(.circle))
                 }
@@ -117,7 +95,7 @@ struct SendStepCurrency: View {
 
 
 
-struct SendStepRecepient: View {
+struct SendStepRecipient: View {
     
     @Environment(AccountModel.self) private var account
     @Environment(SendViewModel.self) private var viewModel
@@ -131,22 +109,31 @@ struct SendStepRecepient: View {
     
     @State private var showsScanner: Bool = false
     
+    @State private var shineTrigger: Bool = false
+    
     var body: some View {
         WithPerceptionTracking {
             
             List {
                 Section {
-                    ForEach(account.activities.values.prefix(20)) { activity in
-                        Text(activity.date.formatted())
+                    ForEach(viewModel.recentAddresses, id: \.address) { recent in
+                        Button(action: {
+                            isFocused = false
+                            withAnimation {
+                                self.text = recent.address.string
+                                shineTrigger.toggle()
+                            }
+                        }) {
+                            TwoLineRow(title: recent.address.formatted(), subtitle: recent.normalizedAddress?.formatted() ?? "Wallet", image: EmptyView())
+                        }
                     }
                     .listSectionSeparator(.hidden)
                 } header: {
-                    VStack(alignment: .leading, spacing: 24) {
-                        Text("Recent")
-                            .font(.title3.weight(.bold))
-                    }
-                    .fontWeight(.bold)
-                    .foregroundStyle(.primary)
+                    Text("Recent")
+                        .font(.title3.weight(.bold))
+                        .foregroundStyle(.primary)
+                        .padding(.top, 8)
+                        .fontWeight(.bold)
                 }
             }
             .listStyle(.plain)
@@ -175,7 +162,7 @@ struct SendStepRecepient: View {
                 Text("To:")
                     .foregroundStyle(.secondary)
                 
-                TextField("Address or domain", text: $text)
+                TextField("Address or domain", text: $text, axis: .vertical)
                     .focused($isFocused)
                 
                 Button(action: {
@@ -186,23 +173,25 @@ struct SendStepRecepient: View {
                 }
             }
             .padding(.horizontal, 12)
-            
-            
+            .padding(.vertical, 10)
         }
+        .fixedSize(horizontal: false, vertical: true)
+        .changeEffect(.shine, value: shineTrigger)
         .clipShape(.rect(cornerRadius: 10))
-        .frame(height: 44)
+        .frame(minHeight: 44)
         .padding(.horizontal, 16)
+        
     }
     
     var continueButton: some View {
-        Button(action: { viewModel.path.append(SendStep.amount) }) {
+        Button(action: { viewModel.setAddress(text) }) {
             Text("Continue")
         }
         .buttonStyle(.mtwLarge)
         .padding(16)
         .background {
             VariableBlurView(maxBlurRadius: 10, direction: .blurredBottomClearTop)
-                .ignoresSafeArea()
+                .ignoresSafeArea(.container)
         }
         
     }
@@ -216,6 +205,8 @@ struct SendStepAmount: View {
     
     @State private var value: Double?
     
+    @State private var shineTrigger: Bool = false
+    
     var body: some View {
         WithPerceptionTracking {
             let title: String = if let symbol = viewModel.token?.symbol {
@@ -226,12 +217,21 @@ struct SendStepAmount: View {
             
             ZStack {
                 Color.clear
-                Text("Amount")
+                CurrencyAmountTextField(value: $value, symbol: viewModel.token?.symbol ?? "TON", maxAvailable: viewModel.walletToken?.decimalAmount ?? 0.0, focusOnAppear: true)
+                    .changeEffect(.shine, value: shineTrigger)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack {
                     TwoLineRow(title: viewModel.token?.name ?? "", subtitle: viewModel.walletToken?.formatted() ?? "", image: TokenImage(token: viewModel.token))
-                    Button(action: {}) {
+                    Button(action: {
+                        withAnimation {
+                            if let v = viewModel.walletToken?.decimalAmount {
+                                value = v
+                                shineTrigger.toggle()
+                            }
+                        }
+                        
+                    }) {
                         Text("Use All")
                     }
                     .buttonStyle(.mtwSmallSecondary)
@@ -249,7 +249,11 @@ struct SendStepAmount: View {
     }
     
     var continueButton: some View {
-        Button(action: { viewModel.path.append(SendStep.details) }) {
+        Button(action: {
+            if let v = value {
+                viewModel.setAmount(v)
+            }
+        }) {
             Text("Continue")
         }
         .buttonStyle(.mtwLarge)
@@ -264,44 +268,55 @@ struct SendStepDetails: View {
     @Environment(SendViewModel.self) private var viewModel
     
     var body: some View {
-        
-        let title: String = if let symbol = viewModel.token?.symbol {
-            "Send \(symbol)"
-        } else {
-            "Send"
-        }
-        
-        @Perception.Bindable var vm = viewModel
-        
-        List {
-            Section("Message") {
-                TextField("Message", text: $vm.messagegText, prompt: Text("Add a comment, if needed"), axis: .vertical)
-                Toggle("Encrypt comment", isOn: $vm.messageIsEncoded)
+        WithPerceptionTracking {
+            let title: String = if let symbol = viewModel.token?.symbol {
+                "Send \(symbol)"
+            } else {
+                "Send"
             }
             
-            Section("Transaction Details") {
-                KeyValueView("Recepient", "...")
-                KeyValueView("Recipient address", "...")
-                KeyValueView("Amount", "...")
-                KeyValueView("Fee", "...")
+            @Perception.Bindable var vm = viewModel
+            
+            List {
+                Section {
+                    TextField("Message", text: $vm.messageText, prompt: Text("Add a comment, if needed"), axis: .vertical)
+                    Toggle("Encrypt comment", isOn: $vm.messageIsEncoded)
+                } header: {
+                    Text("Message")
+                } footer: {
+                    if viewModel.messageIsEncoded {
+                        Text("Only you and the recipient will be able to read your message.") // Do not enable when sending to exchanges.
+                    }
+                }
+                
+                
+                Section("Transaction Details") {
+                    KeyValueView("Recepient", viewModel.address?.formatted() ?? "?")
+                    KeyValueView("Recipient address", viewModel.address?.formatted() ?? "?")
+                    KeyValueView("Amount", "\(viewModel.decimalAmount ?? 0.0) \(viewModel.token?.symbol ?? "?")")
+                    KeyValueView("Fee", "?")
+                }
+                
             }
+            .scrollDismissesKeyboard(.interactively)
+            .animation(.default, value: viewModel.messageIsEncoded)
+            .listStyle(.insetGrouped)
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                Button(action: { viewModel.path.append(SendStep.confirm) }) {
+                    Text("Continue")
+                }
+                .buttonStyle(.mtwLarge)
+                .padding(16)
+                .background {
+                    VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
+                        .ignoresSafeArea(.container)
+                }
+            }
+            .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
+            .dismissToolbarItem()
+            
         }
-        .listStyle(.insetGrouped)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            Button(action: { viewModel.path.append(SendStep.confirm) }) {
-                Text("Continue")
-            }
-            .buttonStyle(.mtwLarge)
-            .padding(16)
-            .background {
-                VariableBlurView(maxBlurRadius: 20, direction: .blurredBottomClearTop)
-                    .ignoresSafeArea()
-            }
-        }
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
-        .dismissToolbarItem()
-        
     }
 }
 
@@ -311,9 +326,14 @@ struct SendStepConfirm: View {
     @Environment(SendViewModel.self) private var viewModel
     
     var body: some View {
-        ConfirmActionView(title: "A", description: "AAA", state: .codeEntry, onConfirm: {
-            viewModel.path.append(SendStep.success)
-        })
+        WithPerceptionTracking {
+            ConfirmActionView(
+                title: viewModel.isSending ? "Sending" : "Confirm Send",
+                description: "\(viewModel.decimalAmount ?? 0.0) \(viewModel.token?.symbol ?? "?")" + " to " + (viewModel.address?.formatted() ?? "?"),
+                state: viewModel.isSending ? .processing : .codeEntry,
+                onConfirm: { viewModel.onConfirm() }
+            )
+        }
     }
 }
 
@@ -326,9 +346,21 @@ struct SendStepSuccess: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        ScrollView {
-            Text("SendStepSuccess")
+        VStack(spacing: 0) {
+            
+            Sticker("Congratulations", play: .repeat(1))
+                .padding(.bottom, 24)
+            CurrencyAmountTextField(value: .constant(-(viewModel.decimalAmount ?? 0.0)), symbol: viewModel.token?.symbol ?? "TON", maxAvailable: viewModel.walletToken?.decimalAmount ?? 0.0, focusOnAppear: false)
+                .allowsHitTesting(false)
+            Text("Coins have been sent!")
+                .foregroundStyle(.secondary)
+            Button(action: {}) {
+                Text("Transaction Details")
+            }
+            .buttonStyle(.mtwLargeTertiary)
         }
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, 32)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             Button(action: { dismiss() }) {
                 Text("Close")

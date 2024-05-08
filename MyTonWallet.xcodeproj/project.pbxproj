@@ -56,6 +56,7 @@
 		589A70C12BE42E410023547C /* catchingException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70C02BE42E410023547C /* catchingException.swift */; };
 		589A70C32BE44F500023547C /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70C22BE44F500023547C /* Tip.swift */; };
 		58A81F312BE3B1E300216431 /* DevelopmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A81F302BE3B1E300216431 /* DevelopmentView.swift */; };
+		58B1F1752BEAA00000A166F2 /* SendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B1F1742BEAA00000A166F2 /* SendModel.swift */; };
 		58B4ABE02BBAC5B00007BF54 /* StatusBarAppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */; };
 		58B4ABE32BBAE0770007BF54 /* TotalWalletValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */; };
 		58B4ABE52BBAE0970007BF54 /* TopSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE42BBAE0960007BF54 /* TopSection.swift */; };
@@ -150,6 +151,7 @@
 		589A70C02BE42E410023547C /* catchingException.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = catchingException.swift; sourceTree = "<group>"; };
 		589A70C22BE44F500023547C /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
 		58A81F302BE3B1E300216431 /* DevelopmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentView.swift; sourceTree = "<group>"; };
+		58B1F1742BEAA00000A166F2 /* SendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendModel.swift; sourceTree = "<group>"; };
 		58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarAppearanceManager.swift; sourceTree = "<group>"; };
 		58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalWalletValue.swift; sourceTree = "<group>"; };
 		58B4ABE42BBAE0960007BF54 /* TopSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSection.swift; sourceTree = "<group>"; };
@@ -467,6 +469,7 @@
 			isa = PBXGroup;
 			children = (
 				58CD63A02BDA855100F9C169 /* SendSheet.swift */,
+				58B1F1742BEAA00000A166F2 /* SendModel.swift */,
 			);
 			path = Send;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				580B06FE2BE384C30024DA9D /* ConfirmActionView.swift in Sources */,
 				58B934B32BB4B56D0086DEBC /* TokenImage.swift in Sources */,
 				58DDF7782BA87A2A003D9628 /* WalletTabScaffold.swift in Sources */,
+				58B1F1752BEAA00000A166F2 /* SendModel.swift in Sources */,
 				581867AC2BD11D45001A1A91 /* AccountModel.swift in Sources */,
 				5864B3872BE00965009A6092 /* Buttons.swift in Sources */,
 				581867A32BD10CED001A1A91 /* MtwAccount.swift in Sources */,
@@ -790,8 +794,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -828,8 +832,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
