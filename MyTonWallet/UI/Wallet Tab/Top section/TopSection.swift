@@ -3,6 +3,28 @@ import SwiftUI
 import Perception
 
 
+//@Perceptible
+//final class AssetsViewModel {
+//    
+//    private(set) var tokens: [TokenAmount] = []
+//    
+//    private var account: AccountModel
+//    
+//    init(account: AccountModel) {
+//        self.account = account
+//        updateTokens()
+//    }
+//    
+//    func updateTokens() {
+//        self.tokens = withPerceptionTracking {
+//            let tokens = account.walletTokens.values
+//            return Array(tokens)
+//        } onChange: { [weak self] in
+//            self?.updateTokens()
+//        }
+//    }
+//}
+
 
 struct AssetsSection: View {
     
@@ -12,6 +34,9 @@ struct AssetsSection: View {
     @State private var showSend = false
     @State private var showStake = false
     @State private var showSwap = false
+    
+//    @State private var assets: AssetsViewModel? = nil
+    
     
     var body: some View {
         WithPerceptionTracking {
@@ -39,6 +64,9 @@ struct AssetsSection: View {
         .sheet(isPresented: $showSwap) {
             SwapSheet()
         }
+//        .task {
+//            self.assets = .init(account: model)
+//        }
     }
     
     var accountValue: some View {
@@ -53,6 +81,7 @@ struct AssetsSection: View {
         .opacity(0) // kept for layout
         .padding(.horizontal, 16)
         .padding(.bottom, 16)
+        .accessibilityHidden(true)
     }
     
     var actionButtons: some View {
@@ -70,21 +99,26 @@ struct AssetsSection: View {
     
     var walletTokens: some View {
         Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 0) {
-            ForEach(model.walletTokens.values, id: \.self) { token in
-                WalletTokenRow(walletToken: token)
-                GridRow {
-                    Color.clear
-                        .frame(maxWidth: 0, maxHeight: 0)
-                    
-                    if token != model.walletTokens.values.last {
-                        CellDivider()
-                            .gridCellColumns(2)
+//            if let assets {
+                ForEach(model.walletTokens.values, id: \.self) { token in
+                    Button(action: {}) {
+                        WalletTokenRow(walletToken: token)
                     }
-               }
-            }
-            
+                    GridRow {
+                        Color.clear
+                            .frame(maxWidth: 0, maxHeight: 0)
+                        
+                        if token != model.walletTokens.values.last {
+                            CellDivider()
+                                .gridCellColumns(2)
+                        }
+                    }
+                }
+                
+//            }
 
         }
+        .buttonStyle(.plain)
         .frame(maxWidth: .infinity)
         .background {
             RoundedRectangle(cornerRadius: 12, style: .continuous)

@@ -57,6 +57,7 @@
 		589A70C32BE44F500023547C /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70C22BE44F500023547C /* Tip.swift */; };
 		58A81F312BE3B1E300216431 /* DevelopmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A81F302BE3B1E300216431 /* DevelopmentView.swift */; };
 		58B1F1752BEAA00000A166F2 /* SendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B1F1742BEAA00000A166F2 /* SendModel.swift */; };
+		58B1F1772BEBD4F000A166F2 /* TokenInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B1F1762BEBD4F000A166F2 /* TokenInfo.swift */; };
 		58B4ABE02BBAC5B00007BF54 /* StatusBarAppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */; };
 		58B4ABE32BBAE0770007BF54 /* TotalWalletValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */; };
 		58B4ABE52BBAE0970007BF54 /* TopSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4ABE42BBAE0960007BF54 /* TopSection.swift */; };
@@ -152,6 +153,7 @@
 		589A70C22BE44F500023547C /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
 		58A81F302BE3B1E300216431 /* DevelopmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentView.swift; sourceTree = "<group>"; };
 		58B1F1742BEAA00000A166F2 /* SendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendModel.swift; sourceTree = "<group>"; };
+		58B1F1762BEBD4F000A166F2 /* TokenInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenInfo.swift; sourceTree = "<group>"; };
 		58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarAppearanceManager.swift; sourceTree = "<group>"; };
 		58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalWalletValue.swift; sourceTree = "<group>"; };
 		58B4ABE42BBAE0960007BF54 /* TopSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSection.swift; sourceTree = "<group>"; };
@@ -372,6 +374,7 @@
 				58D2D0212BB1A55300F613DE /* MtwActivity.swift */,
 				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
 				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue.swift */,
+				58B1F1762BEBD4F000A166F2 /* TokenInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -610,6 +613,7 @@
 				5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */,
 				587539B92BDB401100A0B40E /* SwapSheet.swift in Sources */,
 				589A70C32BE44F500023547C /* Tip.swift in Sources */,
+				58B1F1772BEBD4F000A166F2 /* TokenInfo.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
 				589A70C12BE42E410023547C /* catchingException.swift in Sources */,
 				580B06FE2BE384C30024DA9D /* ConfirmActionView.swift in Sources */,
