@@ -311,6 +311,7 @@ struct SwapRoot: View {
                 Image("Swap.Arrow")
                     .foregroundStyle(Color.blue)
             }
+            .padding(8)
             .contentShape(.circle)
         }
         .buttonStyle(.plain)
@@ -395,22 +396,12 @@ struct TokenPicker: View {
     @ViewBuilder
     var image: some View {
         
-        let placeholder = Rectangle().fill(Material.thin)
-        
-        Group {
-            if let image = swapToken?.image {
-                AsyncImage(url: URL(string: image)) { image in
-                    image.resizable()
-                } placeholder: {
-                    placeholder
-                }
-            } else {
-                placeholder
-            }
+        if let swapToken {
+            TokenImage(token: swapToken.slug, image: swapToken.image)
+                .clipShape(Circle())
+                .frame(width: 24, height: 24)
+                .padding(.trailing, 4)
         }
-        .clipShape(Circle())
-        .frame(width: 24, height: 24)
-        .padding(.trailing, 4)
     }
     
     @ViewBuilder
@@ -458,7 +449,8 @@ struct TokenListPicker: View {
                 }
                 
                 List(wallet, id: \.self) { tokenAmount in
-                    TokenListRow(image: tokenAmount.token.image ?? "", headline: tokenAmount.token.name, subheadline: tokenAmount.formatted())
+                    let token = tokenAmount.token
+                    TokenListRow(token: token.slug, image: token.image, headline: tokenAmount.token.name, subheadline: tokenAmount.formatted())
                         .onTapGesture {
                             viewModel.setSend(tokenAmount.token.slug)
                             viewModel.path.removeLast()
@@ -471,7 +463,7 @@ struct TokenListPicker: View {
                 List {
                     Section("Popular") {
                         ForEach(popular) { token in
-                            TokenListRow(image: token.image ?? "", headline: token.name, subheadline: token.symbol)
+                            TokenListRow(token: token.slug, image: token.image, headline: token.name, subheadline: token.symbol)
                                 .onTapGesture {
                                     viewModel.setReceive(token.slug)
                                     viewModel.path.removeLast()
@@ -480,7 +472,7 @@ struct TokenListPicker: View {
                     }
                     Section("All Tokens") {
                         ForEach(all) { token in
-                            TokenListRow(image: token.image ?? "", headline: token.name, subheadline: token.symbol)
+                            TokenListRow(token: token.slug, image: token.image, headline: token.name, subheadline: token.symbol)
                                 .onTapGesture {
                                     viewModel.setReceive(token.slug)
                                     viewModel.path.removeLast()
@@ -501,7 +493,8 @@ struct TokenListPicker: View {
 
 struct TokenListRow: View {
     
-    var image: String
+    var token: Slug
+    var image: String?
     var headline: String
     var subheadline: String?
     
@@ -509,15 +502,9 @@ struct TokenListRow: View {
     var body: some View {
         HStack(spacing: 12) {
             
-            AsyncImage(url: URL(string: image)) {
-                $0.resizable()
-            } placeholder: {
-                Rectangle().fill(
-                    Material.thin
-                )
-            }
-            .clipShape(.circle)
-            .frame(width: 40, height: 40)
+            TokenImage(token: token, image: image)
+                .clipShape(.circle)
+                .frame(width: 40, height: 40)
             
             
             VStack(alignment: .leading, spacing: 0) {

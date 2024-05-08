@@ -153,8 +153,8 @@ struct TransactionRow: View {
     var leftImage: some View {
         let tx = activity.tokenAmount?.token
         let swap = activity.raw.to.flatMap { slug in model.knownTokens[slug] }
-
-        TokenImage(token: tx.or(swap))
+        let token = tx.or(swap)
+        TokenImage(token: token?.slug ?? "toncoin", image: token?.image)
             .clipShape(Circle())
             .frame(width: 40, height: 40)
 

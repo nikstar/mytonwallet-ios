@@ -10,7 +10,7 @@ struct WalletTokenRow: View {
     
     var body: some View {
         GridRow {
-            TokenImage(token: token)
+            TokenImage(token: token.slug, image: token.image)
                 .clipShape(Circle())
                 .frame(width: 40, height: 40)
                 .padding(.leading, 16)

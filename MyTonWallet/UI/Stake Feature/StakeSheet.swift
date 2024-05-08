@@ -196,7 +196,7 @@ struct StakeAdd: View {
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 HStack {
-                    TwoLineRow(title: "Toncoin", subtitle: "0 TON", image: TokenImage(token: nil))
+                    TwoLineRow(title: "Toncoin", subtitle: "0 TON", image: TokenImage(token: "toncoin", image: nil))
                     Button(action: {}) {
                         Text("Use All")
                     }

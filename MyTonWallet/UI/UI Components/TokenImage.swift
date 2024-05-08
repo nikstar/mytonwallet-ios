@@ -4,33 +4,31 @@ import SwiftUI
 
 struct TokenImage: View {
     
-    var token: Optional<ApiToken>
+    var token: Slug
+    var image: Optional<String>
     
     @ViewBuilder
     var body: some View {
-        if let image = token?.image {
-//            // let _ = print(image)
+            
+        if let uiImage = UIImage(named: "Cache/token.\(token).png") {
+            Image(uiImage: uiImage)
+                .resizable()
+        } else if let image {
+            let _ = print(token, image)
             AsyncImage(url: URL(string: image)) { image in
                 image
                     .resizable()
             } placeholder: {
-                ZStack {
-                    Rectangle().fill(Material.thin)
-                    if let ticker = token?.symbol.lowercased() {
-                        Image(ticker)
-                            .resizable()
-                    }
-                }
+                _placeholder
             }
         } else {
-            if token?.slug == "toncoin" {
-                Image("Toncoin.Image")
-                    .resizable()
-            } else {
-                Rectangle().fill(Material.thin)
-            }
+            _placeholder
         }
     }
+    
+    var _placeholder: some View {
+        Rectangle()
+            .fill(Color(UIColor.tertiarySystemFill))
+    }
 }
-
 

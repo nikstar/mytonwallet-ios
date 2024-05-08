@@ -78,7 +78,7 @@ struct SendStepCurrency: View {
                 Button(action: {
                     viewModel.setCurrency(walletToken.token.slug)
                 }) {
-                    TwoLineRow(title: walletToken.token.name, subtitle: walletToken.formatted(), image: TokenImage(token: walletToken.token).clipShape(.circle))
+                    TwoLineRow(title: walletToken.token.name, subtitle: walletToken.formatted(), image: TokenImage(token: walletToken.token.slug, image: walletToken.token.image).clipShape(.circle))
                 }
                 .listSectionSeparator(.hidden)
             }
@@ -221,23 +221,25 @@ struct SendStepAmount: View {
                     .changeEffect(.shine, value: shineTrigger)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                HStack {
-                    TwoLineRow(title: viewModel.token?.name ?? "", subtitle: viewModel.walletToken?.formatted() ?? "", image: TokenImage(token: viewModel.token))
-                    Button(action: {
-                        withAnimation {
-                            if let v = viewModel.walletToken?.decimalAmount {
-                                value = v
-                                shineTrigger.toggle()
+                if let token = viewModel.token {
+                    HStack {
+                        TwoLineRow(title: viewModel.token?.name ?? "", subtitle: viewModel.walletToken?.formatted() ?? "", image: TokenImage(token: token.slug, image: token.image))
+                        Button(action: {
+                            withAnimation {
+                                if let v = viewModel.walletToken?.decimalAmount {
+                                    value = v
+                                    shineTrigger.toggle()
+                                }
                             }
+                            
+                        }) {
+                            Text("Use All")
                         }
-                        
-                    }) {
-                        Text("Use All")
+                        .buttonStyle(.mtwSmallSecondary)
                     }
-                    .buttonStyle(.mtwSmallSecondary)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
                 }
-                .padding(.vertical, 8)
-                .padding(.horizontal, 16)
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 continueButton
