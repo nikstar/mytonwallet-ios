@@ -20,9 +20,7 @@ struct TwoLineRow<T: View, S: View, I: View>: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 title
-                    .font(.callout.weight(.medium))
                 subtitle
-                    .font(.footnote)
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)

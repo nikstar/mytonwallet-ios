@@ -6,11 +6,24 @@ struct TokenAmount: Hashable, Codable {
     var amount: Double
     var token: ApiToken
 }
-                    
+                
+extension TokenAmount {
+    
+    static func toncoin(exact: Int) -> TokenAmount {
+        .init(amount: Double(exact), token: ApiToken.toncoin)
+    }
+    
+    static func toncoin(decimal: Double) -> TokenAmount {
+        let toncoin = ApiToken.toncoin
+        return .init(amount: decimal * pow(10.0, Double(toncoin.decimals)), token: toncoin)
+    }
+    
+}
+
 extension TokenAmount {
     
     var decimalAmount: Double {
-        amount / pow(10, Double(token.decimals))
+        Double(amount) / pow(10.0, Double(token.decimals))
     }
     
     var pricePerToken: CurrencyValue? {
@@ -55,6 +68,7 @@ struct TokenAmountFormatStyle: FormatStyle {
     var explicitPlus: Bool = false
     var asNegative: Bool = false
     var noSign: Bool = false
+    var noSymbol: Bool = false
     
     func format(_ tokenValue: TokenAmount) -> String {
         var formatter = FloatingPointFormatStyle<Double>.number.precision(precision)
@@ -69,7 +83,8 @@ struct TokenAmountFormatStyle: FormatStyle {
             amount = abs(amount)
         }
         let value = amount.formatted(formatter)
-        return "\(value) \(tokenValue.token.symbol)"
+        let symbol = noSymbol ? "" : " \(tokenValue.token.symbol)"
+        return "\(value)\(symbol)"
     }
     
     func precision(_ v: NumberFormatStyleConfiguration.Precision) -> TokenAmountFormatStyle {
@@ -95,5 +110,9 @@ extension FormatStyle where Self == TokenAmountFormatStyle {
 
     static func tokenAmount(noSign: Bool) -> TokenAmountFormatStyle {
         TokenAmountFormatStyle(noSign: noSign)
+    }
+    
+    static func tokenAmount(noSymbol: Bool) -> TokenAmountFormatStyle {
+        TokenAmountFormatStyle(noSymbol: noSymbol)
     }
 }
