@@ -19964,7 +19964,7 @@ function getDefaultAdapter() {
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
     adapter = __webpack_require__(5448);
-  } else if ( true && Object.prototype.toString.call(({"env":{}})) === '[object process]') {
+  } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
     // For node use HTTP adapter
     adapter = __webpack_require__(5448);
   }
@@ -30809,13 +30809,13 @@ function () {
 // setImmediate or setTimeout) at a potential performance penalty.
 
 
-var enqueuePostPromiseJob =  true && typeof ({"env":{}}).nextTick === 'function' ? function (fn) {
+var enqueuePostPromiseJob = typeof process === 'object' && typeof process.nextTick === 'function' ? function (fn) {
   if (!resolvedPromise) {
     resolvedPromise = Promise.resolve();
   }
 
   resolvedPromise.then(function () {
-    ({"env":{}}).nextTick(fn);
+    process.nextTick(fn);
   });
 } : typeof setImmediate === 'function' ? function (fn) {
   setImmediate(fn);
@@ -39592,23 +39592,23 @@ let ApiTransactionError = /*#__PURE__*/function (ApiTransactionError) {
 
 ;// CONCATENATED MODULE: ./src/config.ts
 const APP_ENV = "production";
-const APP_NAME = ({}).APP_NAME || 'MyTonWallet';
-const APP_VERSION = ({}).APP_VERSION;
+const APP_NAME = (/* unused pure expression or super */ null && ( false || 'MyTonWallet'));
+const APP_VERSION = "1.18.12";
 const APP_ENV_MARKER = APP_ENV === 'staging' ? 'Beta' : APP_ENV === 'development' ? 'Dev' : undefined;
 const DEBUG = APP_ENV !== 'production' && APP_ENV !== 'perf' && APP_ENV !== 'test';
 const DEBUG_MORE = false;
 const IS_TEST = APP_ENV === 'test';
 const IS_PERF = APP_ENV === 'perf';
-const IS_EXTENSION = ({}).IS_EXTENSION === '1';
-const IS_FIREFOX_EXTENSION = ({}).IS_FIREFOX_EXTENSION === '1';
-const IS_PACKAGED_ELECTRON = ({}).IS_PACKAGED_ELECTRON === '1';
-const IS_CAPACITOR = ({}).IS_CAPACITOR === '1';
+const IS_EXTENSION = false === '1';
+const IS_FIREFOX_EXTENSION = (/* unused pure expression or super */ null && (false === '1'));
+const IS_PACKAGED_ELECTRON = false === '1';
+const IS_CAPACITOR = false === '1';
 const ELECTRON_HOST_URL = 'api-https://dumb-host';
 const INACTIVE_MARKER = '[Inactive]';
 const PRODUCTION_URL = 'api-https://mytonwallet.app';
 const BETA_URL = 'api-https://beta.mytonwallet.app';
 const BASE_URL = (/* unused pure expression or super */ null && ("api-https://mytonwallet.app"));
-const SWAP_FEE_ADDRESS = ({}).SWAP_FEE_ADDRESS || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
+const SWAP_FEE_ADDRESS =  false || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
 const STRICTERDOM_ENABLED = DEBUG && !IS_PACKAGED_ELECTRON;
 const DEBUG_ALERT_MSG = 'Shoot!\nSomething went wrong, please see the error details in Dev Tools Console.';
 const PIN_LENGTH = 4;
@@ -39637,17 +39637,17 @@ const ANIMATION_LEVEL_MAX = 2;
 const ANIMATION_LEVEL_DEFAULT = (/* unused pure expression or super */ null && (ANIMATION_LEVEL_MAX));
 const THEME_DEFAULT = 'system';
 const MAIN_ACCOUNT_ID = '0-ton-mainnet';
-const TONHTTPAPI_MAINNET_URL = ({}).TONHTTPAPI_MAINNET_URL || 'api-https://tonhttpapi.mytonwallet.org/api/v2/jsonRPC';
-const TONHTTPAPI_MAINNET_API_KEY = ({}).TONHTTPAPI_MAINNET_API_KEY;
-const ELECTRON_TONHTTPAPI_MAINNET_API_KEY = ({}).ELECTRON_TONHTTPAPI_MAINNET_API_KEY;
-const TONHTTPAPI_V3_MAINNET_API_URL = ({}).TONHTTPAPI_V3_MAINNET_API_KEY || 'api-https://tonhttpapi-v3.mytonwallet.org/api/v3';
-const TONAPIIO_MAINNET_URL = ({}).TONAPIIO_MAINNET_URL || 'api-https://tonapiio.mytonwallet.org';
-const TONHTTPAPI_TESTNET_URL = ({}).TONHTTPAPI_TESTNET_URL || 'api-https://tonhttpapi-testnet.mytonwallet.org/api/v2/jsonRPC';
-const TONHTTPAPI_TESTNET_API_KEY = ({}).TONHTTPAPI_TESTNET_API_KEY;
-const ELECTRON_TONHTTPAPI_TESTNET_API_KEY = ({}).ELECTRON_TONHTTPAPI_TESTNET_API_KEY;
-const TONHTTPAPI_V3_TESTNET_API_URL = ({}).TONHTTPAPI_V3_TESTNET_API_KEY || 'api-https://tonhttpapi-v3-testnet.mytonwallet.org/api/v3';
-const TONAPIIO_TESTNET_URL = ({}).TONAPIIO_TESTNET_URL || 'api-https://tonapiio-testnet.mytonwallet.org';
-const BRILLIANT_API_BASE_URL = ({}).BRILLIANT_API_BASE_URL || 'api-https://api.mytonwallet.org';
+const TONHTTPAPI_MAINNET_URL = "api-https://tonhttpapi.mytonwallet.org/api/v2/jsonRPC" || 0;
+const TONHTTPAPI_MAINNET_API_KEY = "";
+const ELECTRON_TONHTTPAPI_MAINNET_API_KEY = null;
+const TONHTTPAPI_V3_MAINNET_API_URL = "api-https://tonhttpapi-v3.mytonwallet.org/api/v3" || 0;
+const TONAPIIO_MAINNET_URL = "api-https://tonapiio.mytonwallet.org" || 0;
+const TONHTTPAPI_TESTNET_URL = "api-https://tonhttpapi-testnet.mytonwallet.org/api/v2/jsonRPC" || 0;
+const TONHTTPAPI_TESTNET_API_KEY = "";
+const ELECTRON_TONHTTPAPI_TESTNET_API_KEY = null;
+const TONHTTPAPI_V3_TESTNET_API_URL = "api-https://tonhttpapi-testnet-v3.mytonwallet.org/api/v3" || 0;
+const TONAPIIO_TESTNET_URL = "api-https://tonapiio-testnet.mytonwallet.org" || 0;
+const BRILLIANT_API_BASE_URL = "api-https://api.mytonwallet.org" || 0;
 const FRACTION_DIGITS = 9;
 const SHORT_FRACTION_DIGITS = 2;
 const MY_TON_WALLET_PROMO_URL = 'api-https://mytonwallet.io';
@@ -39667,7 +39667,7 @@ const TON_TOKEN_SLUG = 'toncoin';
 const JWBTC_TOKEN_SLUG = 'ton-eqdcbkghmc';
 const JUSDT_TOKEN_SLUG = 'ton-eqbynbo23y';
 const USDT_TRON_TOKEN_SLUG = 'usdtrx';
-const PROXY_HOSTS = ({}).PROXY_HOSTS;
+const PROXY_HOSTS = (/* unused pure expression or super */ null && ("tonproxy.io:38080 tonproxy.io:38081 tonproxy.io:38082"));
 const TINY_TRANSFER_MAX_COST = 0.01;
 const LANG_CACHE_NAME = 'mtw-lang-74';
 const LANG_LIST = [{
@@ -39713,9 +39713,9 @@ const MIN_BALANCE_FOR_UNSTAKE = 1020000000n; // 1.02 TON
 const STAKING_FORWARD_AMOUNT = (/* unused pure expression or super */ null && (ONE_TON));
 const DEFAULT_FEE = 15000000n; // 0.015 TON
 
-const STAKING_POOLS = ({}).STAKING_POOLS ? ({}).STAKING_POOLS.split(' ') : [];
-const LIQUID_POOL = ({}).LIQUID_POOL || 'EQD2_4d91M4TVbEBVyBF8J1UwpMJc361LKVCz6bBlffMW05o';
-const LIQUID_JETTON = ({}).LIQUID_JETTON || 'EQCqC6EhRJ_tpWngKxL6dV0k6DSnRUrs9GSVkLbfdCqsj6TE';
+const STAKING_POOLS =  true ? "3wrbrkS1z3Gpjk3ppd8m8-s_ wW4fiH5zVd4SaHih7PObxP_0 OP3OduRYPdavxGO3DH12fF5g qSTQda2Z1vGK-b7EaPQoeJMx JQoONbSGp8MkrAu1xtM6NOxE dPA4cFLr3rxLOoDcpzR_SyBX".split(' ') : 0;
+const LIQUID_POOL =  false || 'EQD2_4d91M4TVbEBVyBF8J1UwpMJc361LKVCz6bBlffMW05o';
+const LIQUID_JETTON =  false || 'EQCqC6EhRJ_tpWngKxL6dV0k6DSnRUrs9GSVkLbfdCqsj6TE';
 const STAKING_MIN_AMOUNT = (/* unused pure expression or super */ null && (ONE_TON));
 const NOMINATORS_STAKING_MIN_AMOUNT = ONE_TON * 10001n;
 const TON_PROTOCOL = 'ton://';
@@ -41614,8 +41614,7 @@ function handleFetchErrors(response, ignoreHttpCodes) {
   return response;
 }
 function isKnownStakingPool(address) {
-    return true;
-//  return STAKING_POOLS.some(poolPart => address.endsWith(poolPart));
+  return STAKING_POOLS.some(poolPart => address.endsWith(poolPart));
 }
 async function fetchJson(url, data, init) {
   const urlObject = new URL(url);
@@ -46549,12 +46548,12 @@ async function fetchAllActivitySliceForTokens(accountId, tokens, limit) {
   } = parseAccountId(accountId);
   const activeBlockchain = blockchains[blockchain];
   try {
-    const transactions = await activeBlockchain.getMergedTransactionSliceForTokens(accountId, tokens, limit);
+    const transactions = await activeBlockchain.getMergedTransactionSliceForTokens(accountId, tokens, limit !== null && limit !== void 0 ? limit : 100);
     const activities = await swapReplaceTransactions(accountId, transactions, network);
     await activeBlockchain.fixTokenActivitiesAddressForm(network, activities);
     return activities;
   } catch (err) {
-    logDebugError('fetchAllActivitySlice', err);
+    logDebugError('fetchAllActivitySliceForTokens', err);
     return handleServerError(err);
   }
 }
@@ -47836,7 +47835,7 @@ function hexToByteArray(hexString) {
 }
 
 function isNode() {
-    return ( true && ({"env":{}}).versions != null && ({"env":{}}).versions.node != null);
+    return (typeof process !== 'undefined' && process.versions != null && process.versions.node != null);
 }
 
 class SessionCrypto {
@@ -48802,7 +48801,7 @@ function callApi(fnName) {
   // @ts-ignore
   return methods_namespaceObject[fnName](...args);
 }
-;// CONCATENATED MODULE: ./src/ios_entrypoint.js
+;// CONCATENATED MODULE: ./src/entrypoint-ios.js
 /* eslint-disable no-console */
 
 function initApiWithOnUpdateCallback() {
