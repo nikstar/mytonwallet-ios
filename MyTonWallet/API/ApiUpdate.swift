@@ -10,7 +10,7 @@ enum ApiUpdate {
     case nfts(ApiUpdateNfts)
     case balances(ApiUpdateBalances)
     case newActivities(ApiUpdateNewActivities)
-    case region(ApiUpdateRegion)
+    case config(ApiUpdateConfig)
     case swapTokens(ApiUpdateSwapTokens)
     case staking(ApiUpdateStaking)
 }
@@ -25,7 +25,7 @@ extension ApiUpdate: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let type = try container.decode(String.self, forKey: .type)
-        if type != "updateRegion" {
+        if type != "updateConfig" {
             log.debug("Decoding update type = \(type)")
         }
         switch type {
@@ -39,8 +39,8 @@ extension ApiUpdate: Decodable {
             self = try .balances(.init(from: decoder))
         case "newActivities":
             self = try .newActivities(.init(from: decoder))
-        case "updateRegion":
-            self = try .region(.init(from: decoder))
+        case "updateConfig":
+            self = try .config(.init(from: decoder))
         case "updateSwapTokens":
             self = try .swapTokens(.init(from: decoder))
         case "updateStaking":
@@ -91,9 +91,10 @@ struct ApiUpdateNfts: Decodable {
 }
 
 
-struct ApiUpdateRegion: Decodable {
+struct ApiUpdateConfig: Decodable {
     
-    var isLimited: Bool
+    var isLimited: Bool?
+    var isCopyStorageEnabled: Bool?
 }
 
 struct ApiUpdateSwapTokens: Decodable {

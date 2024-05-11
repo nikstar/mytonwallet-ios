@@ -39352,6 +39352,7 @@ __webpack_require__.d(ton_namespaceObject, {
   buildTokenSlug: () => (buildTokenSlug),
   checkApiAvailability: () => (checkApiAvailability),
   checkMultiTransactionDraft: () => (checkMultiTransactionDraft),
+  checkNftTransferDraft: () => (checkNftTransferDraft),
   checkStakeDraft: () => (checkStakeDraft),
   checkTransactionDraft: () => (checkTransactionDraft),
   checkUnstakeDraft: () => (checkUnstakeDraft),
@@ -39381,7 +39382,7 @@ __webpack_require__.d(ton_namespaceObject, {
   getWalletVersions: () => (getWalletVersions),
   isActiveSmartContract: () => (isActiveSmartContract),
   isAddressInitialized: () => (isAddressInitialized),
-  mnemonicToSeed: () => (mnemonicToSeed),
+  mnemonicToKeyPair: () => (mnemonicToKeyPair),
   normalizeAddress: () => (normalizeAddress),
   oneCellFromBoc: () => (oneCellFromBoc),
   packPayloadToBoc: () => (packPayloadToBoc),
@@ -39395,17 +39396,17 @@ __webpack_require__.d(ton_namespaceObject, {
   resolveTokenMinterAddress: () => (resolveTokenMinterAddress),
   resolveTokenWalletAddress: () => (resolveTokenWalletAddress),
   resolveWalletVersion: () => (resolveWalletVersion),
-  seedToKeyPair: () => (seedToKeyPair),
   sendSignedMessage: () => (sendSignedMessage),
   sendSignedMessages: () => (sendSignedMessages),
   submitMultiTransfer: () => (submitMultiTransfer),
+  submitNftTransfers: () => (submitNftTransfers),
   submitStake: () => (submitStake),
   submitTransfer: () => (submitTransfer),
   submitUnstake: () => (submitUnstake),
   validateDexSwapTransfers: () => (validateDexSwapTransfers),
   validateMnemonic: () => (validateMnemonic),
   verifyPassword: () => (verifyPassword),
-  waitLastTransfer: () => (waitLastTransfer),
+  waitPendingTransfer: () => (waitPendingTransfer),
   waitUntilTransactionAppears: () => (waitUntilTransactionAppears)
 });
 
@@ -39432,6 +39433,7 @@ __webpack_require__.d(methods_namespaceObject, {
   cancelDappRequest: () => (cancelDappRequest),
   changePassword: () => (changePassword),
   checkApiAvailability: () => (other_checkApiAvailability),
+  checkNftTransferDraft: () => (nfts_checkNftTransferDraft),
   checkStakeDraft: () => (staking_checkStakeDraft),
   checkTransactionDraft: () => (transactions_checkTransactionDraft),
   checkUnstakeDraft: () => (staking_checkUnstakeDraft),
@@ -39450,8 +39452,8 @@ __webpack_require__.d(methods_namespaceObject, {
   fetchAddress: () => (fetchAddress),
   fetchAllActivitySlice: () => (fetchAllActivitySlice),
   fetchBackendStakingState: () => (fetchBackendStakingState),
-  fetchDappCatalog: () => (fetchDappCatalog),
   fetchNfts: () => (fetchNfts),
+  fetchPriceHistory: () => (fetchPriceHistory),
   fetchToken: () => (tokens_fetchToken),
   fetchTokenActivitySlice: () => (fetchTokenActivitySlice),
   fetchTokenBalances: () => (fetchTokenBalances),
@@ -39469,6 +39471,7 @@ __webpack_require__.d(methods_namespaceObject, {
   getMnemonicWordList: () => (getMnemonicWordList),
   getStakingHistory: () => (getStakingHistory),
   getWalletBalance: () => (wallet_getWalletBalance),
+  getWalletInfo: () => (wallet_getWalletInfo),
   getWalletSeqno: () => (wallet_getWalletSeqno),
   importLedgerWallet: () => (importLedgerWallet),
   importMnemonic: () => (importMnemonic),
@@ -39481,11 +39484,14 @@ __webpack_require__.d(methods_namespaceObject, {
   initTransactions: () => (initTransactions),
   isAccountActive: () => (accounts_isAccountActive),
   isWalletInitialized: () => (isWalletInitialized),
+  loadExploreSites: () => (loadExploreSites),
   onStakingChangeExpected: () => (onStakingChangeExpected),
+  ping: () => (ping),
   processNftUpdates: () => (processNftUpdates),
   removeAccount: () => (removeAccount),
   removeNetworkAccounts: () => (removeNetworkAccounts),
   resetAccounts: () => (resetAccounts),
+  resolveDataPreloadPromise: () => (resolveDataPreloadPromise),
   resolveTokenBySlug: () => (tokens_resolveTokenBySlug),
   resolveTokenMinterAddress: () => (tokens_resolveTokenMinterAddress),
   resolveTokenWalletAddress: () => (tokens_resolveTokenWalletAddress),
@@ -39501,6 +39507,7 @@ __webpack_require__.d(methods_namespaceObject, {
   setupSwapPolling: () => (setupSwapPolling),
   setupWalletVersionsPolling: () => (setupWalletVersionsPolling),
   startSseConnection: () => (startSseConnection),
+  submitNftTransfers: () => (nfts_submitNftTransfers),
   submitStake: () => (staking_submitStake),
   submitTransfer: () => (transactions_submitTransfer),
   submitUnstake: () => (staking_submitUnstake),
@@ -39521,90 +39528,37 @@ __webpack_require__.d(methods_namespaceObject, {
   swapReplaceTransactionsByRanges: () => (swapReplaceTransactionsByRanges),
   swapSubmit: () => (swapSubmit),
   tryLoadSwapTokens: () => (tryLoadSwapTokens),
+  tryUpdateConfig: () => (tryUpdateConfig),
   tryUpdatePrices: () => (tryUpdatePrices),
-  tryUpdateRegion: () => (tryUpdateRegion),
   tryUpdateStakingCommonData: () => (tryUpdateStakingCommonData),
   tryUpdateTokens: () => (tryUpdateTokens),
   updateNfts: () => (updateNfts),
   validateMnemonic: () => (auth_validateMnemonic),
   verifyPassword: () => (wallet_verifyPassword),
   waitDataPreload: () => (waitDataPreload),
-  waitLastTransfer: () => (transactions_waitLastTransfer)
+  waitLastTransfer: () => (waitLastTransfer)
 });
-
-;// CONCATENATED MODULE: ./src/api/types/misc.ts
-let Workchain = /*#__PURE__*/function (Workchain) {
-  Workchain[Workchain["MasterChain"] = -1] = "MasterChain";
-  Workchain[Workchain["BaseChain"] = 0] = "BaseChain";
-  return Workchain;
-}({});
-const WORKCHAIN = Workchain.BaseChain;
-const TRANSFER_TIMEOUT_SEC = 60; // 1 min.
-
-let ApiLiquidUnstakeMode = /*#__PURE__*/function (ApiLiquidUnstakeMode) {
-  ApiLiquidUnstakeMode[ApiLiquidUnstakeMode["Default"] = 0] = "Default";
-  ApiLiquidUnstakeMode[ApiLiquidUnstakeMode["Instant"] = 1] = "Instant";
-  ApiLiquidUnstakeMode[ApiLiquidUnstakeMode["BestRate"] = 2] = "BestRate";
-  return ApiLiquidUnstakeMode;
-}({});
-;// CONCATENATED MODULE: ./src/api/types/errors.ts
-let ApiCommonError = /*#__PURE__*/function (ApiCommonError) {
-  ApiCommonError["Unexpected"] = "Unexpected";
-  ApiCommonError["ServerError"] = "ServerError";
-  ApiCommonError["DebugError"] = "DebugError";
-  return ApiCommonError;
-}({});
-let ApiTransactionDraftError = /*#__PURE__*/function (ApiTransactionDraftError) {
-  ApiTransactionDraftError["InvalidAmount"] = "InvalidAmount";
-  ApiTransactionDraftError["InvalidToAddress"] = "InvalidToAddress";
-  ApiTransactionDraftError["InsufficientBalance"] = "InsufficientBalance";
-  ApiTransactionDraftError["DomainNotResolved"] = "DomainNotResolved";
-  ApiTransactionDraftError["WalletNotInitialized"] = "WalletNotInitialized";
-  ApiTransactionDraftError["UnsupportedHardwareOperation"] = "UnsupportedHardwareOperation";
-  ApiTransactionDraftError["UnsupportedHardwareContract"] = "UnsupportedHardwareContract";
-  ApiTransactionDraftError["EncryptedDataNotSupported"] = "EncryptedDataNotSupported";
-  ApiTransactionDraftError["NonAsciiCommentForHardwareOperation"] = "NonAsciiCommentForHardwareOperation";
-  ApiTransactionDraftError["TooLongCommentForHardwareOperation"] = "TooLongCommentForHardwareOperation";
-  ApiTransactionDraftError["InvalidAddressFormat"] = "InvalidAddressFormat";
-  return ApiTransactionDraftError;
-}({});
-let ApiTransactionError = /*#__PURE__*/function (ApiTransactionError) {
-  ApiTransactionError["PartialTransactionFailure"] = "PartialTransactionFailure";
-  ApiTransactionError["IncorrectDeviceTime"] = "IncorrectDeviceTime";
-  ApiTransactionError["InsufficientBalance"] = "InsufficientBalance";
-  ApiTransactionError["UnsuccesfulTransfer"] = "UnsuccesfulTransfer";
-  ApiTransactionError["UnsupportedHardwareContract"] = "UnsupportedHardwareContract";
-  ApiTransactionError["UnsupportedHardwarePayload"] = "UnsupportedHardwarePayload";
-  ApiTransactionError["NonAsciiCommentForHardwareOperation"] = "NonAsciiCommentForHardwareOperation";
-  ApiTransactionError["TooLongCommentForHardwareOperation"] = "TooLongCommentForHardwareOperation";
-  ApiTransactionError["UnsupportedHardwareNftOperation"] = "UnsupportedHardwareNftOperation";
-  return ApiTransactionError;
-}({});
-;// CONCATENATED MODULE: ./src/api/types/index.ts
-
-
-
-
-
-
 
 ;// CONCATENATED MODULE: ./src/config.ts
 const APP_ENV = "production";
 const APP_NAME = (/* unused pure expression or super */ null && ( false || 'MyTonWallet'));
-const APP_VERSION = "1.18.12";
+const APP_VERSION = "1.19.26";
 const APP_ENV_MARKER = APP_ENV === 'staging' ? 'Beta' : APP_ENV === 'development' ? 'Dev' : undefined;
 const DEBUG = APP_ENV !== 'production' && APP_ENV !== 'perf' && APP_ENV !== 'test';
 const DEBUG_MORE = false;
+const IS_PRODUCTION = APP_ENV === 'production';
 const IS_TEST = APP_ENV === 'test';
 const IS_PERF = APP_ENV === 'perf';
 const IS_EXTENSION = false === '1';
 const IS_FIREFOX_EXTENSION = (/* unused pure expression or super */ null && (false === '1'));
 const IS_PACKAGED_ELECTRON = false === '1';
 const IS_CAPACITOR = false === '1';
+const IS_ANDROID_DIRECT = (/* unused pure expression or super */ null && (false === '1'));
 const ELECTRON_HOST_URL = 'https://dumb-host';
 const INACTIVE_MARKER = '[Inactive]';
 const PRODUCTION_URL = 'https://mytonwallet.app';
 const BETA_URL = 'https://beta.mytonwallet.app';
+const APP_REPO_URL = 'https://github.com/mytonwalletorg/mytonwallet';
 const BASE_URL = (/* unused pure expression or super */ null && ("https://mytonwallet.app"));
 const SWAP_FEE_ADDRESS =  false || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
 const STRICTERDOM_ENABLED = DEBUG && !IS_PACKAGED_ELECTRON;
@@ -39613,6 +39567,7 @@ const PIN_LENGTH = 4;
 const NATIVE_BIOMETRICS_USERNAME = 'MyTonWallet';
 const NATIVE_BIOMETRICS_SERVER = 'https://mytonwallet.app';
 const MNEMONIC_COUNT = 24;
+const PRIVATE_KEY_HEX_LENGTH = 64;
 const MNEMONIC_CHECK_COUNT = 3;
 const MOBILE_SCREEN_MAX_WIDTH = 700; // px
 
@@ -39648,6 +39603,8 @@ const TONAPIIO_TESTNET_URL = "api-https://tonapiio-testnet.mytonwallet.org" || 0
 const BRILLIANT_API_BASE_URL = "api-https://api.mytonwallet.org" || 0;
 const FRACTION_DIGITS = 9;
 const SHORT_FRACTION_DIGITS = 2;
+const SUPPORT_USERNAME = 'MyTonWalletSupport';
+const SUPPORT_URL = (/* unused pure expression or super */ null && (`https://t.me/${SUPPORT_USERNAME}`));
 const MY_TON_WALLET_PROMO_URL = 'https://mytonwallet.io';
 const TELEGRAM_WEB_URL = 'https://web.telegram.org/a/';
 const TONSCAN_BASE_MAINNET_URL = 'https://tonscan.org/';
@@ -39662,12 +39619,11 @@ const CHANGELLY_AML_KYC = 'https://changelly.com/aml-kyc';
 const CHANGELLY_WAITING_DEADLINE = (/* unused pure expression or super */ null && (3 * 60 * 60 * 1000)); // 3 hour
 
 const TON_TOKEN_SLUG = 'toncoin';
-const JWBTC_TOKEN_SLUG = 'ton-eqdcbkghmc';
-const JUSDT_TOKEN_SLUG = 'ton-eqbynbo23y';
-const USDT_TRON_TOKEN_SLUG = 'usdtrx';
+const DEFAULT_SWAP_SECOND_TOKEN_SLUG = 'ton-eqc47093ox'; // To be updated with the most popular token, according to https://ton.app/jettons
+const DEFAULT_CEX_SWAP_SECOND_TOKEN_SLUG = 'usdtrx';
 const PROXY_HOSTS = (/* unused pure expression or super */ null && ("tonproxy.io:38080 tonproxy.io:38081 tonproxy.io:38082"));
 const TINY_TRANSFER_MAX_COST = 0.01;
-const LANG_CACHE_NAME = 'mtw-lang-74';
+const LANG_CACHE_NAME = 'mtw-lang-100';
 const LANG_LIST = [{
   langCode: 'en',
   name: 'English',
@@ -39716,12 +39672,14 @@ const LIQUID_POOL =  false || 'EQD2_4d91M4TVbEBVyBF8J1UwpMJc361LKVCz6bBlffMW05o'
 const LIQUID_JETTON =  false || 'EQCqC6EhRJ_tpWngKxL6dV0k6DSnRUrs9GSVkLbfdCqsj6TE';
 const STAKING_MIN_AMOUNT = (/* unused pure expression or super */ null && (ONE_TON));
 const NOMINATORS_STAKING_MIN_AMOUNT = ONE_TON * 10001n;
-const TON_PROTOCOL = 'ton://';
-const TONCONNECT_PROTOCOL = 'tc://';
-const TONCONNECT_UNIVERSAL_URL = 'https://connect.mytonwallet.org';
 const TONCONNECT_PROTOCOL_VERSION = 2;
 const TONCONNECT_WALLET_JSBRIDGE_KEY = 'mytonwallet';
-const DEFAULT_API_TIMEOUT = 5000;
+const NFT_FRAGMENT_COLLECTIONS = new Set(['0:0e41dc1dc3c9067ed24248580e12b3359818d83dee0304fabcf80845eafafdb2',
+// Anonymous Telegram Numbers
+'0:80d78a35f955a14b679faa887ff4cd5bfc0f43b4a4eea2a7e6927f3701b273c2' // Telegram Usernames
+]);
+
+const TON_DNS_COLLECTION = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz';
 const TOKEN_INFO = {
   toncoin: {
     name: 'Toncoin',
@@ -39729,12 +39687,10 @@ const TOKEN_INFO = {
     slug: TON_TOKEN_SLUG,
     cmcSlug: TON_TOKEN_SLUG,
     quote: {
+      slug: TON_TOKEN_SLUG,
       price: 1.95,
       priceUsd: 1.95,
-      percentChange1h: 0,
-      percentChange24h: 0,
-      percentChange7d: 0,
-      percentChange30d: 0
+      percentChange24h: 0
     },
     decimals: config_DEFAULT_DECIMAL_PLACES
   }
@@ -39748,20 +39704,21 @@ const INIT_SWAP_ASSETS = {
     slug: TON_TOKEN_SLUG,
     decimals: config_DEFAULT_DECIMAL_PLACES,
     price: 0,
+    priceUsd: 0,
     isPopular: true
   },
-  'ton-eqdcbkghmc': {
-    name: 'jWBTC',
-    symbol: 'jWBTC',
+  'ton-eqc47093ox': {
+    name: 'Gram',
+    symbol: 'GRAM',
     blockchain: TON_BLOCKCHAIN,
-    slug: 'ton-eqdcbkghmc',
-    decimals: 8,
+    slug: 'ton-eqc47093ox',
+    decimals: 9,
     // eslint-disable-next-line max-len
-    image: 'https://cache.tonapi.io/imgproxy/LaFKdzahVX9epWT067gyVLd8aCa1lFrZd7Rp9siViEE/rs:fill:200:200:1/g:no/aHR0cHM6Ly9icmlkZ2UudG9uLm9yZy90b2tlbi8xLzB4MjI2MGZhYzVlNTU0MmE3NzNhYTQ0ZmJjZmVkZjdjMTkzYmMyYzU5OS5wbmc.webp',
-    contract: 'EQDcBkGHmC4pTf34x3Gm05XvepO5w60DNxZ-XT4I6-UGG5L5',
+    image: 'https://cache.tonapi.io/imgproxy/lNoY3YdNeBug53ixjK6hxT6XIX3_xoIYNqv-ykIQ1Aw/rs:fill:200:200:1/g:no/aHR0cHM6Ly9ncmFtY29pbi5vcmcvaW1nL2ljb24ucG5n.webp',
+    contract: 'EQC47093oX5Xhb0xuk2lCr2RhS8rj-vul61u4W2UH5ORmG_O',
     price: 0,
-    isPopular: false,
-    keywords: ['bitcoin']
+    priceUsd: 0,
+    isPopular: true
   }
 };
 const MULTITAB_DATA_CHANNEL_NAME = 'mtw-multitab';
@@ -39796,73 +39753,28 @@ const CURRENCY_LIST = [{
   value: TON_SYMBOL,
   name: 'Toncoin'
 }];
-const EXCHANGE_ADDRESSES = new Set(['EQBfAN7LfaUYgXZNw5Wc7GBgkEX2yhuJ5ka95J1JJwXXf4a8', 'UQBfAN7LfaUYgXZNw5Wc7GBgkEX2yhuJ5ka95J1JJwXXf9t5',
-// OKX
-'EQBBlxK8VBxEidbxw4oQVyLSk7iEf9VPJxetaRQpEbi-XG4U', 'UQBBlxK8VBxEidbxw4oQVyLSk7iEf9VPJxetaRQpEbi-XDPR',
-// Bitfinex
-'EQBX63RAdgShn34EAFMV73Cut7Z15lUZd1hnVva68SEl7sxi', 'UQBX63RAdgShn34EAFMV73Cut7Z15lUZd1hnVva68SEl7pGn',
-// MEXC
-'EQDD8dqOzaj4zUK6ziJOo_G2lx6qf1TEktTRkFJ7T1c_fPQb', 'UQDD8dqOzaj4zUK6ziJOo_G2lx6qf1TEktTRkFJ7T1c_fKne',
-// Bybit
-'EQBVXzBT4lcTA3S7gxrg4hnl5fnsDKj4oNEzNp09aQxkwj1f', 'UQBVXzBT4lcTA3S7gxrg4hnl5fnsDKj4oNEzNp09aQxkwmCa',
-// Huobi
-'EQCA1BI4QRZ8qYmskSRDzJmkucGodYRTZCf_b9hckjla6dZl', 'UQCA1BI4QRZ8qYmskSRDzJmkucGodYRTZCf_b9hckjla6Yug' // KuCoin
-]);
-
+const EXCHANGE_ADDRESSES = {
+  OKX: ['EQBfAN7LfaUYgXZNw5Wc7GBgkEX2yhuJ5ka95J1JJwXXf4a8', 'UQBfAN7LfaUYgXZNw5Wc7GBgkEX2yhuJ5ka95J1JJwXXf9t5', 'EQCFTsRSHv1SrUO88ZiOTETr35omrRj6Uav9toX8OzSKXGkS', 'UQCFTsRSHv1SrUO88ZiOTETr35omrRj6Uav9toX8OzSKXDTX', 'EQDn6G2gh0LtkzQ0_-uPCKY8fhAO6ELiX1manL8IkVdKbGzr', 'UQDn6G2gh0LtkzQ0_-uPCKY8fhAO6ELiX1manL8IkVdKbDEu', 'EQADON7zS4TG7pE0oEqxYBRQvkRjQKN64lneV8s3vbWQzWUO', 'UQADON7zS4TG7pE0oEqxYBRQvkRjQKN64lneV8s3vbWQzTjL'],
+  Bitfinex: ['EQBBlxK8VBxEidbxw4oQVyLSk7iEf9VPJxetaRQpEbi-XG4U', 'UQBBlxK8VBxEidbxw4oQVyLSk7iEf9VPJxetaRQpEbi-XDPR'],
+  MEXC: ['EQBX63RAdgShn34EAFMV73Cut7Z15lUZd1hnVva68SEl7sxi', 'UQBX63RAdgShn34EAFMV73Cut7Z15lUZd1hnVva68SEl7pGn'],
+  ByBit: ['EQDD8dqOzaj4zUK6ziJOo_G2lx6qf1TEktTRkFJ7T1c_fPQb', 'UQDD8dqOzaj4zUK6ziJOo_G2lx6qf1TEktTRkFJ7T1c_fKne', 'EQCuYqGS2pbiZhYacCzJ9t6RwMNEHxfOulG8RC37IDGjCmeU', 'UQCuYqGS2pbiZhYacCzJ9t6RwMNEHxfOulG8RC37IDGjCjpR'],
+  Huobi: ['EQBVXzBT4lcTA3S7gxrg4hnl5fnsDKj4oNEzNp09aQxkwj1f', 'UQBVXzBT4lcTA3S7gxrg4hnl5fnsDKj4oNEzNp09aQxkwmCa'],
+  KuCoin: ['EQCA1BI4QRZ8qYmskSRDzJmkucGodYRTZCf_b9hckjla6dZl', 'UQCA1BI4QRZ8qYmskSRDzJmkucGodYRTZCf_b9hckjla6Yug'],
+  'Telegram Wallet': ['EQCkoRp4OE-SFUoMEnYfL3vF43T3AzNfW8jyTC4yzk8cJqMS', 'UQCkoRp4OE-SFUoMEnYfL3vF43T3AzNfW8jyTC4yzk8cJv7X', 'EQA2JYPGPywx6Sn590nUd06B2HgOkFvJ-cCnTO6yTEdacbUG', 'UQA2JYPGPywx6Sn590nUd06B2HgOkFvJ-cCnTO6yTEdacejD', 'EQAfWAbHPQO7yW637r8WBn8fLo4nDPoW1XABqp6vdFbwCAb0', 'UQAfWAbHPQO7yW637r8WBn8fLo4nDPoW1XABqp6vdFbwCFsx', 'EQCXrZNESRUInoEiOP8Qq-kGbQsD6j26KoYw-5yfiKpFXPqY', 'UQCXrZNESRUInoEiOP8Qq-kGbQsD6j26KoYw-5yfiKpFXKdd']
+};
+const EXCHANGE_ADDRESSES_FLAT = new Set(Object.values(EXCHANGE_ADDRESSES).flat());
+const BURN_ADDRESS = 'UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ';
 const DEFAULT_WALLET_VERSION = 'v4R2';
 const POPULAR_WALLET_VERSIONS = ['v3R1', 'v3R2', 'v4R2'];
-;// CONCATENATED MODULE: ./src/util/account.ts
-function parseAccountId(accountId) {
-  const [id, blockchain = 'ton',
-  // Handle deprecated case when `accountId = '0'`
-  network = 'mainnet'] = accountId.split('-');
-  return {
-    id: Number(id),
-    blockchain: blockchain,
-    network: network
-  };
-}
-function buildAccountId(account) {
-  const {
-    id,
-    network,
-    blockchain
-  } = account;
-  return `${id}-${blockchain}-${network}`;
-}
-// EXTERNAL MODULE: ./node_modules/tonweb-mnemonic/dist/web/index.js
-var web = __webpack_require__(6845);
-// EXTERNAL MODULE: ./node_modules/tweetnacl/nacl-fast.js
-var nacl_fast = __webpack_require__(780);
-var nacl_fast_default = /*#__PURE__*/__webpack_require__.n(nacl_fast);
-;// CONCATENATED MODULE: ./src/util/logs.ts
-
-function logDebugError(message) {
-  if (DEBUG) {
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-    // eslint-disable-next-line no-console
-    console.error(`[DEBUG][${message}]`, ...args);
-  }
-}
-function logDebug(message) {
-  if (DEBUG) {
-    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-      args[_key2 - 1] = arguments[_key2];
-    }
-    // eslint-disable-next-line no-console
-    console.log(`[DEBUG] ${message}`, ...args);
-  }
-}
-;// CONCATENATED MODULE: ./src/api/storages/types.ts
-let StorageType = /*#__PURE__*/function (StorageType) {
-  StorageType[StorageType["IndexedDb"] = 0] = "IndexedDb";
-  StorageType[StorageType["LocalStorage"] = 1] = "LocalStorage";
-  StorageType[StorageType["ExtensionLocal"] = 2] = "ExtensionLocal";
-  StorageType[StorageType["CapacitorStorage"] = 3] = "CapacitorStorage";
-  return StorageType;
-}({});
+const DEFAULT_TIMEOUT = 5000;
+const DEFAULT_RETRIES = 3;
+const DEFAULT_ERROR_PAUSE = 200;
+const HISTORY_PERIODS = (/* unused pure expression or super */ null && (['1D', '7D', '1M', '3M', '1Y', 'ALL']));
+const BROWSER_HISTORY_LIMIT = 10;
+const LEDGER_NFT_TRANSFER_DISABLED = true;
+const NFT_BATCH_SIZE = 4;
+const NOTCOIN_VOUCHERS_ADDRESS = 'EQDmkj65Ab_m0aZaW8IpKw4kYqIgITw_HRstYEkVQ6NIYCyW';
+const BURN_CHUNK_DURATION_APPROX_SEC = 30;
 ;// CONCATENATED MODULE: ./src/lib/big.js/index.js
 /*
  *  big.js v6.2.1
@@ -40808,11 +40720,13 @@ function fromDecimal(value, decimals) {
   return BigInt(big_js_Big(value).mul(ten.pow(decimals !== null && decimals !== void 0 ? decimals : config_DEFAULT_DECIMAL_PLACES)).round().toString());
 }
 function toDecimal(value, decimals) {
-  return toBig(value, decimals !== null && decimals !== void 0 ? decimals : DEFAULT_DECIMAL_PLACES).toString();
+  let noFloor = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return toBig(value, decimals !== null && decimals !== void 0 ? decimals : DEFAULT_DECIMAL_PLACES, noFloor).toString();
 }
 function toBig(value) {
   let decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_DECIMAL_PLACES;
-  return Big(value.toString()).div(ten.pow(decimals)).round(decimals);
+  let noFloor = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return Big(value.toString()).div(ten.pow(decimals)).round(decimals, noFloor ? Big.roundHalfUp : undefined);
 }
 function roundDecimal(value, decimals) {
   return Big(value).round(decimals).toString();
@@ -40820,17 +40734,24 @@ function roundDecimal(value, decimals) {
 function getIsPositiveDecimal(value) {
   return !value.startsWith('-');
 }
+;// CONCATENATED MODULE: ./src/util/random.ts
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+function sample(arr) {
+  return arr[random(0, arr.length - 1)];
+}
+function randomBytes(size) {
+  // eslint-disable-next-line no-restricted-globals
+  return self.crypto.getRandomValues(new Uint8Array(size));
+}
 ;// CONCATENATED MODULE: ./src/util/bigint.ts
 
 
-const PREFIX = 'bigint:';
 
-// @ts-ignore
-BigInt.prototype.toJSON = function toJSON() {
-  return `${PREFIX}${this}`;
-};
+const BIGINT_PREFIX = 'bigint:';
 function bigint_bigintReviver(key, value) {
-  if (typeof value === 'string' && value.startsWith(PREFIX)) {
+  if (typeof value === 'string' && value.startsWith(BIGINT_PREFIX)) {
     return BigInt(value.slice(7));
   }
   return value;
@@ -40844,6 +40765,143 @@ function bigintDivideToNumber(value, num) {
 function bigintMultiplyToNumber(value, num) {
   return value * fromDecimal(num) / ONE_TON;
 }
+function bigintRandom(bytes) {
+  let value = BigInt(0);
+  for (const randomNumber of randomBytes(bytes)) {
+    const randomBigInt = BigInt(randomNumber);
+    // eslint-disable-next-line no-bitwise
+    value = (value << BigInt(8)) + randomBigInt;
+  }
+  return value;
+}
+function bigintCountBits(value) {
+  const binaryString = value.toString(2);
+  return binaryString.length;
+}
+;// CONCATENATED MODULE: ./src/util/bigintPatch.ts
+
+
+// Fixes serialization of objects containing `bigint` values.
+// Extracted to a separate file to avoid leaking into Extension Page Script.
+// @ts-ignore
+BigInt.prototype.toJSON = function toJSON() {
+  return `${BIGINT_PREFIX}${this}`;
+};
+;// CONCATENATED MODULE: ./src/api/types/misc.ts
+let Workchain = /*#__PURE__*/function (Workchain) {
+  Workchain[Workchain["MasterChain"] = -1] = "MasterChain";
+  Workchain[Workchain["BaseChain"] = 0] = "BaseChain";
+  return Workchain;
+}({});
+const WORKCHAIN = Workchain.BaseChain;
+const TRANSFER_TIMEOUT_SEC = 60; // 1 min.
+
+let ApiLiquidUnstakeMode = /*#__PURE__*/function (ApiLiquidUnstakeMode) {
+  ApiLiquidUnstakeMode[ApiLiquidUnstakeMode["Default"] = 0] = "Default";
+  ApiLiquidUnstakeMode[ApiLiquidUnstakeMode["Instant"] = 1] = "Instant";
+  ApiLiquidUnstakeMode[ApiLiquidUnstakeMode["BestRate"] = 2] = "BestRate";
+  return ApiLiquidUnstakeMode;
+}({});
+;// CONCATENATED MODULE: ./src/api/types/errors.ts
+let ApiCommonError = /*#__PURE__*/function (ApiCommonError) {
+  ApiCommonError["Unexpected"] = "Unexpected";
+  ApiCommonError["ServerError"] = "ServerError";
+  ApiCommonError["DebugError"] = "DebugError";
+  return ApiCommonError;
+}({});
+let ApiTransactionDraftError = /*#__PURE__*/function (ApiTransactionDraftError) {
+  ApiTransactionDraftError["InvalidAmount"] = "InvalidAmount";
+  ApiTransactionDraftError["InvalidToAddress"] = "InvalidToAddress";
+  ApiTransactionDraftError["InsufficientBalance"] = "InsufficientBalance";
+  ApiTransactionDraftError["DomainNotResolved"] = "DomainNotResolved";
+  ApiTransactionDraftError["WalletNotInitialized"] = "WalletNotInitialized";
+  ApiTransactionDraftError["UnsupportedHardwareOperation"] = "UnsupportedHardwareOperation";
+  ApiTransactionDraftError["UnsupportedHardwareContract"] = "UnsupportedHardwareContract";
+  ApiTransactionDraftError["EncryptedDataNotSupported"] = "EncryptedDataNotSupported";
+  ApiTransactionDraftError["NonAsciiCommentForHardwareOperation"] = "NonAsciiCommentForHardwareOperation";
+  ApiTransactionDraftError["TooLongCommentForHardwareOperation"] = "TooLongCommentForHardwareOperation";
+  ApiTransactionDraftError["UnsupportedHardwareNftOperation"] = "UnsupportedHardwareNftOperation";
+  ApiTransactionDraftError["InvalidAddressFormat"] = "InvalidAddressFormat";
+  ApiTransactionDraftError["InactiveContract"] = "InactiveContract";
+  return ApiTransactionDraftError;
+}({});
+let errors_ApiTransactionError = /*#__PURE__*/function (ApiTransactionError) {
+  ApiTransactionError["PartialTransactionFailure"] = "PartialTransactionFailure";
+  ApiTransactionError["IncorrectDeviceTime"] = "IncorrectDeviceTime";
+  ApiTransactionError["InsufficientBalance"] = "InsufficientBalance";
+  ApiTransactionError["UnsuccesfulTransfer"] = "UnsuccesfulTransfer";
+  ApiTransactionError["UnsupportedHardwareContract"] = "UnsupportedHardwareContract";
+  ApiTransactionError["UnsupportedHardwarePayload"] = "UnsupportedHardwarePayload";
+  ApiTransactionError["NonAsciiCommentForHardwareOperation"] = "NonAsciiCommentForHardwareOperation";
+  ApiTransactionError["TooLongCommentForHardwareOperation"] = "TooLongCommentForHardwareOperation";
+  ApiTransactionError["UnsupportedHardwareNftOperation"] = "UnsupportedHardwareNftOperation";
+  return ApiTransactionError;
+}({});
+;// CONCATENATED MODULE: ./src/api/types/index.ts
+
+
+
+
+
+
+
+;// CONCATENATED MODULE: ./src/util/account.ts
+function parseAccountId(accountId) {
+  const [id, blockchain = 'ton',
+  // Handle deprecated case when `accountId = '0'`
+  network = 'mainnet'] = accountId.split('-');
+  return {
+    id: Number(id),
+    blockchain: blockchain,
+    network: network
+  };
+}
+function buildAccountId(account) {
+  const {
+    id,
+    network,
+    blockchain
+  } = account;
+  return `${id}-${blockchain}-${network}`;
+}
+;// CONCATENATED MODULE: ./src/util/isMnemonicPrivateKey.ts
+
+function isMnemonicPrivateKey(mnemonic) {
+  return mnemonic.length === 1 && mnemonic[0].length === PRIVATE_KEY_HEX_LENGTH;
+}
+// EXTERNAL MODULE: ./node_modules/tonweb-mnemonic/dist/web/index.js
+var web = __webpack_require__(6845);
+// EXTERNAL MODULE: ./node_modules/tweetnacl/nacl-fast.js
+var nacl_fast = __webpack_require__(780);
+var nacl_fast_default = /*#__PURE__*/__webpack_require__.n(nacl_fast);
+;// CONCATENATED MODULE: ./src/util/logs.ts
+
+function logDebugError(message) {
+  if (DEBUG) {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+    // eslint-disable-next-line no-console
+    console.error(`[DEBUG][${message}]`, ...args);
+  }
+}
+function logDebug(message) {
+  if (DEBUG) {
+    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
+    }
+    // eslint-disable-next-line no-console
+    console.log(`[DEBUG] ${message}`, ...args);
+  }
+}
+;// CONCATENATED MODULE: ./src/api/storages/types.ts
+let StorageType = /*#__PURE__*/function (StorageType) {
+  StorageType[StorageType["IndexedDb"] = 0] = "IndexedDb";
+  StorageType[StorageType["LocalStorage"] = 1] = "LocalStorage";
+  StorageType[StorageType["ExtensionLocal"] = 2] = "ExtensionLocal";
+  StorageType[StorageType["CapacitorStorage"] = 3] = "CapacitorStorage";
+  return StorageType;
+}({});
 ;// CONCATENATED MODULE: ./src/util/generateUniqueId.ts
 function generateUniqueId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -41033,42 +41091,34 @@ async function callWindow(methodName) {
     logDebugError('API is not initialized');
     return undefined;
   }
-  try {
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-    return await connector.request({
-      name: methodName,
-      args
-    });
-  } catch (err) {
-    return undefined;
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
   }
+  return connector.request({
+    name: methodName,
+    args
+  });
 }
 ;// CONCATENATED MODULE: ./src/api/storages/capacitorStorage.ts
 
 
-const NON_CACHED_KEYS = ['mnemonicsEncrypted'];
-let cache = {};
 const storage = {
-  async getItem(key, force) {
-    if (key in cache && !force) return cache[key];
+  async getItem(key) {
     const result = await callWindow('getItem', key);
-    const value = result ? JSON.parse(result, bigint_bigintReviver) : undefined;
-    if (value !== undefined && !NON_CACHED_KEYS.includes(key)) cache[key] = value;
-    return value;
+    return result ? JSON.parse(result, bigint_bigintReviver) : undefined;
   },
   async setItem(key, value) {
     await callWindow('setItem', key, JSON.stringify(value));
-    if (!NON_CACHED_KEYS.includes(key)) cache[key] = value;
   },
   async removeItem(key) {
     await callWindow('removeItem', key);
-    delete cache[key];
   },
   async clear() {
     await callWindow('clear');
-    cache = {};
+  },
+  async getKeys() {
+    const result = await callWindow('keys');
+    return result === null || result === void 0 ? void 0 : result.value;
   }
 };
 /* harmony default export */ const capacitorStorage = (storage);
@@ -41309,6 +41359,15 @@ function omit(object, keys) {
   const savedKeys = Object.keys(object).filter(key => !stringKeys.has(key));
   return pick(object, savedKeys);
 }
+function omitUndefined(object) {
+  return Object.keys(object).reduce((result, stringKey) => {
+    const key = stringKey;
+    if (object[key] !== undefined) {
+      result[key] = object[key];
+    }
+    return result;
+  }, {});
+}
 function orderBy(collection, orderRule) {
   let mode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'asc';
   function compareValues(a, b, currentOrderRule, isAsc) {
@@ -41360,6 +41419,9 @@ function cloneDeep(value) {
     acc[key] = cloneDeep(value[key]);
     return acc;
   }, {});
+}
+function isLiteralObject(value) {
+  return isObject(value) && !Array.isArray(value);
 }
 function isObject(value) {
   // eslint-disable-next-line no-null/no-null
@@ -41544,48 +41606,8 @@ function getCurrentAccountId() {
 function waitLogin() {
   return loginPromise;
 }
-;// CONCATENATED MODULE: ./src/api/errors.ts
-// eslint-disable-next-line max-classes-per-file
-
-
-class ApiBaseError extends Error {
-  constructor(message, displayError) {
-    super(message);
-    this.displayError = displayError;
-    this.name = this.constructor.name;
-  }
-}
-class ApiUserRejectsError extends ApiBaseError {
-  constructor() {
-    let message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Canceled by the user';
-    super(message);
-  }
-}
-class ApiServerError extends ApiBaseError {
-  constructor(message) {
-    super(message, ApiCommonError.ServerError);
-  }
-}
-function maybeApiErrors(fn) {
-  return async function () {
-    try {
-      return await fn(...arguments);
-    } catch (err) {
-      return handleServerError(err);
-    }
-  };
-}
-function handleServerError(err) {
-  if (err instanceof ApiServerError) {
-    return {
-      error: err.displayError
-    };
-  }
-  throw err;
-}
 ;// CONCATENATED MODULE: ./src/api/common/utils.ts
 /* provided dependency */ var Buffer = __webpack_require__(8764)["lW"];
-
 
 function sha256(bytes) {
   return crypto.subtle.digest('SHA-256', bytes);
@@ -41605,37 +41627,8 @@ function base64ToBytes(base64) {
 function base64ToString(base64) {
   return Buffer.from(base64, 'base64').toString('utf-8');
 }
-function handleFetchErrors(response, ignoreHttpCodes) {
-  if (!response.ok && !(ignoreHttpCodes !== null && ignoreHttpCodes !== void 0 && ignoreHttpCodes.includes(response.status))) {
-    throw new Error(response.statusText);
-  }
-  return response;
-}
 function isKnownStakingPool(address) {
   return STAKING_POOLS.some(poolPart => address.endsWith(poolPart));
-}
-async function fetchJson(url, data, init) {
-  const urlObject = new URL(url);
-  if (data) {
-    Object.entries(data).forEach(_ref => {
-      let [key, value] = _ref;
-      if (value === undefined) {
-        return;
-      }
-      if (Array.isArray(value)) {
-        value.forEach(item => {
-          urlObject.searchParams.append(key, item.toString());
-        });
-      } else {
-        urlObject.searchParams.set(key, value.toString());
-      }
-    });
-  }
-  const response = await fetch(urlObject, init);
-  if (!response.ok) {
-    throw new ApiServerError(`Http error ${response.status}`);
-  }
-  return response.json();
 }
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/auth.ts
 
@@ -41643,41 +41636,77 @@ async function fetchJson(url, data, init) {
 
 
 
+
+
+const PBKDF2_IMPORT_KEY_ARGS = [{
+  name: 'PBKDF2'
+}, false, ['deriveBits', 'deriveKey']];
+const PBKDF2_DERIVE_KEY_ARGS = {
+  name: 'PBKDF2',
+  iterations: 100000,
+  // Higher is more secure but slower
+  hash: 'SHA-256'
+};
+const PBKDF2_DERIVE_KEY_TYPE = {
+  name: 'AES-GCM',
+  length: 256
+};
 function generateMnemonic() {
   return web.generateMnemonic();
 }
 function validateMnemonic(mnemonic) {
   return web.validateMnemonic(mnemonic);
 }
-async function mnemonicToSeed(mnemonic) {
-  const keyPair = await web.mnemonicToKeyPair(mnemonic);
-  return bytesToBase64(keyPair.secretKey.slice(0, 32));
+function privateKeyHexToKeyPair(privateKeyHex) {
+  return nacl_fast_default().sign.keyPair.fromSeed(hexToBytes(privateKeyHex));
 }
-function seedToKeyPair(seed) {
-  return nacl_fast_default().sign.keyPair.fromSeed(base64ToBytes(seed));
+function mnemonicToKeyPair(mnemonic) {
+  return web.mnemonicToKeyPair(mnemonic);
 }
 async function encryptMnemonic(mnemonic, password) {
   const plaintext = mnemonic.join(',');
-  const pwUtf8 = new TextEncoder().encode(password); // encode password as UTF-8
-  const pwHash = await crypto.subtle.digest('SHA-256', pwUtf8); // hash the password
+  const salt = crypto.getRandomValues(new Uint8Array(16)); // generate a 128-bit salt
+  const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), ...PBKDF2_IMPORT_KEY_ARGS);
+  const key = await crypto.subtle.deriveKey({
+    salt,
+    ...PBKDF2_DERIVE_KEY_ARGS
+  }, keyMaterial, PBKDF2_DERIVE_KEY_TYPE, false, ['encrypt']);
   const iv = crypto.getRandomValues(new Uint8Array(12)); // get 96-bit random iv
-  const alg = {
+  const ptUint8 = new TextEncoder().encode(plaintext); // encode plaintext as UTF-8
+  const ctBuffer = await crypto.subtle.encrypt({
     name: 'AES-GCM',
     iv
-  }; // specify algorithm to use
-  const key = await crypto.subtle.importKey('raw', pwHash, alg, false, ['encrypt']); // generate key from pw
-  const ptUint8 = new TextEncoder().encode(plaintext); // encode plaintext as UTF-8
-  const ctBuffer = await crypto.subtle.encrypt(alg, key, ptUint8); // encrypt plaintext using key
+  }, key, ptUint8); // encrypt plaintext using key
   const ctArray = Array.from(new Uint8Array(ctBuffer)); // ciphertext as byte array
-  const ctStr = ctArray.map(byte => String.fromCharCode(byte)).join(''); // ciphertext as string
-  // TODO Try `ctArray.toString('base64')` or `ctBuffer.toString('base64')`
-  const ctBase64 = btoa(ctStr); // encode ciphertext as base64
+  const ctBase64 = btoa(String.fromCharCode(...ctArray)); // encode ciphertext as base64
   const ivHex = Array.from(iv).map(b => `00${b.toString(16)}`.slice(-2)).join(''); // iv as hex string
+  const saltHex = Array.from(salt).map(b => `00${b.toString(16)}`.slice(-2)).join(''); // salt as hex string
 
-  return ivHex + ctBase64; // return iv+ciphertext
+  return `${saltHex}:${ivHex}:${ctBase64}`;
 }
-
 async function decryptMnemonic(encrypted, password) {
+  if (!encrypted.includes(':')) {
+    return decryptMnemonicLegacy(encrypted, password);
+  }
+  const [saltHex, ivHex, encryptedData] = encrypted.split(':');
+  const salt = new Uint8Array(saltHex.match(/.{2}/g).map(b => parseInt(b, 16)));
+  const iv = new Uint8Array(ivHex.match(/.{2}/g).map(b => parseInt(b, 16)));
+  const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), ...PBKDF2_IMPORT_KEY_ARGS);
+  const key = await crypto.subtle.deriveKey({
+    salt,
+    ...PBKDF2_DERIVE_KEY_ARGS
+  }, keyMaterial, PBKDF2_DERIVE_KEY_TYPE, false, ['decrypt']);
+  const ctStr = atob(encryptedData); // decode base64 ciphertext
+  const ctUint8 = new Uint8Array(ctStr.match(/[\s\S]/g).map(ch => ch.charCodeAt(0))); // ciphertext as Uint8Array
+  const plainBuffer = await crypto.subtle.decrypt({
+    name: 'AES-GCM',
+    iv
+  }, key, ctUint8); // decrypt ciphertext using key
+  const plaintext = new TextDecoder().decode(plainBuffer); // decode password from UTF-8
+
+  return plaintext.split(',');
+}
+async function decryptMnemonicLegacy(encrypted, password) {
   const pwUtf8 = new TextEncoder().encode(password); // encode password as UTF-8
   const pwHash = await crypto.subtle.digest('SHA-256', pwUtf8); // hash the password
   const iv = encrypted.slice(0, 24).match(/.{2}/g).map(byte => parseInt(byte, 16)); // get iv from ciphertext
@@ -41688,31 +41717,48 @@ async function decryptMnemonic(encrypted, password) {
   const key = await crypto.subtle.importKey('raw', pwHash, alg, false, ['decrypt']); // use pw to generate key
   const ctStr = atob(encrypted.slice(24)); // decode base64 ciphertext
   const ctUint8 = new Uint8Array(ctStr.match(/[\s\S]/g).map(ch => ch.charCodeAt(0))); // ciphertext as Uint8Array
-  // note: why doesn't ctUint8 = new TextEncoder().encode(ctStr) work?
   const plainBuffer = await crypto.subtle.decrypt(alg, key, ctUint8); // decrypt ciphertext using key
   const plaintext = new TextDecoder().decode(plainBuffer); // decode password from UTF-8
+
   return plaintext.split(',');
 }
 async function fetchMnemonic(accountId, password) {
   try {
     const mnemonicEncrypted = await getAccountValue(accountId, 'mnemonicsEncrypted');
-    return await decryptMnemonic(mnemonicEncrypted, password);
+    const mnemonic = await decryptMnemonic(mnemonicEncrypted, password);
+    if (!mnemonicEncrypted.includes(':')) {
+      await tryMigratingMnemonicEncryption(accountId, mnemonic, password);
+    }
+    return mnemonic;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
     return undefined;
   }
 }
+async function tryMigratingMnemonicEncryption(accountId, mnemonic, password) {
+  try {
+    const mnemonicEncrypted = await encryptMnemonic(mnemonic, password);
+
+    // This is a defensive approach against potential corrupted encryption reported by some users
+    const decryptedMnemonic = await decryptMnemonic(mnemonicEncrypted, password).catch(() => undefined);
+    if (!password || !decryptedMnemonic) {
+      return {
+        error: ApiCommonError.DebugError
+      };
+    }
+    await Promise.all([setAccountValue(accountId, 'mnemonicsEncrypted', mnemonicEncrypted)]);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
+  return undefined;
+}
 async function fetchPrivateKey(accountId, password) {
   try {
-    const mnemonic = await fetchMnemonic(accountId, password);
-    if (!mnemonic) {
-      return undefined;
-    }
-    const seedBase64 = await mnemonicToSeed(mnemonic);
     const {
       secretKey: privateKey
-    } = seedToKeyPair(seedBase64);
+    } = (await fetchKeyPair(accountId, password)) || {};
     return privateKey;
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -41726,7 +41772,7 @@ async function fetchKeyPair(accountId, password) {
     if (!mnemonic) {
       return undefined;
     }
-    return await web.mnemonicToKeyPair(mnemonic);
+    return isMnemonicPrivateKey(mnemonic) ? privateKeyHexToKeyPair(mnemonic[0]) : await mnemonicToKeyPair(mnemonic);
   } catch (err) {
     logDebugError('fetchKeyPair', err);
     return undefined;
@@ -41741,469 +41787,84 @@ async function rawSign(accountId, password, dataHex) {
   return bytesToHex(signature);
 }
 async function verifyPassword(accountId, password) {
-  const mnemonic = await fetchMnemonic(accountId, password);
-  return Boolean(mnemonic);
-}
-// EXTERNAL MODULE: ./node_modules/tonapi-sdk-js/dist/index.js
-var dist = __webpack_require__(3824);
-;// CONCATENATED MODULE: ./src/util/fetchWithTimeout.ts
-
-async function fetchWithTimeout(url, init) {
-  let timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : DEFAULT_API_TIMEOUT;
-  const controller = new AbortController();
-  const id = setTimeout(() => {
-    controller.abort();
-  }, timeout);
-  try {
-    return await fetch(url, {
-      ...init,
-      signal: controller.signal
-    });
-  } finally {
-    clearTimeout(id);
-  }
-}
-/* harmony default export */ const util_fetchWithTimeout = (fetchWithTimeout);
-;// CONCATENATED MODULE: ./src/api/environment.ts
-/*
- * This module is to be used instead of /src/util/environment.ts
- * when `window` is not available (e.g. in a web worker).
- */
-
-
-const ELECTRON_ORIGIN = 'file://';
-let environment;
-function setEnvironment(args) {
-  var _self;
-  environment = {
-    ...args,
-    isDappSupported: IS_EXTENSION || IS_CAPACITOR || args.isElectron,
-    isSseSupported: args.isElectron || IS_CAPACITOR && !args.isNativeBottomSheet,
-    // eslint-disable-next-line no-restricted-globals
-    apiHeaders: {
-      'X-App-Origin': args.isElectron ? ELECTRON_ORIGIN : (_self = self) === null || _self === void 0 ? void 0 : _self.origin
-    },
-    tonhttpapiMainnetKey: args.isElectron ? ELECTRON_TONHTTPAPI_MAINNET_API_KEY : TONHTTPAPI_MAINNET_API_KEY,
-    tonhttpapiTestnetKey: args.isElectron ? ELECTRON_TONHTTPAPI_TESTNET_API_KEY : TONHTTPAPI_TESTNET_API_KEY
-  };
-  return environment;
-}
-function getEnvironment() {
-  return environment;
-}
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/tonapiio.ts
-
-
-
-
-const MAX_LIMIT = 500;
-const EVENTS_LIMIT = 100;
-let apiByNetwork;
-function getApi(network) {
-  if (!apiByNetwork) {
-    const headers = {
-      ...getEnvironment().apiHeaders,
-      'Content-Type': 'application/json'
-    };
-    apiByNetwork = {
-      mainnet: new dist/* Api */.V0(new dist/* HttpClient */.eN({
-        baseUrl: TONAPIIO_MAINNET_URL,
-        baseApiParams: {
-          headers
-        },
-        customFetch: util_fetchWithTimeout
-      })),
-      testnet: new dist/* Api */.V0(new dist/* HttpClient */.eN({
-        baseUrl: TONAPIIO_TESTNET_URL,
-        baseApiParams: {
-          headers
-        },
-        customFetch: util_fetchWithTimeout
-      }))
-    };
-  }
-  return apiByNetwork[network];
-}
-async function fetchJettonBalances(network, account) {
-  return (await getApi(network).accounts.getAccountJettonsBalances(account)).balances;
-}
-async function fetchNftItems(network, addresses) {
-  return (await getApi(network).nft.getNftItemsByAddresses({
-    account_ids: addresses
-  })).nft_items;
-}
-async function fetchAccountNfts(network, address, options) {
-  const {
-    collection,
-    offset,
-    limit
-  } = options !== null && options !== void 0 ? options : {};
-  return (await getApi(network).accounts.getAccountNftItems(address, {
-    offset: offset !== null && offset !== void 0 ? offset : 0,
-    limit: limit !== null && limit !== void 0 ? limit : MAX_LIMIT,
-    indirect_ownership: true,
-    collection
-  })).nft_items;
-}
-async function fetchAccountEvents(network, address, fromSec, limit) {
-  return (await getApi(network).accounts.getAccountEvents(address, {
-    limit: limit !== null && limit !== void 0 ? limit : EVENTS_LIMIT,
-    start_date: fromSec
-  })).events;
+  return Boolean(await fetchMnemonic(accountId, password));
 }
 // EXTERNAL MODULE: ./node_modules/@ton/core/dist/index.js
-var core_dist = __webpack_require__(6104);
-// EXTERNAL MODULE: ./node_modules/axios/index.js
-var axios = __webpack_require__(9669);
-var axios_default = /*#__PURE__*/__webpack_require__.n(axios);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV1R1.js
-var WalletContractV1R1 = __webpack_require__(309);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV1R2.js
-var WalletContractV1R2 = __webpack_require__(8795);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV1R3.js
-var WalletContractV1R3 = __webpack_require__(42);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV2R1.js
-var WalletContractV2R1 = __webpack_require__(7272);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV2R2.js
-var WalletContractV2R2 = __webpack_require__(2467);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV3R1.js
-var WalletContractV3R1 = __webpack_require__(7700);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV3R2.js
-var WalletContractV3R2 = __webpack_require__(3182);
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV4.js
-var WalletContractV4 = __webpack_require__(7845);
-;// CONCATENATED MODULE: ./src/util/withCacheAsync.ts
-const withCacheAsync_cache = new WeakMap();
-function withCacheAsync(fn) {
-  let canBeCached = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : value => !!value;
-  return async function () {
-    let fnCache = withCacheAsync_cache.get(fn);
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-    const cacheKey = buildCacheKey(args);
-    if (fnCache) {
-      const cached = fnCache.get(cacheKey);
-      if (cached) {
-        return cached;
-      }
-    } else {
-      fnCache = new Map();
-      withCacheAsync_cache.set(fn, fnCache);
-    }
-    const newValue = await fn(...args);
-    if (canBeCached(newValue)) {
-      fnCache.set(cacheKey, newValue);
-    }
-    return newValue;
+var dist = __webpack_require__(6104);
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/index.ts
+
+function util_cloneDeep(value) {
+  return JSON.parse(JSON.stringify(value), bigintReviver);
+}
+function stringifyTxId(_ref) {
+  let {
+    lt,
+    hash
+  } = _ref;
+  return `${lt}:${hash}`;
+}
+function parseTxId(txId) {
+  const [lt, hash] = txId.split(':');
+  return {
+    lt: Number(lt),
+    hash
   };
 }
-function buildCacheKey(args) {
-  return args.reduce((cacheKey, arg) => {
-    return `${cacheKey}_${typeof arg === 'object' ? JSON.stringify(args) : arg}`;
-  }, '');
+function buildTokenSlug(minterAddress) {
+  const addressPart = minterAddress.replace(/[^a-z\d]/gi, '').slice(0, 10);
+  return `ton-${addressPart}`.toLowerCase();
 }
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/JettonConstants.ts
-function JettonConstants_defineProperty(obj, key, value) { key = JettonConstants_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function JettonConstants_toPropertyKey(arg) { var key = JettonConstants_toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function JettonConstants_toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-// eslint-disable-next-line max-classes-per-file
-class Op {}
-JettonConstants_defineProperty(Op, "transfer", 0xf8a7ea5);
-JettonConstants_defineProperty(Op, "transfer_notification", 0x7362d09c);
-JettonConstants_defineProperty(Op, "internal_transfer", 0x178d4519);
-JettonConstants_defineProperty(Op, "excesses", 0xd53276db);
-JettonConstants_defineProperty(Op, "burn", 0x595f07bc);
-JettonConstants_defineProperty(Op, "burn_notification", 0x7bdd97de);
-JettonConstants_defineProperty(Op, "provide_wallet_address", 0x2c76b973);
-JettonConstants_defineProperty(Op, "take_wallet_address", 0xd1735400);
-JettonConstants_defineProperty(Op, "mint", 21);
-JettonConstants_defineProperty(Op, "change_admin", 3);
-JettonConstants_defineProperty(Op, "change_content", 4);
-class Errors {}
-JettonConstants_defineProperty(Errors, "invalid_op", 709);
-JettonConstants_defineProperty(Errors, "not_admin", 73);
-JettonConstants_defineProperty(Errors, "unouthorized_burn", 74);
-JettonConstants_defineProperty(Errors, "discovery_fee_not_matched", 75);
-JettonConstants_defineProperty(Errors, "wrong_op", 0xffff);
-JettonConstants_defineProperty(Errors, "not_owner", 705);
-JettonConstants_defineProperty(Errors, "not_enough_ton", 709);
-JettonConstants_defineProperty(Errors, "not_enough_gas", 707);
-JettonConstants_defineProperty(Errors, "not_valid_wallet", 707);
-JettonConstants_defineProperty(Errors, "wrong_workchain", 333);
-JettonConstants_defineProperty(Errors, "balance_error", 706);
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/JettonMaster.ts
-
-
-function jettonMinterConfigToCell(config) {
-  return (0,core_dist.beginCell)().storeCoins(0).storeAddress(config.admin).storeRef(config.content).storeRef(config.wallet_code).endCell();
+function generateQueryId() {
+  return bigintRandom(8);
 }
-function jettonContentToCell(content) {
-  return beginCell().storeUint(content.type, 8).storeStringTail(content.uri) // Snake logic under the hood
-  .endCell();
+// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/BitReader.js
+var BitReader = __webpack_require__(4290);
+// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/BitString.js
+var BitString = __webpack_require__(3708);
+// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/Builder.js
+var Builder = __webpack_require__(6777);
+// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/Cell.js
+var Cell = __webpack_require__(7768);
+// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/Slice.js
+var Slice = __webpack_require__(8624);
+// EXTERNAL MODULE: ./node_modules/@ton/core/dist/dict/Dictionary.js
+var Dictionary = __webpack_require__(5960);
+;// CONCATENATED MODULE: ./src/util/metadata.ts
+
+const IPFS_GATEWAY_BASE_URL = 'https://ipfs.io/ipfs/';
+function fetchJsonMetadata(url) {
+  url = fixIpfsUrl(url);
+  const reserveUrl = `${BRILLIANT_API_BASE_URL}/utils/download-json?url=${url}`;
+  if (IS_CAPACITOR) {
+    return fetchJson(reserveUrl);
+  }
+  return fetchJson(url).catch(() => {
+    return fetchJson(reserveUrl);
+  });
 }
-class JettonMinter {
-  constructor(address, init) {
-    this.address = address;
-    this.init = init;
-  }
-  static createFromAddress(address) {
-    return new JettonMinter(address);
-  }
-  static createFromConfig(config, code) {
-    let workchain = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-    const data = jettonMinterConfigToCell(config);
-    const init = {
-      code,
-      data
-    };
-    return new JettonMinter((0,core_dist.contractAddress)(workchain, init), init);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendDeploy(provider, via, value) {
-    await provider.internal(via, {
-      value,
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: (0,core_dist.beginCell)().endCell()
-    });
-  }
-  static jettonInternalTransfer(jetton_amount, forward_ton_amount, response_addr) {
-    let query_id = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
-    return (0,core_dist.beginCell)().storeUint(Op.internal_transfer, 32).storeUint(query_id, 64).storeCoins(jetton_amount).storeAddress(undefined).storeAddress(response_addr).storeCoins(forward_ton_amount).storeBit(false).endCell();
-  }
-  static mintMessage(from, to, jetton_amount, forward_ton_amount, total_ton_amount) {
-    let query_id = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-    const mintMsg = (0,core_dist.beginCell)().storeUint(Op.internal_transfer, 32).storeUint(0, 64).storeCoins(jetton_amount).storeAddress(undefined).storeAddress(from) // Response addr
-    .storeCoins(forward_ton_amount).storeMaybeRef(undefined).endCell();
-    return (0,core_dist.beginCell)().storeUint(Op.mint, 32).storeUint(query_id, 64) // op, queryId
-    .storeAddress(to).storeCoins(total_ton_amount).storeCoins(jetton_amount).storeRef(mintMsg).endCell();
-  }
-  async sendMint(provider, via, to, jetton_amount, forward_ton_amount, total_ton_amount) {
-    if (total_ton_amount <= forward_ton_amount) {
-      throw new Error('Total ton amount should be > forward amount');
-    }
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonMinter.mintMessage(this.address, to, jetton_amount, forward_ton_amount, total_ton_amount),
-      value: total_ton_amount + (0,core_dist.toNano)('0.015')
-    });
-  }
-
-  /* provide_wallet_address#2c76b973 query_id:uint64 owner_address:MsgAddress include_address:Bool = InternalMsgBody;
-  */
-  static discoveryMessage(owner, include_address) {
-    return (0,core_dist.beginCell)().storeUint(0x2c76b973, 32).storeUint(0, 64) // op, queryId
-    .storeAddress(owner).storeBit(include_address).endCell();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendDiscovery(provider, via, owner, include_address) {
-    let value = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : (0,core_dist.toNano)('0.1');
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonMinter.discoveryMessage(owner, include_address),
-      value
-    });
-  }
-  static changeAdminMessage(newOwner) {
-    return (0,core_dist.beginCell)().storeUint(Op.change_admin, 32).storeUint(0, 64) // op, queryId
-    .storeAddress(newOwner).endCell();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendChangeAdmin(provider, via, newOwner) {
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonMinter.changeAdminMessage(newOwner),
-      value: (0,core_dist.toNano)('0.05')
-    });
-  }
-  static changeContentMessage(content) {
-    return (0,core_dist.beginCell)().storeUint(Op.change_content, 32).storeUint(0, 64) // op, queryId
-    .storeRef(content).endCell();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendChangeContent(provider, via, content) {
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonMinter.changeContentMessage(content),
-      value: (0,core_dist.toNano)('0.05')
-    });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async getWalletAddress(provider, owner) {
-    const res = await provider.get('get_wallet_address', [{
-      type: 'slice',
-      cell: (0,core_dist.beginCell)().storeAddress(owner).endCell()
-    }]);
-    return res.stack.readAddress();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async getJettonData(provider) {
-    const res = await provider.get('get_jetton_data', []);
-    const totalSupply = res.stack.readBigNumber();
-    const mintable = res.stack.readBoolean();
-    const adminAddress = res.stack.readAddress();
-    const content = res.stack.readCell();
-    const walletCode = res.stack.readCell();
-    return {
-      totalSupply,
-      mintable,
-      adminAddress,
-      content,
-      walletCode
-    };
-  }
-  async getTotalSupply(provider) {
-    const res = await this.getJettonData(provider);
-    return res.totalSupply;
-  }
-  async getAdminAddress(provider) {
-    const res = await this.getJettonData(provider);
-    return res.adminAddress;
-  }
-  async getContent(provider) {
-    const res = await this.getJettonData(provider);
-    return res.content;
-  }
+function fixIpfsUrl(url) {
+  return url.replace('ipfs://', IPFS_GATEWAY_BASE_URL);
 }
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/JettonWallet.ts
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function jettonWalletConfigToCell(config) {
-  return (0,core_dist.beginCell)().endCell();
-}
-class JettonWallet {
-  constructor(address, init) {
-    this.address = address;
-    this.init = init;
+async function fetchJson(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw Error(`Http error ${response.status}`);
   }
-  static createFromAddress(address) {
-    return new JettonWallet(address);
-  }
-  static createFromConfig(config, code) {
-    let workchain = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-    const data = jettonWalletConfigToCell(config);
-    const init = {
-      code,
-      data
-    };
-    return new JettonWallet((0,core_dist.contractAddress)(workchain, init), init);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendDeploy(provider, via, value) {
-    await provider.internal(via, {
-      value,
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: (0,core_dist.beginCell)().endCell()
-    });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async getJettonBalance(provider) {
-    const state = await provider.getState();
-    if (state.state.type !== 'active') {
-      return 0n;
-    }
-    const res = await provider.get('get_wallet_data', []);
-    return res.stack.readBigNumber();
-  }
-  static transferMessage(jetton_amount, to, responseAddress, customPayload, forward_ton_amount, forwardPayload) {
-    return (0,core_dist.beginCell)().storeUint(0xf8a7ea5, 32).storeUint(0, 64) // op, queryId
-    .storeCoins(jetton_amount).storeAddress(to).storeAddress(responseAddress).storeMaybeRef(customPayload).storeCoins(forward_ton_amount).storeMaybeRef(forwardPayload).endCell();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendTransfer(provider, via, value, jetton_amount, to, responseAddress, customPayload, forward_ton_amount, forwardPayload) {
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonWallet.transferMessage(jetton_amount, to, responseAddress, customPayload, forward_ton_amount, forwardPayload),
-      value
-    });
-  }
-
-  /*
-    burn#595f07bc query_id:uint64 amount:(VarUInteger 16)
-                  response_destination:MsgAddress custom_payload:(Maybe ^Cell)
-                  = InternalMsgBody;
-  */
-  static burnMessage(jetton_amount, responseAddress, customPayload) {
-    return (0,core_dist.beginCell)().storeUint(0x595f07bc, 32).storeUint(0, 64) // op, queryId
-    .storeCoins(jetton_amount).storeAddress(responseAddress).storeMaybeRef(customPayload).endCell();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendBurn(provider, via, value, jetton_amount, responseAddress, customPayload) {
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonWallet.burnMessage(jetton_amount, responseAddress, customPayload),
-      value
-    });
-  }
-
-  /*
-    withdraw_tons#107c49ef query_id:uint64 = InternalMsgBody;
-  */
-  static withdrawTonsMessage() {
-    return (0,core_dist.beginCell)().storeUint(0x6d8e5e3c, 32).storeUint(0, 64) // op, queryId
-    .endCell();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendWithdrawTons(provider, via) {
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonWallet.withdrawTonsMessage(),
-      value: (0,core_dist.toNano)('0.1')
-    });
-  }
-
-  /*
-    withdraw_jettons#10 query_id:uint64 wallet:MsgAddressInt amount:Coins = InternalMsgBody;
-  */
-  static withdrawJettonsMessage(from, amount) {
-    return (0,core_dist.beginCell)().storeUint(0x768a50b2, 32).storeUint(0, 64) // op, queryId
-    .storeAddress(from).storeCoins(amount).storeMaybeRef(undefined).endCell();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async sendWithdrawJettons(provider, via, from, amount) {
-    await provider.internal(via, {
-      sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY,
-      body: JettonWallet.withdrawJettonsMessage(from, amount),
-      value: (0,core_dist.toNano)('0.1')
-    });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  async getWalletData(provider) {
-    const res = await provider.get('get_wallet_data', []);
-    const balance = res.stack.readBigNumber();
-    const owner = res.stack.readAddress();
-    const minter = res.stack.readAddress();
-    const code = res.stack.readCell();
-    return {
-      balance,
-      owner,
-      minter,
-      code
-    };
-  }
+  return response.json();
 }
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/constants.ts
 const TOKEN_TRANSFER_TON_AMOUNT = 100000000n; // 0.1 TON
 const TOKEN_TRANSFER_TON_FORWARD_AMOUNT = 1n; // 0.000000001 TON
+const NFT_TRANSFER_TON_AMOUNT = 100000000n; // 0.1 TON
+const NFT_TRANSFER_TON_FORWARD_AMOUNT = 1n; // 0.000000001 TON
+const constants_DEFAULT_FEE = 30000000n; // 0.03 TON
 
 const STAKE_COMMENT = 'd';
 const UNSTAKE_COMMENT = 'w';
 const ATTEMPTS = 5;
 const DEFAULT_DECIMALS = 9;
-const DEFAULT_IS_BOUNCEABLE = false;
+const DEFAULT_IS_BOUNCEABLE = true;
+const WALLET_IS_BOUNCEABLE = false;
 
 // Fee may change, so we add 5% for more reliability. This is only safe for low-fee blockchains such as TON.
 const FEE_FACTOR = 1.05;
@@ -42225,6 +41886,7 @@ let JettonOpCode = /*#__PURE__*/function (JettonOpCode) {
 }({});
 let NftOpCode = /*#__PURE__*/function (NftOpCode) {
   NftOpCode[NftOpCode["TransferOwnership"] = 1607220500] = "TransferOwnership";
+  NftOpCode[NftOpCode["OwnershipAssigned"] = 85167505] = "OwnershipAssigned";
   return NftOpCode;
 }({});
 let LiquidStakingOpCode = /*#__PURE__*/function (LiquidStakingOpCode) {
@@ -42307,7 +41969,7 @@ const KnownContracts = {
   },
   nominatorPool: {
     name: 'nominatorPool',
-    hash: 'bffbc2310c6c535fe7271667fd3352a1151d097905c052701c5c98bf45487f08',
+    hash: '26faa2d0fd2a8197ea36ded8dc50ad081cce5244207e9b05c08c1bb655527bff',
     type: ContractType.Staking,
     isLedgerAllowed: true
   },
@@ -42328,13 +41990,96 @@ const KnownContracts = {
     hash: '69dc931958f7aa203c4a7bfcf263d25d2d828d573184b542a65dd55c8398ad83',
     type: ContractType.Wallet,
     isLedgerAllowed: true
+  },
+  multisigNew: {
+    name: 'multisigNew',
+    hash: '7cb3678880388acff45d74b2e7e7544caa8039d20b49f57c75b53c051b6fa30f',
+    type: ContractType.Wallet,
+    isLedgerAllowed: true
+  },
+  dedustPool: {
+    name: 'dedustPool',
+    hash: 'af6a1790ccd322e9b996733cce5618901a99d76c4c5a219309deef9b0910b238',
+    isSwapAllowed: true
+  },
+  dedustVaultNative: {
+    name: 'dedustVaultNative',
+    hash: '8ecbfbe7642ebceec39712a4b3e7b3d1ffc2cfbb1b712fbf1f27f1051afb5220',
+    isSwapAllowed: true
+  },
+  dedustVaultNative2: {
+    name: 'dedustVaultNative2',
+    hash: '546ea179831fd6bda3d7515f07a5322486ae4ea4685125e6034758b8cca5b917',
+    isSwapAllowed: true
+  },
+  dedustVaultJetton: {
+    name: 'dedustVaultJetton',
+    hash: '54f0c2a249ea3c5fc844c48e2586d8a72e6fc188a1ccaec609fac58248b8c8e3',
+    isSwapAllowed: true
+  },
+  stonPtonWallet: {
+    name: 'stonPtonWallet',
+    hash: '6ccbf71a3ed9c7355f84a698a44a7406574bfb8aa34d4bbd86ab75ee9c994880',
+    isSwapAllowed: true
+  },
+  stonRouter: {
+    name: 'stonRouter',
+    hash: '14ce618a0e9a94adc99fa6e975219ddd675425b30dfa9728f98714c8dc55f9da',
+    isSwapAllowed: true
+  },
+  megatonWtonMaster: {
+    name: 'megatonWtonMaster',
+    hash: '4c9790d808ea4470614e021f76c40529efe2fbce8138da4284a29b5f1943ef19',
+    isSwapAllowed: true
+  },
+  megatonRouter: {
+    name: 'megatonRouter',
+    hash: '5d5f0e3ed9602d1ba96006ead98cb5e9b53f49ce4a5cf675e06e4d440b7d267c',
+    isSwapAllowed: true
   }
 };
-// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/client/TonClient.js
-var client_TonClient = __webpack_require__(874);
-// EXTERNAL MODULE: ./src/lib/axios-retry/index.js
-var axios_retry = __webpack_require__(9386);
-var axios_retry_default = /*#__PURE__*/__webpack_require__.n(axios_retry);
+// EXTERNAL MODULE: ./node_modules/tonapi-sdk-js/dist/index.js
+var tonapi_sdk_js_dist = __webpack_require__(3824);
+;// CONCATENATED MODULE: ./src/api/errors.ts
+// eslint-disable-next-line max-classes-per-file
+
+
+class ApiBaseError extends Error {
+  constructor(message, displayError) {
+    super(message);
+    this.displayError = displayError;
+    this.name = this.constructor.name;
+  }
+}
+class ApiUserRejectsError extends ApiBaseError {
+  constructor() {
+    let message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Canceled by the user';
+    super(message);
+  }
+}
+class ApiServerError extends ApiBaseError {
+  constructor(message, statusCode) {
+    super(message, ApiCommonError.ServerError);
+    this.statusCode = statusCode;
+  }
+}
+function maybeApiErrors(fn) {
+  return async function () {
+    try {
+      return await fn(...arguments);
+    } catch (err) {
+      return handleServerError(err);
+    }
+  };
+}
+function handleServerError(err) {
+  if (err instanceof ApiServerError) {
+    return {
+      error: err.displayError
+    };
+  }
+  throw err;
+}
 ;// CONCATENATED MODULE: ./src/util/schedulers.ts
 function debounce(fn, ms) {
   let shouldRunFirst = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
@@ -42519,6 +42264,528 @@ async function waitFor(cb, interval, attempts) {
   }
   return result;
 }
+;// CONCATENATED MODULE: ./src/util/fetch.ts
+
+
+
+
+const DEFAULT_TIMEOUTS = [5000, 10000, 30000]; // 5, 10, 30 sec
+
+async function fetch_fetchJson(url, data, init) {
+  const urlObject = new URL(url);
+  if (data) {
+    Object.entries(data).forEach(_ref => {
+      let [key, value] = _ref;
+      if (value === undefined) {
+        return;
+      }
+      if (Array.isArray(value)) {
+        value.forEach(item => {
+          urlObject.searchParams.append(key, item.toString());
+        });
+      } else {
+        urlObject.searchParams.set(key, value.toString());
+      }
+    });
+  }
+  const response = await fetchWithRetry(urlObject, init);
+  return response.json();
+}
+async function fetchWithRetry(url, init, options) {
+  const {
+    retries = DEFAULT_RETRIES,
+    timeouts = DEFAULT_TIMEOUTS,
+    conditionFn
+  } = options !== null && options !== void 0 ? options : {};
+  let message = 'Unknown error.';
+  let statusCode;
+  for (let i = 1; i <= retries; i++) {
+    try {
+      var _timeouts;
+      if (i > 1) {
+        logDebug(`Retry request #${i}:`, url.toString(), statusCode);
+      }
+      const timeout = Array.isArray(timeouts) ? (_timeouts = timeouts[i - 1]) !== null && _timeouts !== void 0 ? _timeouts : timeouts[timeouts.length - 1] : timeouts;
+      const response = await fetchWithTimeout(url, init, timeout);
+      statusCode = response.status;
+      if (statusCode >= 400) {
+        if (response.headers.get('content-type') !== 'application/json') {
+          throw new Error(`HTTP Error ${statusCode}`);
+        }
+        const {
+          error
+        } = await response.json();
+        throw new Error(error !== null && error !== void 0 ? error : `HTTP Error ${statusCode}`);
+      }
+      return response;
+    } catch (err) {
+      var _err$message;
+      message = typeof err === 'string' ? err : (_err$message = err.message) !== null && _err$message !== void 0 ? _err$message : message;
+      if (statusCode === 400 || conditionFn !== null && conditionFn !== void 0 && conditionFn(message, statusCode)) {
+        throw new ApiServerError(message, statusCode);
+      }
+      if (i < retries) {
+        await pause(DEFAULT_ERROR_PAUSE * i);
+      }
+    }
+  }
+  throw new ApiServerError(message);
+}
+async function fetchWithTimeout(url, init) {
+  let timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : DEFAULT_TIMEOUT;
+  const controller = new AbortController();
+  const id = setTimeout(() => {
+    controller.abort();
+  }, timeout);
+  try {
+    return await fetch(url, {
+      ...init,
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(id);
+  }
+}
+function handleFetchErrors(response, ignoreHttpCodes) {
+  if (!response.ok && !(ignoreHttpCodes !== null && ignoreHttpCodes !== void 0 && ignoreHttpCodes.includes(response.status))) {
+    throw new Error(response.statusText);
+  }
+  return response;
+}
+;// CONCATENATED MODULE: ./src/api/environment.ts
+/*
+ * This module is to be used instead of /src/util/environment.ts
+ * when `window` is not available (e.g. in a web worker).
+ */
+
+
+const ELECTRON_ORIGIN = 'file://';
+let environment;
+function setEnvironment(args) {
+  var _self;
+  environment = {
+    ...args,
+    isDappSupported: IS_EXTENSION || IS_CAPACITOR || args.isElectron,
+    isSseSupported: args.isElectron || IS_CAPACITOR && !args.isNativeBottomSheet,
+    // eslint-disable-next-line no-restricted-globals
+    apiHeaders: {
+      'X-App-Origin': args.isElectron ? ELECTRON_ORIGIN : (_self = self) === null || _self === void 0 ? void 0 : _self.origin
+    },
+    tonhttpapiMainnetKey: args.isElectron ? ELECTRON_TONHTTPAPI_MAINNET_API_KEY : TONHTTPAPI_MAINNET_API_KEY,
+    tonhttpapiTestnetKey: args.isElectron ? ELECTRON_TONHTTPAPI_TESTNET_API_KEY : TONHTTPAPI_TESTNET_API_KEY
+  };
+  return environment;
+}
+function getEnvironment() {
+  return environment;
+}
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/tonapiio.ts
+
+
+
+
+const MAX_LIMIT = 500;
+const EVENTS_LIMIT = 100;
+let apiByNetwork;
+function getApi(network) {
+  if (!apiByNetwork) {
+    const headers = {
+      ...getEnvironment().apiHeaders,
+      'Content-Type': 'application/json'
+    };
+    apiByNetwork = {
+      mainnet: new tonapi_sdk_js_dist/* Api */.V0(new tonapi_sdk_js_dist/* HttpClient */.eN({
+        baseUrl: TONAPIIO_MAINNET_URL,
+        baseApiParams: {
+          headers
+        },
+        customFetch: fetchWithRetry
+      })),
+      testnet: new tonapi_sdk_js_dist/* Api */.V0(new tonapi_sdk_js_dist/* HttpClient */.eN({
+        baseUrl: TONAPIIO_TESTNET_URL,
+        baseApiParams: {
+          headers
+        },
+        customFetch: fetchWithRetry
+      }))
+    };
+  }
+  return apiByNetwork[network];
+}
+async function fetchJettonBalances(network, account) {
+  return (await getApi(network).accounts.getAccountJettonsBalances(account)).balances;
+}
+async function fetchNftItems(network, addresses) {
+  return (await getApi(network).nft.getNftItemsByAddresses({
+    account_ids: addresses
+  })).nft_items;
+}
+async function fetchAccountNfts(network, address, options) {
+  const {
+    collection,
+    offset,
+    limit
+  } = options !== null && options !== void 0 ? options : {};
+  return (await getApi(network).accounts.getAccountNftItems(address, {
+    offset: offset !== null && offset !== void 0 ? offset : 0,
+    limit: limit !== null && limit !== void 0 ? limit : MAX_LIMIT,
+    indirect_ownership: true,
+    collection
+  })).nft_items;
+}
+async function fetchAccountEvents(network, address, fromSec, limit) {
+  return (await getApi(network).accounts.getAccountEvents(address, {
+    limit: limit !== null && limit !== void 0 ? limit : EVENTS_LIMIT,
+    start_date: fromSec
+  })).events;
+}
+// EXTERNAL MODULE: ./node_modules/axios/index.js
+var axios = __webpack_require__(9669);
+var axios_default = /*#__PURE__*/__webpack_require__.n(axios);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV1R1.js
+var WalletContractV1R1 = __webpack_require__(309);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV1R2.js
+var WalletContractV1R2 = __webpack_require__(8795);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV1R3.js
+var WalletContractV1R3 = __webpack_require__(42);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV2R1.js
+var WalletContractV2R1 = __webpack_require__(7272);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV2R2.js
+var WalletContractV2R2 = __webpack_require__(2467);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV3R1.js
+var WalletContractV3R1 = __webpack_require__(7700);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV3R2.js
+var WalletContractV3R2 = __webpack_require__(3182);
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/wallets/WalletContractV4.js
+var WalletContractV4 = __webpack_require__(7845);
+;// CONCATENATED MODULE: ./src/util/withCacheAsync.ts
+const cache = new WeakMap();
+function withCacheAsync(fn) {
+  let canBeCached = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : value => !!value;
+  return async function () {
+    let fnCache = cache.get(fn);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    const cacheKey = buildCacheKey(args);
+    if (fnCache) {
+      const cached = fnCache.get(cacheKey);
+      if (cached) {
+        return cached;
+      }
+    } else {
+      fnCache = new Map();
+      cache.set(fn, fnCache);
+    }
+    const newValue = await fn(...args);
+    if (canBeCached(newValue)) {
+      fnCache.set(cacheKey, newValue);
+    }
+    return newValue;
+  };
+}
+function buildCacheKey(args) {
+  return args.reduce((cacheKey, arg) => {
+    return `${cacheKey}_${typeof arg === 'object' ? JSON.stringify(args) : arg}`;
+  }, '');
+}
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/JettonConstants.ts
+function JettonConstants_defineProperty(obj, key, value) { key = JettonConstants_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function JettonConstants_toPropertyKey(arg) { var key = JettonConstants_toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+function JettonConstants_toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+// eslint-disable-next-line max-classes-per-file
+class Op {}
+JettonConstants_defineProperty(Op, "transfer", 0xf8a7ea5);
+JettonConstants_defineProperty(Op, "transfer_notification", 0x7362d09c);
+JettonConstants_defineProperty(Op, "internal_transfer", 0x178d4519);
+JettonConstants_defineProperty(Op, "excesses", 0xd53276db);
+JettonConstants_defineProperty(Op, "burn", 0x595f07bc);
+JettonConstants_defineProperty(Op, "burn_notification", 0x7bdd97de);
+JettonConstants_defineProperty(Op, "provide_wallet_address", 0x2c76b973);
+JettonConstants_defineProperty(Op, "take_wallet_address", 0xd1735400);
+JettonConstants_defineProperty(Op, "mint", 21);
+JettonConstants_defineProperty(Op, "change_admin", 3);
+JettonConstants_defineProperty(Op, "change_content", 4);
+class Errors {}
+JettonConstants_defineProperty(Errors, "invalid_op", 709);
+JettonConstants_defineProperty(Errors, "not_admin", 73);
+JettonConstants_defineProperty(Errors, "unouthorized_burn", 74);
+JettonConstants_defineProperty(Errors, "discovery_fee_not_matched", 75);
+JettonConstants_defineProperty(Errors, "wrong_op", 0xffff);
+JettonConstants_defineProperty(Errors, "not_owner", 705);
+JettonConstants_defineProperty(Errors, "not_enough_ton", 709);
+JettonConstants_defineProperty(Errors, "not_enough_gas", 707);
+JettonConstants_defineProperty(Errors, "not_valid_wallet", 707);
+JettonConstants_defineProperty(Errors, "wrong_workchain", 333);
+JettonConstants_defineProperty(Errors, "balance_error", 706);
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/JettonMaster.ts
+
+
+function jettonMinterConfigToCell(config) {
+  return (0,dist.beginCell)().storeCoins(0).storeAddress(config.admin).storeRef(config.content).storeRef(config.wallet_code).endCell();
+}
+function jettonContentToCell(content) {
+  return beginCell().storeUint(content.type, 8).storeStringTail(content.uri) // Snake logic under the hood
+  .endCell();
+}
+class JettonMinter {
+  constructor(address, init) {
+    this.address = address;
+    this.init = init;
+  }
+  static createFromAddress(address) {
+    return new JettonMinter(address);
+  }
+  static createFromConfig(config, code) {
+    let workchain = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+    const data = jettonMinterConfigToCell(config);
+    const init = {
+      code,
+      data
+    };
+    return new JettonMinter((0,dist.contractAddress)(workchain, init), init);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendDeploy(provider, via, value) {
+    await provider.internal(via, {
+      value,
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: (0,dist.beginCell)().endCell()
+    });
+  }
+  static jettonInternalTransfer(jetton_amount, forward_ton_amount, response_addr) {
+    let query_id = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 0;
+    return (0,dist.beginCell)().storeUint(Op.internal_transfer, 32).storeUint(query_id, 64).storeCoins(jetton_amount).storeAddress(undefined).storeAddress(response_addr).storeCoins(forward_ton_amount).storeBit(false).endCell();
+  }
+  static mintMessage(from, to, jetton_amount, forward_ton_amount, total_ton_amount) {
+    let query_id = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+    const mintMsg = (0,dist.beginCell)().storeUint(Op.internal_transfer, 32).storeUint(0, 64).storeCoins(jetton_amount).storeAddress(undefined).storeAddress(from) // Response addr
+    .storeCoins(forward_ton_amount).storeMaybeRef(undefined).endCell();
+    return (0,dist.beginCell)().storeUint(Op.mint, 32).storeUint(query_id, 64) // op, queryId
+    .storeAddress(to).storeCoins(total_ton_amount).storeCoins(jetton_amount).storeRef(mintMsg).endCell();
+  }
+  async sendMint(provider, via, to, jetton_amount, forward_ton_amount, total_ton_amount) {
+    if (total_ton_amount <= forward_ton_amount) {
+      throw new Error('Total ton amount should be > forward amount');
+    }
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonMinter.mintMessage(this.address, to, jetton_amount, forward_ton_amount, total_ton_amount),
+      value: total_ton_amount + (0,dist.toNano)('0.015')
+    });
+  }
+
+  /* provide_wallet_address#2c76b973 query_id:uint64 owner_address:MsgAddress include_address:Bool = InternalMsgBody;
+  */
+  static discoveryMessage(owner, include_address) {
+    return (0,dist.beginCell)().storeUint(0x2c76b973, 32).storeUint(0, 64) // op, queryId
+    .storeAddress(owner).storeBit(include_address).endCell();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendDiscovery(provider, via, owner, include_address) {
+    let value = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : (0,dist.toNano)('0.1');
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonMinter.discoveryMessage(owner, include_address),
+      value
+    });
+  }
+  static changeAdminMessage(newOwner) {
+    return (0,dist.beginCell)().storeUint(Op.change_admin, 32).storeUint(0, 64) // op, queryId
+    .storeAddress(newOwner).endCell();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendChangeAdmin(provider, via, newOwner) {
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonMinter.changeAdminMessage(newOwner),
+      value: (0,dist.toNano)('0.05')
+    });
+  }
+  static changeContentMessage(content) {
+    return (0,dist.beginCell)().storeUint(Op.change_content, 32).storeUint(0, 64) // op, queryId
+    .storeRef(content).endCell();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendChangeContent(provider, via, content) {
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonMinter.changeContentMessage(content),
+      value: (0,dist.toNano)('0.05')
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getWalletAddress(provider, owner) {
+    const res = await provider.get('get_wallet_address', [{
+      type: 'slice',
+      cell: (0,dist.beginCell)().storeAddress(owner).endCell()
+    }]);
+    return res.stack.readAddress();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getJettonData(provider) {
+    const res = await provider.get('get_jetton_data', []);
+    const totalSupply = res.stack.readBigNumber();
+    const mintable = res.stack.readBoolean();
+    const adminAddress = res.stack.readAddress();
+    const content = res.stack.readCell();
+    const walletCode = res.stack.readCell();
+    return {
+      totalSupply,
+      mintable,
+      adminAddress,
+      content,
+      walletCode
+    };
+  }
+  async getTotalSupply(provider) {
+    const res = await this.getJettonData(provider);
+    return res.totalSupply;
+  }
+  async getAdminAddress(provider) {
+    const res = await this.getJettonData(provider);
+    return res.adminAddress;
+  }
+  async getContent(provider) {
+    const res = await this.getJettonData(provider);
+    return res.content;
+  }
+}
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/JettonWallet.ts
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function jettonWalletConfigToCell(config) {
+  return (0,dist.beginCell)().endCell();
+}
+class JettonWallet {
+  constructor(address, init) {
+    this.address = address;
+    this.init = init;
+  }
+  static createFromAddress(address) {
+    return new JettonWallet(address);
+  }
+  static createFromConfig(config, code) {
+    let workchain = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+    const data = jettonWalletConfigToCell(config);
+    const init = {
+      code,
+      data
+    };
+    return new JettonWallet((0,dist.contractAddress)(workchain, init), init);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendDeploy(provider, via, value) {
+    await provider.internal(via, {
+      value,
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: (0,dist.beginCell)().endCell()
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getJettonBalance(provider) {
+    const state = await provider.getState();
+    if (state.state.type !== 'active') {
+      return 0n;
+    }
+    const res = await provider.get('get_wallet_data', []);
+    return res.stack.readBigNumber();
+  }
+  static transferMessage(jetton_amount, to, responseAddress, customPayload, forward_ton_amount, forwardPayload) {
+    return (0,dist.beginCell)().storeUint(0xf8a7ea5, 32).storeUint(0, 64) // op, queryId
+    .storeCoins(jetton_amount).storeAddress(to).storeAddress(responseAddress).storeMaybeRef(customPayload).storeCoins(forward_ton_amount).storeMaybeRef(forwardPayload).endCell();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendTransfer(provider, via, value, jetton_amount, to, responseAddress, customPayload, forward_ton_amount, forwardPayload) {
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonWallet.transferMessage(jetton_amount, to, responseAddress, customPayload, forward_ton_amount, forwardPayload),
+      value
+    });
+  }
+
+  /*
+    burn#595f07bc query_id:uint64 amount:(VarUInteger 16)
+                  response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+                  = InternalMsgBody;
+  */
+  static burnMessage(jetton_amount, responseAddress, customPayload) {
+    return (0,dist.beginCell)().storeUint(0x595f07bc, 32).storeUint(0, 64) // op, queryId
+    .storeCoins(jetton_amount).storeAddress(responseAddress).storeMaybeRef(customPayload).endCell();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendBurn(provider, via, value, jetton_amount, responseAddress, customPayload) {
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonWallet.burnMessage(jetton_amount, responseAddress, customPayload),
+      value
+    });
+  }
+
+  /*
+    withdraw_tons#107c49ef query_id:uint64 = InternalMsgBody;
+  */
+  static withdrawTonsMessage() {
+    return (0,dist.beginCell)().storeUint(0x6d8e5e3c, 32).storeUint(0, 64) // op, queryId
+    .endCell();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendWithdrawTons(provider, via) {
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonWallet.withdrawTonsMessage(),
+      value: (0,dist.toNano)('0.1')
+    });
+  }
+
+  /*
+    withdraw_jettons#10 query_id:uint64 wallet:MsgAddressInt amount:Coins = InternalMsgBody;
+  */
+  static withdrawJettonsMessage(from, amount) {
+    return (0,dist.beginCell)().storeUint(0x768a50b2, 32).storeUint(0, 64) // op, queryId
+    .storeAddress(from).storeCoins(amount).storeMaybeRef(undefined).endCell();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async sendWithdrawJettons(provider, via, from, amount) {
+    await provider.internal(via, {
+      sendMode: dist.SendMode.PAY_GAS_SEPARATELY,
+      body: JettonWallet.withdrawJettonsMessage(from, amount),
+      value: (0,dist.toNano)('0.1')
+    });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getWalletData(provider) {
+    const res = await provider.get('get_wallet_data', []);
+    const balance = res.stack.readBigNumber();
+    const owner = res.stack.readAddress();
+    const minter = res.stack.readAddress();
+    const code = res.stack.readCell();
+    return {
+      balance,
+      owner,
+      minter,
+      code
+    };
+  }
+}
+// EXTERNAL MODULE: ./node_modules/@ton/ton/dist/client/TonClient.js
+var client_TonClient = __webpack_require__(874);
+// EXTERNAL MODULE: ./src/lib/axios-retry/index.js
+var axios_retry = __webpack_require__(9386);
+var axios_retry_default = /*#__PURE__*/__webpack_require__.n(axios_retry);
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/TonClient.ts
 function TonClient_defineProperty(obj, key, value) { key = TonClient_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function TonClient_toPropertyKey(arg) { var key = TonClient_toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
@@ -42528,19 +42795,22 @@ function TonClient_toPrimitive(input, hint) { if (typeof input !== "object" || i
 
 
 
-const TonClient_ATTEMPTS = 5;
-const ERROR_PAUSE = 200; // 200 ms
 
 axios_retry_default()((axios_default()), {
-  retries: TonClient_ATTEMPTS,
+  retries: DEFAULT_RETRIES,
   retryDelay: retryCount => {
-    return retryCount * ERROR_PAUSE;
+    return retryCount * DEFAULT_ERROR_PAUSE;
+  },
+  onRetry: (retryNumber, error, requestConfig) => {
+    var _error$response;
+    logDebug(`Retry request #${retryNumber}:`, requestConfig.url, (_error$response = error.response) === null || _error$response === void 0 ? void 0 : _error$response.status);
   }
 });
 class TonClient extends client_TonClient.TonClient {
   constructor(parameters) {
     super(parameters);
     TonClient_defineProperty(this, "initParameters", void 0);
+    TonClient_defineProperty(this, "lastSendBoc", void 0);
     this.initParameters = parameters;
   }
   getWalletInfo(address) {
@@ -42561,6 +42831,23 @@ class TonClient extends client_TonClient.TonClient {
       params
     });
   }
+  async sendFile(src) {
+    const boc = typeof src === 'object' ? src.toString('base64') : src;
+    const {
+      hash
+    } = await this.callRpc('sendBocReturnHash', {
+      boc
+    });
+    this.lastSendBoc = {
+      boc,
+      msgHash: hash
+    };
+  }
+  popLastSendBoc() {
+    const lastSendBoc = this.lastSendBoc;
+    this.lastSendBoc = undefined;
+    return lastSendBoc;
+  }
   async sendRequest(apiUrl, request) {
     const method = request.method;
     const headers = {
@@ -42571,45 +42858,19 @@ class TonClient extends client_TonClient.TonClient {
       headers['X-API-Key'] = this.parameters.apiKey;
     }
     const body = JSON.stringify(request);
-    let message = 'Unknown error.';
-    let statusCode;
-    for (let i = 1; i <= TonClient_ATTEMPTS; i++) {
-      try {
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers,
-          body
-        });
-        statusCode = response.status;
-        if (statusCode >= 400) {
-          if (response.headers.get('content-type') !== 'application/json') {
-            throw new Error(`HTTP Error ${statusCode}`);
-          }
-          const {
-            error
-          } = await response.json();
-          throw new Error(error);
-        }
-        const {
-          result
-        } = await response.json();
-        return result;
-      } catch (err) {
-        var _err$message;
-        message = typeof err === 'string' ? err : (_err$message = err.message) !== null && _err$message !== void 0 ? _err$message : message;
-        if (isNotTemporaryError(method, message, statusCode)) {
-          throw new ApiServerError(message);
-        }
-        if (i < TonClient_ATTEMPTS) {
-          await pause(ERROR_PAUSE * i);
-        }
-      }
-    }
-    throw new ApiServerError(message);
+    const response = await fetchWithRetry(apiUrl, {
+      method: 'POST',
+      body,
+      headers
+    }, {
+      conditionFn: (message, statusCode) => isNotTemporaryError(method, message, statusCode)
+    });
+    const data = await response.json();
+    return data.result;
   }
 }
 function isNotTemporaryError(method, message, statusCode) {
-  return statusCode === 422 || method === 'sendBoc' && (message === null || message === void 0 ? void 0 : message.includes('exitcode='));
+  return Boolean(statusCode === 422 || (message === null || message === void 0 ? void 0 : message.match(/(exit code|exitcode=|duplicate message)/)));
 }
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/tonCore.ts
 /* provided dependency */ var tonCore_Buffer = __webpack_require__(8764)["lW"];
@@ -42652,13 +42913,13 @@ function getTonClient() {
     clientByNetwork = {
       mainnet: new TonClient({
         endpoint: TONHTTPAPI_MAINNET_URL,
-        timeout: DEFAULT_API_TIMEOUT,
+        timeout: DEFAULT_TIMEOUT,
         apiKey: TONHTTPAPI_MAINNET_API_KEY,
         headers: getEnvironment().apiHeaders
       }),
       testnet: new TonClient({
         endpoint: TONHTTPAPI_TESTNET_URL,
-        timeout: DEFAULT_API_TIMEOUT,
+        timeout: DEFAULT_TIMEOUT,
         apiKey: TONHTTPAPI_TESTNET_API_KEY,
         headers: getEnvironment().apiHeaders
       })
@@ -42678,18 +42939,18 @@ function getTonWalletContract(publicKeyHex, version) {
   });
 }
 const resolveTokenWalletAddress = withCacheAsync(async (network, address, minterAddress) => {
-  const minter = getTonClient(network).open(new JettonMinter(core_dist.Address.parse(minterAddress)));
-  const walletAddress = await minter.getWalletAddress(core_dist.Address.parse(address));
-  return toBase64Address(walletAddress, true);
+  const minter = getTonClient(network).open(new JettonMinter(dist.Address.parse(minterAddress)));
+  const walletAddress = await minter.getWalletAddress(dist.Address.parse(address));
+  return toBase64Address(walletAddress, true, network);
 });
 const resolveTokenMinterAddress = withCacheAsync(async (network, tokenWalletAddress) => {
-  const tokenWallet = getTonClient(network).open(new JettonWallet(core_dist.Address.parse(tokenWalletAddress)));
+  const tokenWallet = getTonClient(network).open(new JettonWallet(dist.Address.parse(tokenWalletAddress)));
   const data = await tokenWallet.getWalletData();
-  return toBase64Address(data.minter, true);
+  return toBase64Address(data.minter, true, network);
 });
 const getWalletPublicKey = withCacheAsync(async (network, address) => {
   try {
-    const res = await getTonClient(network).callGetMethod(core_dist.Address.parse(address), 'get_public_key');
+    const res = await getTonClient(network).callGetMethod(dist.Address.parse(address), 'get_public_key');
     const bigintKey = res.stack.readBigNumber();
     const hex = bigintKey.toString(16).padStart(64, '0');
     return hexToBytes(hex);
@@ -42699,25 +42960,27 @@ const getWalletPublicKey = withCacheAsync(async (network, address) => {
   }
 });
 function getJettonMinterData(network, address) {
-  const contract = getTonClient(network).open(new JettonMinter(core_dist.Address.parse(address)));
+  const contract = getTonClient(network).open(new JettonMinter(dist.Address.parse(address)));
   return contract.getJettonData();
 }
 function oneCellFromBoc(bytes) {
-  return core_dist.Cell.fromBoc(tonCore_Buffer.from(bytes));
+  return dist.Cell.fromBoc(tonCore_Buffer.from(bytes));
 }
 function toBase64Address(address) {
   let isBounceable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_IS_BOUNCEABLE;
+  let network = arguments.length > 2 ? arguments[2] : undefined;
   if (typeof address === 'string') {
-    address = core_dist.Address.parse(address);
+    address = dist.Address.parse(address);
   }
   return address.toString({
     urlSafe: true,
-    bounceable: isBounceable
+    bounceable: isBounceable,
+    testOnly: network === 'testnet'
   });
 }
 function toRawAddress(address) {
   if (typeof address === 'string') {
-    address = core_dist.Address.parse(address);
+    address = dist.Address.parse(address);
   }
   return address.toRawString();
 }
@@ -42730,7 +42993,7 @@ function buildTokenTransferBody(params) {
     forwardAmount
   } = params;
   let forwardPayload = params.forwardPayload;
-  let builder = new core_dist.Builder().storeUint(JettonOpCode.Transfer, 32).storeUint(queryId || 0, 64).storeCoins(tokenAmount).storeAddress(core_dist.Address.parse(toAddress)).storeAddress(core_dist.Address.parse(responseAddress)).storeBit(false).storeCoins(forwardAmount !== null && forwardAmount !== void 0 ? forwardAmount : 0n);
+  let builder = new dist.Builder().storeUint(JettonOpCode.Transfer, 32).storeUint(queryId || 0, 64).storeCoins(tokenAmount).storeAddress(dist.Address.parse(toAddress)).storeAddress(dist.Address.parse(responseAddress)).storeBit(false).storeCoins(forwardAmount !== null && forwardAmount !== void 0 ? forwardAmount : 0n);
   if (forwardPayload instanceof Uint8Array) {
     const freeBytes = Math.round(builder.availableBits / 8);
     forwardPayload = packBytesAsSnake(forwardPayload, freeBytes);
@@ -42748,7 +43011,7 @@ function buildTokenTransferBody(params) {
 }
 function parseBase64(base64) {
   try {
-    return core_dist.Cell.fromBase64(base64);
+    return dist.Cell.fromBase64(base64);
   } catch (err) {
     logDebugError('parseBase64', err);
     return Uint8Array.from(tonCore_Buffer.from(base64, 'base64'));
@@ -42769,7 +43032,7 @@ function packBytesAsSnake(bytes) {
   if (buffer.length <= maxBytes) {
     return bytes;
   }
-  const mainBuilder = new core_dist.Builder();
+  const mainBuilder = new dist.Builder();
   let prevBuilder;
   let currentBuilder = mainBuilder;
   for (const [i, byte] of buffer.entries()) {
@@ -42777,7 +43040,7 @@ function packBytesAsSnake(bytes) {
       var _prevBuilder;
       (_prevBuilder = prevBuilder) === null || _prevBuilder === void 0 ? void 0 : _prevBuilder.storeRef(currentBuilder);
       prevBuilder = currentBuilder;
-      currentBuilder = new core_dist.Builder();
+      currentBuilder = new dist.Builder();
     }
     currentBuilder = currentBuilder.storeUint(byte, 8);
     if (i === buffer.length - 1) {
@@ -42788,7 +43051,7 @@ function packBytesAsSnake(bytes) {
   return mainBuilder.asCell();
 }
 function buildLiquidStakingDepositBody(queryId) {
-  return new core_dist.Builder().storeUint(LiquidStakingOpCode.Deposit, 32).storeUint(queryId || 0, 64).asCell();
+  return new dist.Builder().storeUint(LiquidStakingOpCode.Deposit, 32).storeUint(queryId || 0, 64).asCell();
 }
 function buildLiquidStakingWithdrawBody(options) {
   const {
@@ -42798,24 +43061,24 @@ function buildLiquidStakingWithdrawBody(options) {
     waitTillRoundEnd,
     fillOrKill
   } = options;
-  const customPayload = new core_dist.Builder().storeUint(Number(waitTillRoundEnd), 1).storeUint(Number(fillOrKill), 1).asCell();
-  return new core_dist.Builder().storeUint(JettonOpCode.Burn, 32).storeUint(queryId !== null && queryId !== void 0 ? queryId : 0, 64).storeCoins(amount).storeAddress(core_dist.Address.parse(responseAddress)).storeBit(1).storeRef(customPayload).asCell();
+  const customPayload = new dist.Builder().storeUint(Number(waitTillRoundEnd), 1).storeUint(Number(fillOrKill), 1).asCell();
+  return new dist.Builder().storeUint(JettonOpCode.Burn, 32).storeUint(queryId !== null && queryId !== void 0 ? queryId : 0, 64).storeCoins(amount).storeAddress(dist.Address.parse(responseAddress)).storeBit(1).storeRef(customPayload).asCell();
 }
 function getTokenBalance(network, walletAddress) {
-  const tokenWallet = getTonClient(network).open(new JettonWallet(core_dist.Address.parse(walletAddress)));
+  const tokenWallet = getTonClient(network).open(new JettonWallet(dist.Address.parse(walletAddress)));
   return tokenWallet.getJettonBalance();
 }
 function parseAddress(address) {
   try {
-    if (core_dist.Address.isRaw(address)) {
+    if (dist.Address.isRaw(address)) {
       return {
-        address: core_dist.Address.parseRaw(address),
+        address: dist.Address.parseRaw(address),
         isRaw: true,
         isValid: true
       };
-    } else if (core_dist.Address.isFriendly(address)) {
+    } else if (dist.Address.isFriendly(address)) {
       return {
-        ...core_dist.Address.parseFriendly(address),
+        ...dist.Address.parseFriendly(address),
         isUserFriendly: true,
         isValid: true
       };
@@ -42830,31 +43093,8 @@ function parseAddress(address) {
 function getIsRawAddress(address) {
   return Boolean(parseAddress(address).isRaw);
 }
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/index.ts
-
-function util_cloneDeep(value) {
-  return JSON.parse(JSON.stringify(value), bigintReviver);
-}
-function stringifyTxId(_ref) {
-  let {
-    lt,
-    hash
-  } = _ref;
-  return `${lt}:${hash}`;
-}
-function parseTxId(txId) {
-  const [lt, hash] = txId.split(':');
-  return {
-    lt: Number(lt),
-    hash
-  };
-}
-function buildTokenSlug(minterAddress) {
-  const addressPart = minterAddress.replace(/[^a-z\d]/gi, '').slice(0, 10);
-  return `ton-${addressPart}`.toLowerCase();
-}
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/wallet.ts
-/* provided dependency */ var wallet_Buffer = __webpack_require__(8764)["lW"];
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/metadata.ts
+/* provided dependency */ var metadata_Buffer = __webpack_require__(8764)["lW"];
 
 
 
@@ -42866,173 +43106,395 @@ function buildTokenSlug(minterAddress) {
 
 
 
-const isAddressInitialized = withCacheAsync(async (network, walletOrAddress) => {
-  return (await getWalletInfo(network, walletOrAddress)).isInitialized;
-});
-const isActiveSmartContract = withCacheAsync(async (network, address) => {
-  const {
-    isInitialized,
-    isWallet
-  } = await getWalletInfo(network, address);
-  return isInitialized ? !isWallet : undefined;
-}, value => value !== undefined);
-function publicKeyToAddress(network, publicKey, walletVersion) {
-  const wallet = buildWallet(network, publicKey, walletVersion);
-  return toBase64Address(wallet.address, false);
-}
-function buildWallet(network, publicKey, walletVersion) {
-  const client = getTonClient(network);
-  const WalletClass = walletClassMap[walletVersion];
-  return client.open(WalletClass.create({
-    publicKey: wallet_Buffer.from(publicKey),
-    workchain: WORKCHAIN
-  }));
-}
-async function getWalletInfo(network, walletOrAddress) {
-  const address = typeof walletOrAddress === 'string' ? walletOrAddress : toBase64Address(walletOrAddress.address);
-  const {
-    account_state: accountState,
-    wallet: isWallet,
-    seqno = 0,
-    balance,
-    last_transaction_id: {
-      lt,
-      hash
+
+
+
+
+const OFFCHAIN_CONTENT_PREFIX = 0x01;
+const SNAKE_PREFIX = 0x00;
+function parseJettonWalletMsgBody(network, body) {
+  if (!body) return undefined;
+  try {
+    let slice = Cell.Cell.fromBase64(body).beginParse();
+    const opCode = slice.loadUint(32);
+    const queryId = slice.loadUint(64);
+    if (opCode !== JettonOpCode.Transfer && opCode !== JettonOpCode.InternalTransfer) {
+      return undefined;
     }
-  } = await getTonClient(network).getWalletInfo(address);
-  return {
-    isInitialized: accountState === 'active',
-    isWallet,
-    seqno,
-    balance: BigInt(balance || '0'),
-    lastTxId: lt === '0' ? undefined : stringifyTxId({
-      lt,
-      hash
-    })
-  };
-}
-async function getContractInfo(network, address) {
-  const data = await getTonClient(network).getAddressInfo(address);
-  const {
-    code,
-    state
-  } = data;
-  const codeHash = wallet_Buffer.from(await sha256(base64ToBytes(code))).toString('hex');
-  const contractInfo = Object.values(KnownContracts).find(info => info.hash === codeHash);
-  const isInitialized = state === 'active';
-  const isWallet = state === 'active' ? (contractInfo === null || contractInfo === void 0 ? void 0 : contractInfo.type) === 'wallet' : undefined;
-  const isLedgerAllowed = Boolean(!isInitialized || (contractInfo === null || contractInfo === void 0 ? void 0 : contractInfo.isLedgerAllowed));
-  return {
-    isInitialized,
-    isWallet,
-    isLedgerAllowed,
-    contractInfo
-  };
-}
-async function getAccountBalance(accountId) {
-  const {
-    network
-  } = parseAccountId(accountId);
-  const address = await fetchStoredAddress(accountId);
-  return getWalletBalance(network, address);
-}
-async function getWalletBalance(network, walletOrAddress) {
-  return (await getWalletInfo(network, walletOrAddress)).balance;
-}
-async function getWalletSeqno(network, walletOrAddress) {
-  const {
-    seqno
-  } = await getWalletInfo(network, walletOrAddress);
-  return seqno || 0;
-}
-async function pickBestWallet(network, publicKey) {
-  const allWallets = await getWalletVersionInfos(network, publicKey);
-  const withBiggestBalance = allWallets.reduce((best, current) => {
-    return best && best.balance > current.balance ? best : current;
-  }, undefined);
-  if (!withBiggestBalance || !withBiggestBalance.balance) {
-    const version = DEFAULT_WALLET_VERSION;
-    const wallet = buildWallet(network, publicKey, version);
+    const jettonAmount = slice.loadCoins();
+    const address = slice.loadMaybeAddress();
+    const responseAddress = slice.loadMaybeAddress();
+    let forwardAmount;
+    let comment;
+    let encryptedComment;
+    if (responseAddress) {
+      if (opCode === JettonOpCode.Transfer) {
+        slice.loadBit();
+      }
+      forwardAmount = slice.loadCoins();
+      const isSeparateCell = slice.remainingBits && slice.loadBit();
+      if (isSeparateCell && slice.remainingRefs) {
+        slice = slice.loadRef().beginParse();
+      }
+      if (slice.remainingBits > 32) {
+        const forwardOpCode = slice.loadUint(32);
+        if (forwardOpCode === OpCode.Comment) {
+          const buffer = readSnakeBytes(slice);
+          comment = buffer.toString('utf-8');
+        } else if (forwardOpCode === OpCode.Encrypted) {
+          const buffer = readSnakeBytes(slice);
+          encryptedComment = buffer.toString('base64');
+        }
+      }
+    }
     return {
-      wallet,
-      version,
-      balance: 0n
+      operation: JettonOpCode[opCode],
+      queryId,
+      jettonAmount,
+      responseAddress,
+      address: address ? toBase64Address(address, undefined, network) : undefined,
+      forwardAmount,
+      comment,
+      encryptedComment
     };
+  } catch (err) {
+    logDebugError('parseJettonWalletMsgBody', err);
   }
-  return withBiggestBalance;
+  return undefined;
 }
-function getWalletVersionInfos(network, publicKey) {
-  let versions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ALL_WALLET_VERSIONS;
-  return Promise.all(versions.map(async version => {
-    const wallet = buildWallet(network, publicKey, version);
-    const address = toBase64Address(wallet.address, false);
-    const walletInfo = await getWalletInfo(network, wallet);
-    return {
-      wallet,
-      address,
-      version,
-      ...pick(walletInfo, ['isInitialized', 'balance', 'lastTxId'])
+function fixBase64ImageData(data) {
+  const decodedData = base64ToString(data);
+  if (decodedData.includes('<svg')) {
+    return `data:image/svg+xml;base64,${data}`;
+  }
+  return `data:image/png;base64,${data}`;
+}
+const dictSnakeBufferValue = {
+  parse: slice => {
+    const buffer = metadata_Buffer.from('');
+    const sliceToVal = (s, v, isFirst) => {
+      if (isFirst && s.loadUint(8) !== SNAKE_PREFIX) {
+        throw new Error('Only snake format is supported');
+      }
+      v = metadata_Buffer.concat([v, s.loadBuffer(s.remainingBits / 8)]);
+      if (s.remainingRefs === 1) {
+        v = sliceToVal(s.loadRef().beginParse(), v, false);
+      }
+      return v;
     };
-  }));
-}
-function getWalletVersions(network, publicKey) {
-  let versions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ALL_WALLET_VERSIONS;
-  return versions.map(version => {
-    const wallet = buildWallet(network, publicKey, version);
-    const address = toBase64Address(wallet.address, false);
-    return {
-      wallet,
-      address,
-      version
-    };
-  });
-}
-async function getWalletStateInit(accountId) {
-  const wallet = await pickAccountWallet(accountId);
-  return (0,core_dist.beginCell)().storeWritable((0,core_dist.storeStateInit)(wallet.init)).endCell();
-}
-function pickWalletByAddress(network, publicKey, address) {
-  address = toBase64Address(address, false);
-  const allWallets = getWalletVersions(network, publicKey);
-  return allWallets.find(w => w.address === address);
-}
-async function pickAccountWallet(accountId) {
+    return sliceToVal(slice.loadRef().beginParse(), buffer, true);
+  },
+  serialize: () => {
+    // pass
+  }
+};
+const jettonOnChainMetadataSpec = {
+  uri: 'ascii',
+  name: 'utf8',
+  description: 'utf8',
+  image: 'ascii',
+  symbol: 'utf8',
+  decimals: 'utf8'
+};
+async function fetchJettonMetadata(network, address) {
   const {
-    network
-  } = parseAccountId(accountId);
-  const {
-    publicKey,
-    version
-  } = await fetchStoredAccount(accountId);
-  const publicKeyBytes = hexToBytes(publicKey);
-  return buildWallet(network, publicKeyBytes, version);
+    content
+  } = await getJettonMinterData(network, address);
+  let metadata;
+  const slice = content.asSlice();
+  const prefix = slice.loadUint(8);
+  if (prefix === OFFCHAIN_CONTENT_PREFIX) {
+    const bytes = readSnakeBytes(slice);
+    const contentUri = bytes.toString('utf-8');
+    metadata = await fetchJettonOffchainMetadata(contentUri);
+  } else {
+    // On-chain content
+    metadata = await parseJettonOnchainMetadata(slice);
+    if (metadata.uri) {
+      // Semi-chain content
+      const offchainMetadata = await fetchJettonOffchainMetadata(metadata.uri);
+      metadata = {
+        ...offchainMetadata,
+        ...metadata
+      };
+    }
+  }
+  return metadata;
 }
-function resolveWalletVersion(wallet) {
-  var _Object$entries$find;
-  return (_Object$entries$find = Object.entries(walletClassMap).find(_ref => {
-    let [, walletClass] = _ref;
-    return wallet instanceof walletClass;
-  })) === null || _Object$entries$find === void 0 ? void 0 : _Object$entries$find[0];
+async function parseJettonOnchainMetadata(slice) {
+  const dict = slice.loadDict(Dictionary.Dictionary.Keys.Buffer(32), dictSnakeBufferValue);
+  const res = {};
+  for (const [key, value] of Object.entries(jettonOnChainMetadataSpec)) {
+    var _dict$get;
+    const sha256Key = metadata_Buffer.from(await sha256(metadata_Buffer.from(key, 'ascii')));
+    const val = (_dict$get = dict.get(sha256Key)) === null || _dict$get === void 0 ? void 0 : _dict$get.toString(value);
+    if (val) {
+      res[key] = val;
+    }
+  }
+  return res;
 }
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/nfts.ts
-
-
-
-
-
-
-async function getAccountNfts(accountId, offset, limit) {
-  const {
-    network
-  } = parseAccountId(accountId);
-  const address = await fetchStoredAddress(accountId);
-  const rawNfts = await fetchAccountNfts(network, address, {
-    offset,
-    limit
-  });
-  return compact(rawNfts.map(buildNft));
+async function fetchJettonOffchainMetadata(uri) {
+  const metadata = await fetchJsonMetadata(uri);
+  return pick(metadata, ['name', 'description', 'symbol', 'decimals', 'image', 'image_data']);
 }
-function buildNft(rawNft) {
+async function parseWalletTransactionBody(network, transaction) {
+  var _transaction$extraDat;
+  const body = (_transaction$extraDat = transaction.extraData) === null || _transaction$extraDat === void 0 ? void 0 : _transaction$extraDat.body;
+  if (!body || transaction.comment || transaction.encryptedComment) {
+    return transaction;
+  }
+  try {
+    const slice = dataToSlice(body);
+    if (slice.remainingBits > 32) {
+      const address = transaction.isIncoming ? transaction.fromAddress : transaction.toAddress;
+      const parsedPayload = await parsePayloadSlice(network, address, slice, false, transaction);
+      transaction.extraData.parsedPayload = parsedPayload;
+      if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'comment') {
+        transaction = {
+          ...transaction,
+          comment: parsedPayload.comment
+        };
+      } else if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'encrypted-comment') {
+        transaction = {
+          ...transaction,
+          encryptedComment: parsedPayload.encryptedComment
+        };
+      }
+    }
+  } catch (err) {
+    logDebugError('parseTransactionBody', err);
+  }
+  return transaction;
+}
+async function parsePayloadBase64(network, address, base64) {
+  var _await$parsePayloadSl;
+  const slice = dataToSlice(base64);
+  const result = {
+    type: 'unknown',
+    base64
+  };
+  if (!slice) return result;
+  return (_await$parsePayloadSl = await parsePayloadSlice(network, address, slice, true)) !== null && _await$parsePayloadSl !== void 0 ? _await$parsePayloadSl : result;
+}
+async function parsePayloadSlice(network, address, slice, shouldLoadItems, transactionDebug) {
+  let opCode;
+  try {
+    opCode = slice.loadUint(32);
+    if (opCode === OpCode.Comment) {
+      const buffer = readSnakeBytes(slice);
+      const comment = buffer.toString('utf-8');
+      return {
+        type: 'comment',
+        comment
+      };
+    } else if (opCode === OpCode.Encrypted) {
+      const buffer = readSnakeBytes(slice);
+      const encryptedComment = buffer.toString('base64');
+      return {
+        type: 'encrypted-comment',
+        encryptedComment
+      };
+    } else if (slice.remainingBits < 64) {
+      return undefined;
+    }
+    const queryId = slice.loadUintBig(64);
+    switch (opCode) {
+      case JettonOpCode.Transfer:
+        {
+          var _forwardPayload;
+          const minterAddress = await resolveTokenMinterAddress(network, address);
+          const slug = buildTokenSlug(minterAddress);
+          const amount = slice.loadCoins();
+          const destination = slice.loadAddress();
+          const responseDestination = slice.loadMaybeAddress();
+          if (!responseDestination) {
+            return {
+              type: 'tokens:transfer-non-standard',
+              queryId,
+              destination: toBase64Address(destination, undefined, network),
+              amount,
+              slug
+            };
+          }
+          const customPayload = slice.loadMaybeRef();
+          const forwardAmount = slice.loadCoins();
+          let forwardPayload = slice.loadMaybeRef();
+          if (!forwardPayload && slice.remainingBits) {
+            const builder = new Builder.Builder().storeBits(slice.loadBits(slice.remainingBits));
+            range(0, slice.remainingRefs).forEach(() => {
+              builder.storeRef(slice.loadRef());
+            });
+            forwardPayload = builder.endCell();
+          }
+          return {
+            type: 'tokens:transfer',
+            queryId,
+            amount,
+            destination: toBase64Address(destination, undefined, network),
+            responseDestination: toBase64Address(responseDestination, undefined, network),
+            customPayload: customPayload === null || customPayload === void 0 ? void 0 : customPayload.toBoc().toString('base64'),
+            forwardAmount,
+            forwardPayload: (_forwardPayload = forwardPayload) === null || _forwardPayload === void 0 ? void 0 : _forwardPayload.toBoc().toString('base64'),
+            slug
+          };
+        }
+      case NftOpCode.TransferOwnership:
+        {
+          var _nft;
+          const newOwner = slice.loadAddress();
+          const responseDestination = slice.loadAddress();
+          const customPayload = slice.loadMaybeRef();
+          const forwardAmount = slice.loadCoins();
+          const forwardPayload = readForwardPayloadCell(slice);
+          const comment = forwardPayload ? readComment(forwardPayload.asSlice()) : undefined;
+          let nft;
+          if (shouldLoadItems) {
+            const [rawNft] = await fetchNftItems(network, [address]);
+            if (rawNft) {
+              nft = buildNft(network, rawNft);
+            }
+          }
+          return {
+            type: 'nft:transfer',
+            queryId,
+            newOwner: toBase64Address(newOwner, undefined, network),
+            responseDestination: toBase64Address(responseDestination, undefined, network),
+            customPayload: customPayload === null || customPayload === void 0 ? void 0 : customPayload.toBoc().toString('base64'),
+            forwardAmount,
+            forwardPayload: forwardPayload === null || forwardPayload === void 0 ? void 0 : forwardPayload.toBoc().toString('base64'),
+            nftAddress: address,
+            nftName: (_nft = nft) === null || _nft === void 0 ? void 0 : _nft.name,
+            nft,
+            comment
+          };
+        }
+      case NftOpCode.OwnershipAssigned:
+        {
+          const prevOwner = slice.loadAddress();
+          const forwardPayload = readForwardPayloadCell(slice);
+          const comment = forwardPayload ? readComment(forwardPayload.asSlice()) : undefined;
+          let nft;
+          if (shouldLoadItems) {
+            const [rawNft] = await fetchNftItems(network, [address]);
+            if (rawNft) {
+              nft = buildNft(network, rawNft);
+            }
+          }
+          return {
+            type: 'nft:ownership-assigned',
+            queryId,
+            prevOwner: toBase64Address(prevOwner, undefined, network),
+            comment,
+            nftAddress: address,
+            nft
+          };
+        }
+      case JettonOpCode.Burn:
+        {
+          const minterAddress = await resolveTokenMinterAddress(network, address);
+          const slug = buildTokenSlug(minterAddress);
+          const amount = slice.loadCoins();
+          const addressObj = slice.loadAddress();
+          const customPayload = slice.loadMaybeRef();
+          const isLiquidUnstakeRequest = minterAddress === LIQUID_JETTON;
+          return {
+            type: 'tokens:burn',
+            queryId,
+            amount,
+            address: toBase64Address(addressObj, undefined, network),
+            customPayload: customPayload === null || customPayload === void 0 ? void 0 : customPayload.toBoc().toString('base64'),
+            slug,
+            isLiquidUnstakeRequest
+          };
+        }
+      case LiquidStakingOpCode.DistributedAsset:
+        {
+          return {
+            type: 'liquid-staking:withdrawal-nft',
+            queryId
+          };
+        }
+      case LiquidStakingOpCode.Withdrawal:
+        {
+          return {
+            type: 'liquid-staking:withdrawal',
+            queryId
+          };
+        }
+      case LiquidStakingOpCode.Deposit:
+        {
+          // const amount = slice.loadCoins();
+          return {
+            type: 'liquid-staking:deposit',
+            queryId
+          };
+        }
+    }
+  } catch (err) {
+    if (DEBUG) {
+      var _opCode;
+      const debugTxString = transactionDebug && `${transactionDebug.txId} ${new Date(transactionDebug.timestamp)}`;
+      const opCodeHex = `0x${(_opCode = opCode) === null || _opCode === void 0 ? void 0 : _opCode.toString(16).padStart(8, '0')}`;
+      logDebugError('parsePayload', opCodeHex, debugTxString, '\n', err);
+    }
+  }
+  return undefined;
+}
+function dataToSlice(data) {
+  let buffer;
+  if (typeof data === 'string') {
+    buffer = metadata_Buffer.from(data, 'base64');
+  } else if (data instanceof metadata_Buffer) {
+    buffer = data;
+  } else {
+    buffer = metadata_Buffer.from(data);
+  }
+  try {
+    return Cell.Cell.fromBoc(buffer)[0].beginParse();
+  } catch (err) {
+    if ((err === null || err === void 0 ? void 0 : err.message) !== 'Invalid magic') {
+      throw err;
+    }
+  }
+  return new Slice.Slice(new BitReader.BitReader(new BitString.BitString(buffer, 0, buffer.length * 8)), []);
+}
+function readComment(slice) {
+  if (slice.remainingBits < 32) {
+    return undefined;
+  }
+  const opCode = slice.loadUint(32);
+  if (opCode !== OpCode.Comment || !slice.remainingBits && !slice.remainingRefs) {
+    return undefined;
+  }
+  const buffer = readSnakeBytes(slice);
+  return buffer.toString('utf-8');
+}
+function readForwardPayloadCell(slice) {
+  var _forwardPayload2;
+  let forwardPayload = slice.loadBit() && slice.remainingRefs ? slice.loadRef() : undefined;
+  if (!forwardPayload && slice.remainingBits) {
+    const builder = new Builder.Builder().storeBits(slice.loadBits(slice.remainingBits));
+    range(0, slice.remainingRefs).forEach(() => {
+      builder.storeRef(slice.loadRef());
+    });
+    forwardPayload = builder.endCell();
+  }
+  return (_forwardPayload2 = forwardPayload) !== null && _forwardPayload2 !== void 0 ? _forwardPayload2 : undefined;
+}
+function readSnakeBytes(slice) {
+  let buffer = metadata_Buffer.alloc(0);
+  while (slice.remainingBits >= 8) {
+    buffer = metadata_Buffer.concat([buffer, slice.loadBuffer(slice.remainingBits / 8)]);
+    if (slice.remainingRefs) {
+      slice = slice.loadRef().beginParse();
+    } else {
+      break;
+    }
+  }
+  return buffer;
+}
+function buildNft(network, rawNft) {
   if (!rawNft.metadata) {
     return undefined;
   }
@@ -43051,92 +43513,25 @@ function buildNft(rawNft) {
       sale
     } = rawNft;
     const isHidden = renderType === 'hidden' || description === 'SCAM';
+    const imageFromPreview = previews.find(x => x.resolution === '1500x1500').url;
     return {
       index,
       name,
-      address: toBase64Address(address, true),
-      image,
+      address: toBase64Address(address, true, network),
+      image: fixIpfsUrl(imageFromPreview || image || ''),
       thumbnail: previews.find(x => x.resolution === '500x500').url,
       isOnSale: Boolean(sale),
       isHidden,
+      description,
       ...(collection && {
-        collectionAddress: toBase64Address(collection.address, true),
-        collectionName: collection.name
+        collectionAddress: toBase64Address(collection.address, true, network),
+        collectionName: collection.name,
+        isOnFragment: NFT_FRAGMENT_COLLECTIONS.has(collection.address)
       })
     };
   } catch (err) {
     return undefined;
   }
-}
-async function getNftUpdates(accountId, fromSec) {
-  var _events$0$timestamp, _events$;
-  const {
-    network
-  } = parseAccountId(accountId);
-  const address = await fetchStoredAddress(accountId);
-  const events = await fetchAccountEvents(network, address, fromSec);
-  fromSec = (_events$0$timestamp = (_events$ = events[0]) === null || _events$ === void 0 ? void 0 : _events$.timestamp) !== null && _events$0$timestamp !== void 0 ? _events$0$timestamp : fromSec;
-  events.reverse();
-  const updates = [];
-  for (const event of events) {
-    for (const action of event.actions) {
-      let to;
-      let nftAddress;
-      let rawNft;
-      const isPurchase = !!action.NftPurchase;
-      if (action.NftItemTransfer) {
-        const {
-          sender,
-          recipient,
-          nft: rawNftAddress
-        } = action.NftItemTransfer;
-        if (!sender || !recipient) continue;
-        to = toBase64Address(recipient.address);
-        nftAddress = toBase64Address(rawNftAddress, true);
-      } else if (action.NftPurchase) {
-        const {
-          buyer
-        } = action.NftPurchase;
-        to = toBase64Address(buyer.address);
-        rawNft = action.NftPurchase.nft;
-        if (!rawNft) {
-          continue;
-        }
-        nftAddress = toBase64Address(rawNft.address, true);
-      } else {
-        continue;
-      }
-      if (to === address) {
-        if (!rawNft) {
-          [rawNft] = await fetchNftItems(network, [nftAddress]);
-        }
-        if (rawNft) {
-          const nft = buildNft(rawNft);
-          if (nft) {
-            updates.push({
-              type: 'nftReceived',
-              accountId,
-              nftAddress,
-              nft
-            });
-          }
-        }
-      } else if (!isPurchase && (await isActiveSmartContract(network, to))) {
-        updates.push({
-          type: 'nftPutUpForSale',
-          accountId,
-          nftAddress
-        });
-      } else {
-        updates.push({
-          type: 'nftSent',
-          accountId,
-          nftAddress
-        });
-      }
-    }
-  }
-  return [fromSec, updates];
 }
 ;// CONCATENATED MODULE: ./src/util/compareActivities.ts
 function compareActivities(a, b) {
@@ -43207,9 +43602,9 @@ async function fetchTransactions(network, address, limit, toTxId, fromTxId) {
       rawTransactions = rawTransactions.slice(1);
     }
   }
-  return rawTransactions.map(rawTx => parseRawTransaction(rawTx, addressBook)).flat();
+  return rawTransactions.map(rawTx => parseRawTransaction(network, rawTx, addressBook)).flat();
 }
-function parseRawTransaction(rawTx, addressBook) {
+function parseRawTransaction(network, rawTx, addressBook) {
   const {
     now,
     lt,
@@ -43222,6 +43617,7 @@ function parseRawTransaction(rawTx, addressBook) {
   });
   const timestamp = now * 1000;
   const isIncoming = !!rawTx.in_msg.source;
+  const inMsgHash = rawTx.in_msg.hash;
   const msgs = isIncoming ? [rawTx.in_msg] : rawTx.out_msgs;
   if (!msgs.length) return [];
   return msgs.map((msg, i) => {
@@ -43232,7 +43628,7 @@ function parseRawTransaction(rawTx, addressBook) {
     } = msg;
     const fromAddress = addressBook[source].user_friendly;
     const toAddress = addressBook[destination].user_friendly;
-    const normalizedAddress = toBase64Address(isIncoming ? source : destination, true);
+    const normalizedAddress = toBase64Address(isIncoming ? source : destination, true, network);
     return {
       txId: msgs.length > 1 ? `${txId}:${i + 1}` : txId,
       timestamp,
@@ -43242,6 +43638,7 @@ function parseRawTransaction(rawTx, addressBook) {
       amount: isIncoming ? BigInt(value) : -BigInt(value),
       slug: TON_TOKEN_SLUG,
       fee: BigInt(fee),
+      inMsgHash,
       normalizedAddress,
       extraData: {
         body: getRawBody(msg)
@@ -43292,7 +43689,7 @@ function callApiV3(network, path, data) {
   } = getEnvironment();
   const baseUrl = network === 'testnet' ? TONHTTPAPI_V3_TESTNET_API_URL : TONHTTPAPI_V3_MAINNET_API_URL;
   const apiKey = network === 'testnet' ? tonhttpapiTestnetKey : tonhttpapiMainnetKey;
-  return fetchJson(`${baseUrl}${path}`, data, {
+  return fetch_fetchJson(`${baseUrl}${path}`, data, {
     headers: {
       ...(apiKey && {
         'X-Api-Key': apiKey
@@ -43437,389 +43834,41 @@ async function decryptMessageComment(encryptedData, myPublicKey, myPrivateKey, s
   const decryptedBytes = await decryptData(encryptedData, myPublicKey, myPrivateKey, salt);
   return new TextDecoder().decode(decryptedBytes);
 }
-// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/BitReader.js
-var BitReader = __webpack_require__(4290);
-// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/BitString.js
-var BitString = __webpack_require__(3708);
-// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/Builder.js
-var Builder = __webpack_require__(6777);
-// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/Cell.js
-var Cell = __webpack_require__(7768);
-// EXTERNAL MODULE: ./node_modules/@ton/core/dist/boc/Slice.js
-var Slice = __webpack_require__(8624);
-// EXTERNAL MODULE: ./node_modules/@ton/core/dist/dict/Dictionary.js
-var Dictionary = __webpack_require__(5960);
-;// CONCATENATED MODULE: ./src/util/metadata.ts
-
-const IPFS_GATEWAY_BASE_URL = 'https://ipfs.io/ipfs/';
-function fetchJsonMetadata(url) {
-  url = fixIpfsUrl(url);
-  const reserveUrl = `${BRILLIANT_API_BASE_URL}/utils/download-json?url=${url}`;
-  if (IS_CAPACITOR) {
-    return metadata_fetchJson(reserveUrl);
+;// CONCATENATED MODULE: ./src/util/areDeepEqual.ts
+function areDeepEqual(value1, value2) {
+  const type1 = typeof value1;
+  const type2 = typeof value2;
+  if (type1 !== type2) {
+    return false;
   }
-  return metadata_fetchJson(url).catch(() => {
-    return metadata_fetchJson(reserveUrl);
-  });
-}
-function fixIpfsUrl(url) {
-  return url.replace('ipfs://', IPFS_GATEWAY_BASE_URL);
-}
-async function metadata_fetchJson(url) {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw Error(`Http error ${response.status}`);
+
+  // eslint-disable-next-line no-null/no-null
+  if (type1 !== 'object' || value1 === null || value2 === null) {
+    return value1 === value2;
   }
-  return response.json();
-}
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/util/metadata.ts
-/* provided dependency */ var metadata_Buffer = __webpack_require__(8764)["lW"];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const OFFCHAIN_CONTENT_PREFIX = 0x01;
-const SNAKE_PREFIX = 0x00;
-function parseJettonWalletMsgBody(body) {
-  if (!body) return undefined;
-  try {
-    let slice = Cell.Cell.fromBase64(body).beginParse();
-    const opCode = slice.loadUint(32);
-    const queryId = slice.loadUint(64);
-    if (opCode !== JettonOpCode.Transfer && opCode !== JettonOpCode.InternalTransfer) {
-      return undefined;
+  const isArray1 = Array.isArray(value1);
+  const isArray2 = Array.isArray(value2);
+  if (isArray1 !== isArray2) {
+    return false;
+  }
+  if (isArray1) {
+    const array1 = value1;
+    const array2 = value2;
+    if (array1.length !== array2.length) {
+      return false;
     }
-    const jettonAmount = slice.loadCoins();
-    const address = slice.loadMaybeAddress();
-    const responseAddress = slice.loadMaybeAddress();
-    let forwardAmount;
-    let comment;
-    let encryptedComment;
-    if (responseAddress) {
-      if (opCode === JettonOpCode.Transfer) {
-        slice.loadBit();
-      }
-      forwardAmount = slice.loadCoins();
-      const isSeparateCell = slice.remainingBits && slice.loadBit();
-      if (isSeparateCell && slice.remainingRefs) {
-        slice = slice.loadRef().beginParse();
-      }
-      if (slice.remainingBits > 32) {
-        const forwardOpCode = slice.loadUint(32);
-        if (forwardOpCode === OpCode.Comment) {
-          const buffer = readSnakeBytes(slice);
-          comment = buffer.toString('utf-8');
-        } else if (forwardOpCode === OpCode.Encrypted) {
-          const buffer = readSnakeBytes(slice);
-          encryptedComment = buffer.toString('base64');
-        }
-      }
-    }
-    return {
-      operation: JettonOpCode[opCode],
-      queryId,
-      jettonAmount,
-      responseAddress,
-      address: address ? toBase64Address(address) : undefined,
-      forwardAmount,
-      comment,
-      encryptedComment
-    };
-  } catch (err) {
-    logDebugError('parseJettonWalletMsgBody', err);
+    return array1.every((member1, i) => areDeepEqual(member1, array2[i]));
   }
-  return undefined;
+  const object1 = value1;
+  const object2 = value2;
+  const keys1 = Object.keys(object1);
+  return keys1.every(key1 => areDeepEqual(object1[key1], object2[key1]));
 }
-function fixBase64ImageData(data) {
-  const decodedData = base64ToString(data);
-  if (decodedData.includes('<svg')) {
-    return `data:image/svg+xml;base64,${data}`;
+;// CONCATENATED MODULE: ./src/util/assert.ts
+function assert(condition, message) {
+  if (!condition) {
+    throw new Error(message || 'Assertion failed');
   }
-  return `data:image/png;base64,${data}`;
-}
-const dictSnakeBufferValue = {
-  parse: slice => {
-    const buffer = metadata_Buffer.from('');
-    const sliceToVal = (s, v, isFirst) => {
-      if (isFirst && s.loadUint(8) !== SNAKE_PREFIX) {
-        throw new Error('Only snake format is supported');
-      }
-      v = metadata_Buffer.concat([v, s.loadBuffer(s.remainingBits / 8)]);
-      if (s.remainingRefs === 1) {
-        v = sliceToVal(s.loadRef().beginParse(), v, false);
-      }
-      return v;
-    };
-    return sliceToVal(slice.loadRef().beginParse(), buffer, true);
-  },
-  serialize: () => {
-    // pass
-  }
-};
-const jettonOnChainMetadataSpec = {
-  uri: 'ascii',
-  name: 'utf8',
-  description: 'utf8',
-  image: 'ascii',
-  symbol: 'utf8',
-  decimals: 'utf8'
-};
-async function fetchJettonMetadata(network, address) {
-  const {
-    content
-  } = await getJettonMinterData(network, address);
-  let metadata;
-  const slice = content.asSlice();
-  const prefix = slice.loadUint(8);
-  if (prefix === OFFCHAIN_CONTENT_PREFIX) {
-    const bytes = readSnakeBytes(slice);
-    const contentUri = bytes.toString('utf-8');
-    metadata = await fetchJettonOffchainMetadata(contentUri);
-  } else {
-    // On-chain content
-    metadata = await parseJettonOnchainMetadata(slice);
-    if (metadata.uri) {
-      // Semi-chain content
-      const offchainMetadata = await fetchJettonOffchainMetadata(metadata.uri);
-      metadata = {
-        ...offchainMetadata,
-        ...metadata
-      };
-    }
-  }
-  return metadata;
-}
-async function parseJettonOnchainMetadata(slice) {
-  const dict = slice.loadDict(Dictionary.Dictionary.Keys.Buffer(32), dictSnakeBufferValue);
-  const res = {};
-  for (const [key, value] of Object.entries(jettonOnChainMetadataSpec)) {
-    var _dict$get;
-    const sha256Key = metadata_Buffer.from(await sha256(metadata_Buffer.from(key, 'ascii')));
-    const val = (_dict$get = dict.get(sha256Key)) === null || _dict$get === void 0 ? void 0 : _dict$get.toString(value);
-    if (val) {
-      res[key] = val;
-    }
-  }
-  return res;
-}
-async function fetchJettonOffchainMetadata(uri) {
-  const metadata = await fetchJsonMetadata(uri);
-  return pick(metadata, ['name', 'description', 'symbol', 'decimals', 'image', 'image_data']);
-}
-async function parseWalletTransactionBody(network, transaction) {
-  var _transaction$extraDat;
-  const body = (_transaction$extraDat = transaction.extraData) === null || _transaction$extraDat === void 0 ? void 0 : _transaction$extraDat.body;
-  if (!body || transaction.comment || transaction.encryptedComment) {
-    return transaction;
-  }
-  try {
-    const slice = dataToSlice(body);
-    if (slice.remainingBits > 32) {
-      const parsedPayload = await parsePayloadSlice(network, transaction.toAddress, slice);
-      transaction.extraData.parsedPayload = parsedPayload;
-      if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'comment') {
-        transaction = {
-          ...transaction,
-          comment: parsedPayload.comment
-        };
-      } else if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'encrypted-comment') {
-        transaction = {
-          ...transaction,
-          encryptedComment: parsedPayload.encryptedComment
-        };
-      }
-    }
-  } catch (err) {
-    logDebugError('parseTransactionBody', err);
-  }
-  return transaction;
-}
-async function parsePayloadBase64(network, toAddress, base64) {
-  var _await$parsePayloadSl;
-  const slice = dataToSlice(base64);
-  const result = {
-    type: 'unknown',
-    base64
-  };
-  if (!slice) return result;
-  return (_await$parsePayloadSl = await parsePayloadSlice(network, toAddress, slice)) !== null && _await$parsePayloadSl !== void 0 ? _await$parsePayloadSl : result;
-}
-async function parsePayloadSlice(network, toAddress, slice) {
-  try {
-    const opCode = slice.loadUint(32);
-    if (opCode === OpCode.Comment) {
-      const buffer = readSnakeBytes(slice);
-      const comment = buffer.toString('utf-8');
-      return {
-        type: 'comment',
-        comment
-      };
-    } else if (opCode === OpCode.Encrypted) {
-      const buffer = readSnakeBytes(slice);
-      const encryptedComment = buffer.toString('base64');
-      return {
-        type: 'encrypted-comment',
-        encryptedComment
-      };
-    } else if (slice.remainingBits < 64) {
-      return undefined;
-    }
-    const queryId = slice.loadUintBig(64);
-    switch (opCode) {
-      case JettonOpCode.Transfer:
-        {
-          var _forwardPayload;
-          const minterAddress = await resolveTokenMinterAddress(network, toAddress);
-          const slug = buildTokenSlug(minterAddress);
-          const amount = slice.loadCoins();
-          const destination = slice.loadAddress();
-          const responseDestination = slice.loadMaybeAddress();
-          if (!responseDestination) {
-            return {
-              type: 'tokens:transfer-non-standard',
-              queryId,
-              destination: toBase64Address(destination),
-              amount,
-              slug
-            };
-          }
-          const customPayload = slice.loadMaybeRef();
-          const forwardAmount = slice.loadCoins();
-          let forwardPayload = slice.loadMaybeRef();
-          if (!forwardPayload && slice.remainingBits) {
-            const builder = new Builder.Builder().storeBits(slice.loadBits(slice.remainingBits));
-            range(0, slice.remainingRefs).forEach(() => {
-              builder.storeRef(slice.loadRef());
-            });
-            forwardPayload = builder.endCell();
-          }
-          return {
-            type: 'tokens:transfer',
-            queryId,
-            amount,
-            destination: toBase64Address(destination),
-            responseDestination: toBase64Address(responseDestination),
-            customPayload: customPayload === null || customPayload === void 0 ? void 0 : customPayload.toBoc().toString('base64'),
-            forwardAmount,
-            forwardPayload: (_forwardPayload = forwardPayload) === null || _forwardPayload === void 0 ? void 0 : _forwardPayload.toBoc().toString('base64'),
-            slug
-          };
-        }
-      case NftOpCode.TransferOwnership:
-        {
-          var _forwardPayload2, _nft$metadata;
-          const newOwner = slice.loadAddress();
-          const responseDestination = slice.loadAddress();
-          const customPayload = slice.loadMaybeRef();
-          const forwardAmount = slice.loadCoins();
-          let forwardPayload = slice.loadMaybeRef();
-          if (!forwardPayload && slice.remainingBits) {
-            const builder = new Builder.Builder().storeBits(slice.loadBits(slice.remainingBits));
-            range(0, slice.remainingRefs).forEach(() => {
-              builder.storeRef(slice.loadRef());
-            });
-            forwardPayload = builder.endCell();
-          }
-          const nftAddress = toAddress;
-          const [nft] = await fetchNftItems(network, [nftAddress]);
-          return {
-            type: 'nft:transfer',
-            queryId,
-            newOwner: toBase64Address(newOwner),
-            responseDestination: toBase64Address(responseDestination),
-            customPayload: customPayload === null || customPayload === void 0 ? void 0 : customPayload.toBoc().toString('base64'),
-            forwardAmount,
-            forwardPayload: (_forwardPayload2 = forwardPayload) === null || _forwardPayload2 === void 0 ? void 0 : _forwardPayload2.toBoc().toString('base64'),
-            nftAddress,
-            nftName: nft === null || nft === void 0 || (_nft$metadata = nft.metadata) === null || _nft$metadata === void 0 ? void 0 : _nft$metadata.name
-          };
-        }
-      case JettonOpCode.Burn:
-        {
-          const minterAddress = await resolveTokenMinterAddress(network, toAddress);
-          const slug = buildTokenSlug(minterAddress);
-          const amount = slice.loadCoins();
-          const address = slice.loadAddress();
-          const customPayload = slice.loadMaybeRef();
-          const isLiquidUnstakeRequest = minterAddress === LIQUID_JETTON;
-          return {
-            type: 'tokens:burn',
-            queryId,
-            amount,
-            address: toBase64Address(address),
-            customPayload: customPayload === null || customPayload === void 0 ? void 0 : customPayload.toBoc().toString('base64'),
-            slug,
-            isLiquidUnstakeRequest
-          };
-        }
-      case LiquidStakingOpCode.DistributedAsset:
-        {
-          return {
-            type: 'liquid-staking:withdrawal-nft',
-            queryId
-          };
-        }
-      case LiquidStakingOpCode.Withdrawal:
-        {
-          return {
-            type: 'liquid-staking:withdrawal',
-            queryId
-          };
-        }
-      case LiquidStakingOpCode.Deposit:
-        {
-          // const amount = slice.loadCoins();
-          return {
-            type: 'liquid-staking:deposit',
-            queryId
-          };
-        }
-    }
-  } catch (err) {
-    logDebugError('parsePayload', err);
-  }
-  return undefined;
-}
-function dataToSlice(data) {
-  let buffer;
-  if (typeof data === 'string') {
-    buffer = metadata_Buffer.from(data, 'base64');
-  } else if (data instanceof metadata_Buffer) {
-    buffer = data;
-  } else {
-    buffer = metadata_Buffer.from(data);
-  }
-  try {
-    return Cell.Cell.fromBoc(buffer)[0].beginParse();
-  } catch (err) {
-    if ((err === null || err === void 0 ? void 0 : err.message) !== 'Invalid magic') {
-      throw err;
-    }
-  }
-  return new Slice.Slice(new BitReader.BitReader(new BitString.BitString(buffer, 0, buffer.length * 8)), []);
-}
-function readSnakeBytes(slice) {
-  let buffer = metadata_Buffer.alloc(0);
-  while (slice.remainingBits >= 8) {
-    buffer = metadata_Buffer.concat([buffer, slice.loadBuffer(slice.remainingBits / 8)]);
-    if (slice.remainingRefs) {
-      slice = slice.loadRef().beginParse();
-    } else {
-      break;
-    }
-  }
-  return buffer;
 }
 ;// CONCATENATED MODULE: ./src/api/common/backend.ts
 
@@ -43828,10 +43877,11 @@ const BAD_REQUEST_CODE = 400;
 async function callBackendPost(path, data, options) {
   const {
     authToken,
-    isAllowBadRequest
+    isAllowBadRequest,
+    method
   } = options !== null && options !== void 0 ? options : {};
   const response = await fetch(`${BRILLIANT_API_BASE_URL}${path}`, {
-    method: 'POST',
+    method: method !== null && method !== void 0 ? method : 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...(authToken && {
@@ -43843,20 +43893,11 @@ async function callBackendPost(path, data, options) {
   handleFetchErrors(response, isAllowBadRequest ? [BAD_REQUEST_CODE] : undefined);
   return response.json();
 }
-async function callBackendGet(path, data, headers) {
+function callBackendGet(path, data, headers) {
   const url = new URL(`${BRILLIANT_API_BASE_URL}${path}`);
-  if (data) {
-    Object.entries(data).forEach(_ref => {
-      let [key, value] = _ref;
-      if (value === undefined) return;
-      url.searchParams.set(key, value.toString());
-    });
-  }
-  const response = await fetch(url, {
+  return fetch_fetchJson(url, data, {
     headers
   });
-  handleFetchErrors(response);
-  return response.json();
 }
 ;// CONCATENATED MODULE: ./src/api/common/addresses.ts
 
@@ -43886,59 +43927,8 @@ function getScamMarkers() {
 function getAddressInfo(address) {
   return knownAddresses[address];
 }
-;// CONCATENATED MODULE: ./src/util/areDeepEqual.ts
-function areDeepEqual(value1, value2) {
-  const type1 = typeof value1;
-  const type2 = typeof value2;
-  if (type1 !== type2) {
-    return false;
-  }
-  if (type1 !== 'object') {
-    return value1 === value2;
-  }
-  const isArray1 = Array.isArray(value1);
-  const isArray2 = Array.isArray(value2);
-  if (isArray1 !== isArray2) {
-    return false;
-  }
-  if (isArray1) {
-    const array1 = value1;
-    const array2 = value2;
-    if (array1.length !== array2.length) {
-      return false;
-    }
-    return array1.every((member1, i) => areDeepEqual(member1, array2[i]));
-  }
-  const object1 = value1;
-  const object2 = value2;
-  const keys1 = Object.keys(object1);
-  return keys1.every(key1 => areDeepEqual(object1[key1], object2[key1]));
-}
-// EXTERNAL MODULE: ./src/lib/dexie/dexie.js
-var dexie = __webpack_require__(8876);
-var dexie_default = /*#__PURE__*/__webpack_require__.n(dexie);
-;// CONCATENATED MODULE: ./src/api/db.ts
-function db_defineProperty(obj, key, value) { key = db_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function db_toPropertyKey(arg) { var key = db_toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function db_toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-
-var Table = (dexie_default()).Table;
-const DB_NANE = 'tables';
-class ApiDb extends (dexie_default()) {
-  constructor() {
-    super(DB_NANE);
-    db_defineProperty(this, "nfts", void 0);
-    db_defineProperty(this, "sseConnections", void 0);
-    this.version(1).stores({
-      nfts: '[accountId+address], accountId, address, collectionAddress'
-    });
-    this.version(2).stores({
-      sseConnections: '&clientId'
-    });
-  }
-}
-const apiDb = new ApiDb();
 ;// CONCATENATED MODULE: ./src/api/common/helpers.ts
+
 
 
 
@@ -43952,7 +43942,7 @@ const apiDb = new ApiDb();
 
 let localCounter = 0;
 const getNextLocalId = () => `${Date.now()}|${localCounter++}`;
-const actualStateVersion = 13;
+const actualStateVersion = 16;
 let migrationEnsurePromise;
 function resolveBlockchainKey(accountId) {
   return parseAccountId(accountId).blockchain;
@@ -44022,7 +44012,14 @@ function isUpdaterAlive(onUpdate) {
   return currentOnUpdate === onUpdate;
 }
 function startStorageMigration(onUpdate, ton) {
-  migrationEnsurePromise = migrateStorage(onUpdate, ton);
+  migrationEnsurePromise = migrateStorage(onUpdate, ton).catch(err => {
+    var _currentOnUpdate;
+    logDebugError('Migration error', err);
+    (_currentOnUpdate = currentOnUpdate) === null || _currentOnUpdate === void 0 ? void 0 : _currentOnUpdate({
+      type: 'showError',
+      error: 'Migration error'
+    });
+  });
   return migrationEnsurePromise;
 }
 function waitStorageMigration() {
@@ -44192,9 +44189,6 @@ async function migrateStorage(onUpdate, ton) {
             }
           }
         }
-        if (items.length) {
-          await apiDb.sseConnections.bulkPut(items);
-        }
       }
     }
     version = 9;
@@ -44215,6 +44209,11 @@ async function migrateStorage(onUpdate, ton) {
     version = 10;
     await storages_storage.setItem('stateVersion', version);
   }
+  let isIosKeychainModeMigrated = false;
+  if (getEnvironment().isIosApp && version >= 10 && version <= 13) {
+    await iosBackupAndMigrateKeychainMode();
+    isIosKeychainModeMigrated = true;
+  }
   if (version === 10 || version === 11 || version === 12) {
     const accounts = await storages_storage.getItem('accounts', true);
     if (accounts) {
@@ -44233,6 +44232,62 @@ async function migrateStorage(onUpdate, ton) {
     }
     version = 13;
     await storages_storage.setItem('stateVersion', version);
+  }
+  if (version === 13) {
+    const accounts = await storages_storage.getItem('accounts', true);
+    if (accounts) {
+      for (const [accountId, account] of Object.entries(accounts)) {
+        const {
+          network
+        } = parseAccountId(accountId);
+        if (network === 'testnet') {
+          account.address = toBase64Address(account.address, false, network);
+          onUpdate({
+            type: 'updateAccount',
+            accountId,
+            partial: {
+              address: account.address
+            }
+          });
+        }
+      }
+      await storages_storage.setItem('accounts', accounts);
+    }
+  }
+  if (version === 14 || version === 15) {
+    if (getEnvironment().isIosApp && !isIosKeychainModeMigrated) {
+      await iosBackupAndMigrateKeychainMode();
+    }
+    version = 16;
+    await storages_storage.setItem('stateVersion', version);
+  }
+}
+async function iosBackupAndMigrateKeychainMode() {
+  const keys = await capacitorStorage.getKeys();
+  if (keys !== null && keys !== void 0 && keys.length) {
+    const items = [];
+    for (const key of keys) {
+      if (key.startsWith('backup_')) {
+        continue;
+      }
+      const backupKey = `backup_${key}`;
+      const value = await capacitorStorage.getItem(key, true);
+      assert(value !== undefined, 'Empty value!');
+      await capacitorStorage.setItem(backupKey, value);
+      const backupValue = await capacitorStorage.getItem(backupKey);
+      assert(areDeepEqual(value, backupValue), 'Data has not been saved!');
+      items.push([key, value]);
+    }
+    for (const [key, value] of items) {
+      let shouldRewrite = false;
+      await capacitorStorage.setItem(key, value).catch(() => {
+        shouldRewrite = true;
+      });
+      if (shouldRewrite) {
+        await capacitorStorage.removeItem(key);
+        await capacitorStorage.setItem(key, value);
+      }
+    }
   }
 }
 ;// CONCATENATED MODULE: ./src/util/dns.ts
@@ -44330,11 +44385,11 @@ function parseAdnlAddressRecord(cell) {
 }
 async function dnsResolveImpl(client, dnsAddress, rawDomainBytes, category, oneStep) {
   const len = rawDomainBytes.length * 8;
-  const domainCell = new core_dist.Builder().storeBuffer(dns_Buffer.from(rawDomainBytes)).asCell();
+  const domainCell = new dist.Builder().storeBuffer(dns_Buffer.from(rawDomainBytes)).asCell();
   const categoryBN = await categoryToBigInt(category);
   const {
     stack
-  } = await client.callGetMethod(core_dist.Address.parse(dnsAddress), 'dnsresolve', [{
+  } = await client.callGetMethod(dist.Address.parse(dnsAddress), 'dnsresolve', [{
     type: 'slice',
     cell: domainCell
   }, {
@@ -44437,16 +44492,41 @@ function dns_parseAddress(slice) {
     return undefined;
   }
   const s = `${n.toString(10)}:${hashPart.toString(16).padStart(64, '0')}`;
-  return core_dist.Address.parse(s);
+  return dist.Address.parse(s);
 }
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/address.ts
 
 
 
 
-const TON_DNS_COLLECTION = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz';
+
+
+const address_TON_DNS_COLLECTION = 'EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz';
 const VIP_DNS_COLLECTION = 'EQBWG4EBbPDv4Xj7xlPwzxd7hSyHMzwwLB5O6rY-0BBeaixS';
 async function resolveAddress(network, address) {
+  if (address === BURN_ADDRESS) {
+    return {
+      address,
+      name: 'Burn Address'
+    };
+  }
+  if (EXCHANGE_ADDRESSES_FLAT.has(address)) {
+    const [name] = Object.entries(EXCHANGE_ADDRESSES).find(_ref => {
+      let [, addresses] = _ref;
+      return addresses.includes(address);
+    });
+    return {
+      name,
+      address
+    };
+  }
+  const known = getKnownAddresses()[address];
+  if (known) {
+    return {
+      address,
+      name: known.name
+    };
+  }
   if (!dns.isDnsDomain(address)) {
     return {
       address
@@ -44461,25 +44541,26 @@ async function resolveAddress(network, address) {
       collection = VIP_DNS_COLLECTION;
     } else {
       base = dns.removeTonZone(domain);
-      collection = TON_DNS_COLLECTION;
+      collection = address_TON_DNS_COLLECTION;
     }
     const result = await dnsResolve(getTonClient(network), collection, base, DnsCategory.Wallet);
-    if (!(result instanceof core_dist.Address)) {
+    if (!(result instanceof dist.Address)) {
       return undefined;
     }
     return {
-      address: toBase64Address(result),
-      domain
+      address: toBase64Address(result, undefined, network),
+      name: domain
     };
   } catch (err) {
-    if (err.message !== 'http provider parse response error') {
+    var _err$message;
+    if (!((_err$message = err.message) !== null && _err$message !== void 0 && _err$message.includes('exit_code'))) {
       throw err;
     }
     return undefined;
   }
 }
-function normalizeAddress(address) {
-  return toBase64Address(address, true);
+function normalizeAddress(address, network) {
+  return toBase64Address(address, true, network);
 }
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/tokens.ts
 
@@ -44509,13 +44590,13 @@ async function getAccountTokenBalances(accountId) {
   } = parseAccountId(accountId);
   const address = await fetchStoredAddress(accountId);
   const balancesRaw = await fetchJettonBalances(network, address);
-  return balancesRaw.map(parseTokenBalance).filter(Boolean);
+  return balancesRaw.map(balance => parseTokenBalance(network, balance)).filter(Boolean);
 }
 async function getAddressTokenBalances(address, network) {
   const balancesRaw = await fetchJettonBalances(network, address);
-  return balancesRaw.map(parseTokenBalance).filter(Boolean);
+  return balancesRaw.map(balance => parseTokenBalance(network, balance)).filter(Boolean);
 }
-function parseTokenBalance(balanceRaw) {
+function parseTokenBalance(network, balanceRaw) {
   if (!balanceRaw.jetton) {
     return undefined;
   }
@@ -44525,27 +44606,27 @@ function parseTokenBalance(balanceRaw) {
       jetton,
       wallet_address: walletAddress
     } = balanceRaw;
-    const minterAddress = toBase64Address(jetton.address, true);
+    const minterAddress = toBase64Address(jetton.address, true, network);
     const token = buildTokenByMetadata(minterAddress, jetton);
     return {
       slug: token.slug,
       balance: BigInt(balance),
       token,
-      jettonWallet: toBase64Address(walletAddress.address)
+      jettonWallet: toBase64Address(walletAddress.address, undefined, network)
     };
   } catch (err) {
     logDebugError('parseTokenBalance', err);
     return undefined;
   }
 }
-function parseTokenTransaction(tx, slug, walletAddress) {
+function parseTokenTransaction(network, tx, slug, walletAddress) {
   const {
     extraData
   } = tx;
   if (!(extraData !== null && extraData !== void 0 && extraData.body)) {
     return undefined;
   }
-  const parsedData = parseJettonWalletMsgBody(extraData.body);
+  const parsedData = parseJettonWalletMsgBody(network, extraData.body);
   if (!parsedData) {
     return undefined;
   }
@@ -44557,22 +44638,25 @@ function parseTokenTransaction(tx, slug, walletAddress) {
     encryptedComment
   } = parsedData;
   const isIncoming = operation === 'InternalTransfer';
+  const fromAddress = isIncoming ? address !== null && address !== void 0 ? address : tx.fromAddress : walletAddress;
+  const toAddress = isIncoming ? walletAddress : address;
+  const normalizedAddress = toBase64Address(isIncoming ? fromAddress : toAddress, true);
   return {
     ...tx,
     slug,
-    fromAddress: isIncoming ? address !== null && address !== void 0 ? address : tx.fromAddress : walletAddress,
-    toAddress: isIncoming ? walletAddress : address,
+    fromAddress,
+    toAddress,
+    normalizedAddress,
     amount: isIncoming ? jettonAmount : -jettonAmount,
     comment,
     encryptedComment,
     isIncoming
   };
 }
-async function buildTokenTransfer(network, slug, fromAddress, toAddress, amount, payload) {
-  const minterAddress = resolveTokenBySlug(slug).minterAddress;
-  const tokenWalletAddress = await resolveTokenWalletAddress(network, fromAddress, minterAddress);
-  const realMinterAddress = await resolveTokenMinterAddress(network, tokenWalletAddress);
-  if (minterAddress !== realMinterAddress) {
+async function buildTokenTransfer(network, tokenAddress, fromAddress, toAddress, amount, payload) {
+  const tokenWalletAddress = await resolveTokenWalletAddress(network, fromAddress, tokenAddress);
+  const realTokenAddress = await resolveTokenMinterAddress(network, tokenWalletAddress);
+  if (tokenAddress !== realTokenAddress) {
     throw new Error('Invalid contract');
   }
   const tokenWallet = getTokenWallet(network, tokenWalletAddress);
@@ -44597,7 +44681,7 @@ function findTokenByMinter(minter) {
   return Object.values(knownTokens).find(token => token.minterAddress === minter);
 }
 function getTokenWallet(network, tokenAddress) {
-  return getTonClient(network).open(new JettonWallet(core_dist.Address.parse(tokenAddress)));
+  return getTonClient(network).open(new JettonWallet(dist.Address.parse(tokenAddress)));
 }
 function getKnownTokens() {
   return knownTokens;
@@ -44605,18 +44689,19 @@ function getKnownTokens() {
 function addKnownTokens(tokens) {
   for (const token of tokens) {
     if (token.slug in knownTokens) continue;
-    knownTokens[token.slug] = {
+    addKnownToken({
       ...token,
       quote: {
+        slug: token.slug,
         price: 0,
         priceUsd: 0,
-        percentChange1h: 0,
-        percentChange24h: 0,
-        percentChange7d: 0,
-        percentChange30d: 0
+        percentChange24h: 0
       }
-    };
+    });
   }
+}
+function addKnownToken(token) {
+  knownTokens[token.slug] = token;
 }
 async function fetchToken(network, address) {
   const metadata = await fetchJettonMetadata(network, address);
@@ -44638,6 +44723,170 @@ function buildTokenByMetadata(address, metadata) {
     minterAddress: address,
     image: image && fixIpfsUrl(image) || imageData && fixBase64ImageData(imageData) || undefined
   };
+}
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/wallet.ts
+/* provided dependency */ var wallet_Buffer = __webpack_require__(8764)["lW"];
+
+
+
+
+
+
+
+
+
+
+
+const isAddressInitialized = withCacheAsync(async (network, walletOrAddress) => {
+  return (await getWalletInfo(network, walletOrAddress)).isInitialized;
+});
+const isActiveSmartContract = withCacheAsync(async (network, address) => {
+  const {
+    isInitialized,
+    isWallet
+  } = await getWalletInfo(network, address);
+  return isInitialized ? !isWallet : undefined;
+}, value => value !== undefined);
+function publicKeyToAddress(network, publicKey, walletVersion) {
+  const wallet = buildWallet(network, publicKey, walletVersion);
+  return toBase64Address(wallet.address, false, network);
+}
+function buildWallet(network, publicKey, walletVersion) {
+  const client = getTonClient(network);
+  const WalletClass = walletClassMap[walletVersion];
+  return client.open(WalletClass.create({
+    publicKey: wallet_Buffer.from(publicKey),
+    workchain: WORKCHAIN
+  }));
+}
+async function getWalletInfo(network, walletOrAddress) {
+  const address = typeof walletOrAddress === 'string' ? walletOrAddress : toBase64Address(walletOrAddress.address, undefined, network);
+  const {
+    account_state: accountState,
+    wallet: isWallet,
+    seqno = 0,
+    balance,
+    last_transaction_id: {
+      lt,
+      hash
+    }
+  } = await getTonClient(network).getWalletInfo(address);
+  return {
+    isInitialized: accountState === 'active',
+    isWallet,
+    seqno,
+    balance: BigInt(balance || '0'),
+    lastTxId: lt === '0' ? undefined : stringifyTxId({
+      lt,
+      hash
+    })
+  };
+}
+async function getContractInfo(network, address) {
+  const data = await getTonClient(network).getAddressInfo(address);
+  const {
+    code,
+    state
+  } = data;
+  const codeHash = wallet_Buffer.from(await sha256(base64ToBytes(code))).toString('hex');
+  const contractInfo = Object.values(KnownContracts).find(info => info.hash === codeHash);
+  const isInitialized = state === 'active';
+  const isWallet = state === 'active' ? (contractInfo === null || contractInfo === void 0 ? void 0 : contractInfo.type) === 'wallet' : undefined;
+  const isLedgerAllowed = Boolean(!isInitialized || (contractInfo === null || contractInfo === void 0 ? void 0 : contractInfo.isLedgerAllowed));
+  const isSwapAllowed = contractInfo === null || contractInfo === void 0 ? void 0 : contractInfo.isSwapAllowed;
+  return {
+    isInitialized,
+    isWallet,
+    isLedgerAllowed,
+    isSwapAllowed,
+    contractInfo,
+    codeHash
+  };
+}
+async function getAccountBalance(accountId) {
+  const {
+    network
+  } = parseAccountId(accountId);
+  const address = await fetchStoredAddress(accountId);
+  return getWalletBalance(network, address);
+}
+async function getWalletBalance(network, walletOrAddress) {
+  return (await getWalletInfo(network, walletOrAddress)).balance;
+}
+async function getWalletSeqno(network, walletOrAddress) {
+  const {
+    seqno
+  } = await getWalletInfo(network, walletOrAddress);
+  return seqno || 0;
+}
+async function pickBestWallet(network, publicKey) {
+  const allWallets = await getWalletVersionInfos(network, publicKey);
+  const withBiggestBalance = allWallets.reduce((best, current) => {
+    return best && best.balance > current.balance ? best : current;
+  }, undefined);
+  if (!withBiggestBalance || !withBiggestBalance.balance) {
+    const version = DEFAULT_WALLET_VERSION;
+    const wallet = buildWallet(network, publicKey, version);
+    return {
+      wallet,
+      version,
+      balance: 0n
+    };
+  }
+  return withBiggestBalance;
+}
+function getWalletVersionInfos(network, publicKey) {
+  let versions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ALL_WALLET_VERSIONS;
+  return Promise.all(versions.map(async version => {
+    const wallet = buildWallet(network, publicKey, version);
+    const address = toBase64Address(wallet.address, false, network);
+    const walletInfo = await getWalletInfo(network, wallet);
+    return {
+      wallet,
+      address,
+      version,
+      ...pick(walletInfo, ['isInitialized', 'balance', 'lastTxId'])
+    };
+  }));
+}
+function getWalletVersions(network, publicKey) {
+  let versions = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ALL_WALLET_VERSIONS;
+  return versions.map(version => {
+    const wallet = buildWallet(network, publicKey, version);
+    const address = toBase64Address(wallet.address, false, network);
+    return {
+      wallet,
+      address,
+      version
+    };
+  });
+}
+async function getWalletStateInit(accountId) {
+  const wallet = await pickAccountWallet(accountId);
+  return (0,dist.beginCell)().storeWritable((0,dist.storeStateInit)(wallet.init)).endCell();
+}
+function pickWalletByAddress(network, publicKey, address) {
+  address = toBase64Address(address, false, network);
+  const allWallets = getWalletVersions(network, publicKey);
+  return allWallets.find(w => w.address === address);
+}
+async function pickAccountWallet(accountId) {
+  const {
+    network
+  } = parseAccountId(accountId);
+  const {
+    publicKey,
+    version
+  } = await fetchStoredAccount(accountId);
+  const publicKeyBytes = hexToBytes(publicKey);
+  return buildWallet(network, publicKeyBytes, version);
+}
+function resolveWalletVersion(wallet) {
+  var _Object$entries$find;
+  return (_Object$entries$find = Object.entries(walletClassMap).find(_ref => {
+    let [, walletClass] = _ref;
+    return wallet instanceof walletClass;
+  })) === null || _Object$entries$find === void 0 ? void 0 : _Object$entries$find[0];
 }
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/transactions.ts
 /* provided dependency */ var transactions_Buffer = __webpack_require__(8764)["lW"];
@@ -44671,69 +44920,50 @@ function buildTokenByMetadata(address, metadata) {
 const DEFAULT_EXPIRE_AT_TIMEOUT_SEC = 60; // 60 sec.
 const GET_TRANSACTIONS_LIMIT = 50;
 const GET_TRANSACTIONS_MAX_LIMIT = 100;
-const WAIT_SEQNO_TIMEOUT = 40000; // 40 sec.
-const WAIT_SEQNO_PAUSE = 5000; // 5 sec.
+const WAIT_TRANSFER_TIMEOUT = 40000; // 40 sec.
+const WAIT_TRANSFER_PAUSE = 1000; // 1 sec.
 const WAIT_TRANSACTION_PAUSE = 500; // 0.5 sec.
 
-const lastTransfers = {
-  mainnet: {},
-  testnet: {}
-};
+const pendingTransfers = {};
 const checkHasTransaction = withCacheAsync(async (network, address) => {
   const transactions = await fetchTransactions(network, address, 1);
   return Boolean(transactions.length);
 });
-async function checkTransactionDraft(accountId, tokenSlug, toAddress, amount, data, stateInit, shouldEncrypt, isBase64Data) {
+async function checkTransactionDraft(options) {
+  const {
+    accountId,
+    tokenAddress,
+    stateInit,
+    shouldEncrypt,
+    isBase64Data
+  } = options;
+  let {
+    toAddress,
+    amount,
+    data
+  } = options;
   const {
     network
   } = parseAccountId(accountId);
-  const result = {};
+  let result = {};
   try {
-    const resolved = await resolveAddress(network, toAddress);
-    if (resolved) {
-      result.addressName = resolved.domain;
-      toAddress = resolved.address;
-    } else {
-      return {
-        ...result,
-        error: ApiTransactionDraftError.DomainNotResolved
-      };
+    result = await checkToAddress(network, toAddress);
+    if ('error' in result) {
+      return result;
     }
-    const {
-      isValid,
-      isUserFriendly,
-      isTestOnly,
-      isBounceable
-    } = parseAddress(toAddress);
-    if (!isValid) {
-      return {
-        ...result,
-        error: ApiTransactionDraftError.InvalidToAddress
-      };
-    }
-    const regex = /[+=/]/; // Temp check for `isUrlSafe`. Remove after TonWeb fixes the issue
-    const isUrlSafe = !regex.test(toAddress);
-    if (!isUserFriendly || !isUrlSafe || network === 'mainnet' && isTestOnly) {
-      return {
-        ...result,
-        error: ApiTransactionDraftError.InvalidAddressFormat
-      };
-    }
+    toAddress = result.resolvedAddress;
     const {
       isInitialized,
       isLedgerAllowed
     } = await getContractInfo(network, toAddress);
-    if (isBounceable && !isInitialized) {
+    if (result.isBounceable && !isInitialized) {
       result.isToAddressNew = !(await checkHasTransaction(network, toAddress));
-      if (tokenSlug === TON_TOKEN_SLUG) {
-        // Force non-bounceable for non-initialized recipients
-        toAddress = toBase64Address(toAddress, false);
-      }
+      return {
+        ...result,
+        error: ApiTransactionDraftError.InactiveContract
+      };
     }
     result.resolvedAddress = toAddress;
-    const addressInfo = await getAddressInfo(toBase64Address(toAddress, true));
-    if (addressInfo !== null && addressInfo !== void 0 && addressInfo.name) result.addressName = addressInfo.name;
-    if (addressInfo !== null && addressInfo !== void 0 && addressInfo.isScam) result.isScam = addressInfo.isScam;
     if (amount < 0n) {
       return {
         ...result,
@@ -44770,7 +45000,7 @@ async function checkTransactionDraft(accountId, tokenSlug, toAddress, amount, da
     if (data && typeof data === 'string' && !isBase64Data && !isLedger) {
       data = commentToBytes(data);
     }
-    if (tokenSlug === TON_TOKEN_SLUG) {
+    if (!tokenAddress) {
       if (data && isLedger && (typeof data !== 'string' || shouldEncrypt || !isValidLedgerComment(data))) {
         let error;
         if (typeof data !== 'string') {
@@ -44797,7 +45027,7 @@ async function checkTransactionDraft(accountId, tokenSlug, toAddress, amount, da
         amount,
         toAddress,
         payload: data
-      } = await buildTokenTransfer(network, tokenSlug, address, toAddress, amount, data));
+      } = await buildTokenTransfer(network, tokenAddress, address, toAddress, amount, data));
       const tokenBalance = await tokenWallet.getJettonBalance();
       if (tokenBalance < tokenAmount) {
         return {
@@ -44812,7 +45042,9 @@ async function checkTransactionDraft(accountId, tokenSlug, toAddress, amount, da
     const realFee = await calculateFee(network, wallet, transaction, account.isInitialized);
     result.fee = bigintMultiplyToNumber(realFee, FEE_FACTOR);
     const balance = await getWalletBalance(network, wallet);
-    if (balance < amount + realFee) {
+    const isFullTonBalance = !tokenAddress && balance === amount;
+    const isEnoughBalance = isFullTonBalance ? balance > realFee : balance >= amount + realFee;
+    if (!isEnoughBalance) {
       return {
         ...result,
         error: ApiTransactionDraftError.InsufficientBalance
@@ -44826,7 +45058,56 @@ async function checkTransactionDraft(accountId, tokenSlug, toAddress, amount, da
     };
   }
 }
-async function submitTransfer(accountId, password, tokenSlug, toAddress, amount, data, stateInit, shouldEncrypt, isBase64Data) {
+async function checkToAddress(network, toAddress) {
+  const result = {};
+  const resolved = await resolveAddress(network, toAddress);
+  if (resolved) {
+    result.addressName = resolved.name;
+    result.resolvedAddress = resolved.address;
+    toAddress = resolved.address;
+  } else {
+    return {
+      ...result,
+      error: ApiTransactionDraftError.DomainNotResolved
+    };
+  }
+  const {
+    isValid,
+    isUserFriendly,
+    isTestOnly,
+    isBounceable
+  } = parseAddress(toAddress);
+  result.isBounceable = isBounceable;
+  if (!isValid) {
+    return {
+      ...result,
+      error: ApiTransactionDraftError.InvalidToAddress
+    };
+  }
+  const regex = /[+=/]/;
+  const isUrlSafe = !regex.test(toAddress);
+  if (!isUserFriendly || !isUrlSafe || network === 'mainnet' && isTestOnly) {
+    return {
+      ...result,
+      error: ApiTransactionDraftError.InvalidAddressFormat
+    };
+  }
+  return result;
+}
+async function submitTransfer(options) {
+  const {
+    accountId,
+    password,
+    tokenAddress,
+    stateInit,
+    shouldEncrypt,
+    isBase64Data
+  } = options;
+  let {
+    toAddress,
+    amount,
+    data
+  } = options;
   const {
     network
   } = parseAccountId(accountId);
@@ -44853,7 +45134,7 @@ async function submitTransfer(accountId, password, tokenSlug, toAddress, amount,
         data = commentToBytes(data);
       }
     }
-    if (tokenSlug === TON_TOKEN_SLUG) {
+    if (!tokenAddress) {
       if (data instanceof Uint8Array) {
         data = packBytesAsSnake(data);
       }
@@ -44862,29 +45143,37 @@ async function submitTransfer(accountId, password, tokenSlug, toAddress, amount,
         amount,
         toAddress,
         payload: data
-      } = await buildTokenTransfer(network, tokenSlug, fromAddress, toAddress, amount, data));
+      } = await buildTokenTransfer(network, tokenAddress, fromAddress, toAddress, amount, data));
     }
-    await waitLastTransfer(network, fromAddress);
+    await waitPendingTransfer(network, fromAddress);
     const {
       balance
     } = await getWalletInfo(network, wallet);
+    const isFullTonBalance = !tokenAddress && balance === amount;
     const {
       seqno,
       transaction
-    } = await signTransaction(network, wallet, toAddress, amount, data, stateInit, secretKey);
+    } = await signTransaction(network, wallet, toAddress, amount, data, stateInit, secretKey, isFullTonBalance);
     const fee = await calculateFee(network, wallet, transaction, account.isInitialized);
-    if (balance < amount + fee) {
+    const isEnoughBalance = isFullTonBalance ? balance > fee : balance >= amount + fee;
+    if (!isEnoughBalance) {
       return {
-        error: ApiTransactionError.InsufficientBalance
+        error: errors_ApiTransactionError.InsufficientBalance
       };
     }
-    wallet.send(transaction);
-    updateLastTransfer(network, fromAddress, seqno);
+    const client = getTonClient(network);
+    await wallet.send(transaction);
+    const {
+      msgHash,
+      boc
+    } = client.popLastSendBoc();
+    addPendingTransfer(network, fromAddress, seqno, boc);
     return {
       amount,
       seqno,
       encryptedComment,
-      toAddress
+      toAddress,
+      msgHash
     };
   } catch (err) {
     logDebugError('submitTransfer', err);
@@ -44896,15 +45185,16 @@ async function submitTransfer(accountId, password, tokenSlug, toAddress, amount,
 function resolveTransactionError(error) {
   if (error instanceof ApiServerError) {
     if (error.message.includes('exitcode=35,')) {
-      return ApiTransactionError.IncorrectDeviceTime;
+      return errors_ApiTransactionError.IncorrectDeviceTime;
     } else if (error.displayError) {
       return error.displayError;
     }
   }
-  return ApiTransactionError.UnsuccesfulTransfer;
+  return errors_ApiTransactionError.UnsuccesfulTransfer;
 }
 async function signTransaction(network, wallet, toAddress, amount, payload, stateInit) {
   let privateKey = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : new Uint8Array(64);
+  let isFullBalance = arguments.length > 7 ? arguments[7] : undefined;
   const {
     seqno
   } = await getWalletInfo(network, wallet);
@@ -44915,17 +45205,18 @@ async function signTransaction(network, wallet, toAddress, amount, payload, stat
     code: stateInit.refs[0],
     data: stateInit.refs[1]
   } : undefined;
+  const sendMode = isFullBalance ? dist.SendMode.CARRY_ALL_REMAINING_BALANCE : dist.SendMode.PAY_GAS_SEPARATELY + dist.SendMode.IGNORE_ERRORS;
   const transaction = wallet.createTransfer({
     seqno,
     secretKey: transactions_Buffer.from(privateKey),
-    messages: [(0,core_dist.internal)({
+    messages: [(0,dist.internal)({
       value: amount,
       to: toAddress,
       body: payload,
       init,
       bounce: parseAddress(toAddress).isBounceable
     })],
-    sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY + core_dist.SendMode.IGNORE_ERRORS
+    sendMode
   });
   return {
     seqno,
@@ -44946,7 +45237,44 @@ async function getAccountTransactionSlice(accountId, toTxId, fromTxId, limit) {
   const address = await fetchStoredAddress(accountId);
   let transactions = await fetchTransactions(network, address, limit !== null && limit !== void 0 ? limit : GET_TRANSACTIONS_LIMIT, toTxId, fromTxId);
   transactions = await Promise.all(transactions.map(transaction => parseWalletTransactionBody(network, transaction)));
+  await populateTransactions(network, transactions);
   return transactions.map(updateTransactionType).map(updateTransactionMetadata).map(omitExtraData).map(transactionToActivity);
+}
+async function populateTransactions(network, transactions) {
+  const nftAddresses = new Set();
+  const addressesForFixFormat = new Set();
+  for (const {
+    extraData: {
+      parsedPayload
+    }
+  } of transactions) {
+    if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'nft:ownership-assigned') {
+      nftAddresses.add(parsedPayload.nftAddress);
+      addressesForFixFormat.add(parsedPayload.prevOwner);
+    } else if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'nft:transfer') {
+      nftAddresses.add(parsedPayload.nftAddress);
+      addressesForFixFormat.add(parsedPayload.newOwner);
+    }
+  }
+  if (nftAddresses.size) {
+    const [rawNfts, addressBook] = await Promise.all([fetchNftItems(network, [...nftAddresses]), fetchAddressBook(network, [...addressesForFixFormat])]);
+    const nfts = rawNfts.map(rawNft => buildNft(network, rawNft)).filter(Boolean);
+    const nftsByAddress = buildCollectionByKey(nfts, 'address');
+    for (const transaction of transactions) {
+      const {
+        extraData: {
+          parsedPayload
+        }
+      } = transaction;
+      if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'nft:ownership-assigned') {
+        transaction.nft = nftsByAddress[parsedPayload.nftAddress];
+        transaction.fromAddress = addressBook[parsedPayload.prevOwner].user_friendly;
+      } else if ((parsedPayload === null || parsedPayload === void 0 ? void 0 : parsedPayload.type) === 'nft:transfer') {
+        transaction.nft = nftsByAddress[parsedPayload.nftAddress];
+        transaction.toAddress = addressBook[parsedPayload.newOwner].user_friendly;
+      }
+    }
+  }
 }
 async function getMergedTransactionSlice(accountId, lastTxIds, limit) {
   // eslint-disable-next-line prefer-const
@@ -44982,23 +45310,25 @@ async function getTokenTransactionSlice(accountId, tokenSlug, toTxId, fromTxId, 
   const minterAddress = resolveTokenBySlug(tokenSlug).minterAddress;
   const tokenWalletAddress = await resolveTokenWalletAddress(network, address, minterAddress);
   const transactions = await fetchTransactions(network, tokenWalletAddress, limit !== null && limit !== void 0 ? limit : GET_TRANSACTIONS_LIMIT, toTxId, fromTxId);
-  return transactions.map(tx => parseTokenTransaction(tx, tokenSlug, address)).filter(Boolean).map(updateTransactionMetadata).map(omitExtraData).map(transactionToActivity);
+  return transactions.map(tx => parseTokenTransaction(network, tx, tokenSlug, address)).filter(Boolean).map(updateTransactionMetadata).map(omitExtraData).map(transactionToActivity);
 }
 function omitExtraData(tx) {
   return omit(tx, ['extraData']);
 }
 function updateTransactionType(transaction) {
   const {
-    fromAddress,
-    toAddress,
-    comment,
     amount,
     extraData
   } = transaction;
+  let {
+    comment
+  } = transaction;
+  const normalizedFromAddress = toBase64Address(transaction.fromAddress, true);
+  const normalizedToAddress = toBase64Address(transaction.toAddress, true);
   let type;
-  if (isKnownStakingPool(toBase64Address(fromAddress, true)) && amount > ONE_TON) {
+  if (isKnownStakingPool(normalizedFromAddress) && amount > ONE_TON) {
     type = 'unstake';
-  } else if (isKnownStakingPool(toBase64Address(toAddress, true))) {
+  } else if (isKnownStakingPool(normalizedToAddress)) {
     if (comment === STAKE_COMMENT) {
       type = 'stake';
     } else if (comment === UNSTAKE_COMMENT) {
@@ -45012,11 +45342,18 @@ function updateTransactionType(transaction) {
       type = 'stake';
     } else if (payload.type === 'liquid-staking:withdrawal' || payload.type === 'liquid-staking:withdrawal-nft') {
       type = 'unstake';
+    } else if (payload.type === 'nft:transfer') {
+      type = 'nftTransferred';
+      comment = payload.comment;
+    } else if (payload.type === 'nft:ownership-assigned') {
+      type = 'nftReceived';
+      comment = payload.comment;
     }
   }
   return {
     ...transaction,
-    type
+    type,
+    comment
   };
 }
 function transactionToActivity(transaction) {
@@ -45044,7 +45381,12 @@ async function checkMultiTransactionDraft(accountId, messages) {
           error: ApiTransactionDraftError.InvalidAmount
         };
       }
-      if (!parseAddress(toAddress).isValid) {
+      const isMainnet = network === 'mainnet';
+      const {
+        isValid,
+        isTestOnly
+      } = parseAddress(toAddress);
+      if (!isValid || isMainnet && isTestOnly) {
         return {
           ...result,
           error: ApiTransactionDraftError.InvalidToAddress
@@ -45092,7 +45434,7 @@ async function submitMultiTransfer(accountId, password, messages, expireAt) {
     messages.forEach(message => {
       totalAmount += BigInt(message.amount);
     });
-    await waitLastTransfer(network, fromAddress);
+    await waitPendingTransfer(network, fromAddress);
     const {
       balance
     } = await getWalletInfo(network, wallet);
@@ -45100,20 +45442,31 @@ async function submitMultiTransfer(accountId, password, messages, expireAt) {
       seqno,
       transaction
     } = await signMultiTransaction(network, wallet, messages, privateKey, expireAt);
-    const boc = transaction.toBoc().toString('base64');
     const fee = await calculateFee(network, wallet, transaction, account.isInitialized);
     if (BigInt(balance) < BigInt(totalAmount) + BigInt(fee)) {
       return {
-        error: ApiTransactionError.InsufficientBalance
+        error: errors_ApiTransactionError.InsufficientBalance
       };
     }
-    wallet.send(transaction);
-    updateLastTransfer(network, fromAddress, seqno);
+    const tonClient = getTonClient(network);
+    await wallet.send(transaction);
+    const {
+      msgHash,
+      boc
+    } = tonClient.popLastSendBoc();
+    addPendingTransfer(network, fromAddress, seqno, boc);
+    const clearedMessages = messages.map(message => {
+      if (typeof message.payload !== 'string' && typeof message.payload !== 'undefined') {
+        return omit(message, ['payload']);
+      }
+      return message;
+    });
     return {
       seqno,
       amount: totalAmount.toString(),
-      messages,
-      boc
+      messages: clearedMessages,
+      boc,
+      msgHash
     };
   } catch (err) {
     logDebugError('submitMultiTransfer', err);
@@ -45142,13 +45495,13 @@ async function signMultiTransaction(network, wallet, messages) {
       payload
     } = message;
     if (isBase64Payload && typeof payload === 'string') {
-      payload = core_dist.Cell.fromBase64(payload);
+      payload = dist.Cell.fromBase64(payload);
     }
     const init = stateInit ? {
       code: stateInit.refs[0],
       data: stateInit.refs[1]
     } : undefined;
-    return (0,core_dist.internal)({
+    return (0,dist.internal)({
       value: amount,
       to: toAddress,
       body: payload,
@@ -45161,51 +45514,54 @@ async function signMultiTransaction(network, wallet, messages) {
     seqno,
     secretKey: transactions_Buffer.from(privateKey),
     messages: preparedMessages,
-    sendMode: core_dist.SendMode.PAY_GAS_SEPARATELY + core_dist.SendMode.IGNORE_ERRORS,
+    sendMode: dist.SendMode.PAY_GAS_SEPARATELY + dist.SendMode.IGNORE_ERRORS,
     timeout: expireAt
   });
+  const externalMessage = toExternalMessage(wallet, seqno, transaction);
   return {
     seqno,
-    transaction
+    transaction,
+    externalMessage
   };
 }
-function updateLastTransfer(network, address, seqno) {
-  lastTransfers[network][address] = {
-    timestamp: Date.now(),
-    seqno
-  };
+function toExternalMessage(contract, seqno, body) {
+  return (0,dist.beginCell)().storeWritable((0,dist.storeMessage)((0,dist.external)({
+    to: contract.address,
+    init: seqno === 0 ? contract.init : undefined,
+    body
+  }))).endCell();
 }
-async function waitLastTransfer(network, address) {
-  const lastTransfer = lastTransfers[network][address];
-  if (!lastTransfer) return;
-  const {
+function addPendingTransfer(network, address, seqno, boc) {
+  const key = buildPendingTransferKey(network, address);
+  const timestamp = Date.now();
+  const promise = retrySendBoc(network, boc, timestamp);
+  pendingTransfers[key] = {
+    timestamp,
     seqno,
-    timestamp
-  } = lastTransfer;
-  const waitUntil = timestamp + WAIT_SEQNO_TIMEOUT;
-  const result = await waitIncrementSeqno(network, address, seqno, waitUntil);
-  if (result) {
-    delete lastTransfers[network][address];
-  }
+    promise
+  };
 }
-async function waitIncrementSeqno(network, address, seqno, waitUntil) {
-  if (!waitUntil) {
-    waitUntil = Date.now() + WAIT_SEQNO_TIMEOUT;
-  }
+async function retrySendBoc(network, boc, timestamp) {
+  const tonClient = getTonClient(network);
+  const waitUntil = timestamp + WAIT_TRANSFER_TIMEOUT;
   while (Date.now() < waitUntil) {
-    try {
-      const {
-        seqno: currentSeqno
-      } = await getWalletInfo(network, address);
-      if (currentSeqno > seqno) {
-        return true;
-      }
-      await pause(WAIT_SEQNO_PAUSE);
-    } catch (err) {
-      logDebugError('waitIncrementSeqno', err);
+    const error = await tonClient.sendFile(boc).catch(err => String(err));
+    if (!error || !error.includes('exitcode=33')) {
+      await pause(WAIT_TRANSFER_PAUSE);
+    } else {
+      break;
     }
   }
-  return false;
+}
+async function waitPendingTransfer(network, address) {
+  const key = buildPendingTransferKey(network, address);
+  const pendingTransfer = pendingTransfers[key];
+  if (!pendingTransfer) return;
+  await pendingTransfer.promise;
+  delete pendingTransfers[key];
+}
+function buildPendingTransferKey(network, address) {
+  return `${network}:${address}`;
 }
 async function calculateFee(network, wallet, transaction, isInitialized) {
   // eslint-disable-next-line no-null/no-null
@@ -45239,8 +45595,13 @@ async function sendSignedMessage(accountId, message) {
     base64,
     seqno
   } = message;
-  await contract.send(core_dist.Cell.fromBase64(base64));
-  updateLastTransfer(network, fromAddress, seqno);
+  await contract.send(dist.Cell.fromBase64(base64));
+  const {
+    msgHash,
+    boc
+  } = client.popLastSendBoc();
+  addPendingTransfer(network, fromAddress, seqno, boc);
+  return msgHash;
 }
 async function sendSignedMessages(accountId, messages) {
   const {
@@ -45257,15 +45618,22 @@ async function sendSignedMessages(accountId, messages) {
   const attempts = ATTEMPTS + messages.length;
   let index = 0;
   let attempt = 0;
+  const firstExternalMessage = toExternalMessage(contract, messages[0].seqno, dist.Cell.fromBase64(messages[0].base64));
+  const msgHashes = [];
   while (index < messages.length && attempt < attempts) {
     const {
       base64,
       seqno
     } = messages[index];
     try {
-      await waitLastTransfer(network, fromAddress);
-      await contract.send(core_dist.Cell.fromBase64(base64));
-      updateLastTransfer(network, fromAddress, seqno);
+      await waitPendingTransfer(network, fromAddress);
+      await contract.send(dist.Cell.fromBase64(base64));
+      const {
+        msgHash,
+        boc
+      } = client.popLastSendBoc();
+      msgHashes.push(msgHash);
+      addPendingTransfer(network, fromAddress, seqno, boc);
       index++;
     } catch (err) {
       logDebugError('sendSignedMessages', err);
@@ -45273,7 +45641,9 @@ async function sendSignedMessages(accountId, messages) {
     attempt++;
   }
   return {
-    successNumber: index
+    successNumber: index,
+    externalMessage: firstExternalMessage,
+    msgHashes
   };
 }
 async function decryptComment(accountId, encryptedComment, fromAddress, password) {
@@ -45331,12 +45701,181 @@ async function fixTokenActivitiesAddressForm(network, activities) {
     }
   }
 }
-;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/NominatorPool.ts
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/nfts.ts
+/* provided dependency */ var nfts_Buffer = __webpack_require__(8764)["lW"];
 
+
+
+
+
+
+
+
+
+
+
+
+
+async function getAccountNfts(accountId, offset, limit) {
+  const {
+    network
+  } = parseAccountId(accountId);
+  const address = await fetchStoredAddress(accountId);
+  const rawNfts = await fetchAccountNfts(network, address, {
+    offset,
+    limit
+  });
+  return compact(rawNfts.map(rawNft => buildNft(network, rawNft)));
+}
+async function getNftUpdates(accountId, fromSec) {
+  var _events$0$timestamp, _events$;
+  const {
+    network
+  } = parseAccountId(accountId);
+  const address = await fetchStoredAddress(accountId);
+  const events = await fetchAccountEvents(network, address, fromSec);
+  fromSec = (_events$0$timestamp = (_events$ = events[0]) === null || _events$ === void 0 ? void 0 : _events$.timestamp) !== null && _events$0$timestamp !== void 0 ? _events$0$timestamp : fromSec;
+  events.reverse();
+  const updates = [];
+  for (const event of events) {
+    for (const action of event.actions) {
+      let to;
+      let nftAddress;
+      let rawNft;
+      const isPurchase = !!action.NftPurchase;
+      if (action.NftItemTransfer) {
+        const {
+          sender,
+          recipient,
+          nft: rawNftAddress
+        } = action.NftItemTransfer;
+        if (!sender || !recipient) continue;
+        to = toBase64Address(recipient.address, undefined, network);
+        nftAddress = toBase64Address(rawNftAddress, true, network);
+      } else if (action.NftPurchase) {
+        const {
+          buyer
+        } = action.NftPurchase;
+        to = toBase64Address(buyer.address, undefined, network);
+        rawNft = action.NftPurchase.nft;
+        if (!rawNft) {
+          continue;
+        }
+        nftAddress = toBase64Address(rawNft.address, true, network);
+      } else {
+        continue;
+      }
+      if (to === address) {
+        if (!rawNft) {
+          [rawNft] = await fetchNftItems(network, [nftAddress]);
+        }
+        if (rawNft) {
+          const nft = buildNft(network, rawNft);
+          if (nft) {
+            updates.push({
+              type: 'nftReceived',
+              accountId,
+              nftAddress,
+              nft
+            });
+          }
+        }
+      } else if (!isPurchase && (await isActiveSmartContract(network, to))) {
+        updates.push({
+          type: 'nftPutUpForSale',
+          accountId,
+          nftAddress
+        });
+      } else {
+        updates.push({
+          type: 'nftSent',
+          accountId,
+          nftAddress
+        });
+      }
+    }
+  }
+  return [fromSec, updates];
+}
+async function checkNftTransferDraft(options) {
+  const {
+    accountId,
+    nftAddresses,
+    comment
+  } = options;
+  let {
+    toAddress
+  } = options;
+  const {
+    network
+  } = parseAccountId(accountId);
+  const {
+    address: fromAddress,
+    ledger
+  } = await fetchStoredAccount(accountId);
+  const isLedger = !!ledger;
+  const checkAddressResult = await checkToAddress(network, toAddress);
+  if ('error' in checkAddressResult) {
+    return checkAddressResult;
+  }
+  toAddress = checkAddressResult.resolvedAddress;
+  if (isLedger && LEDGER_NFT_TRANSFER_DISABLED) {
+    return {
+      error: ApiTransactionDraftError.UnsupportedHardwareNftOperation
+    };
+  }
+
+  // We only need to check the first batch of a multi-transaction
+  const messages = nftAddresses.slice(0, NFT_BATCH_SIZE).map(nftAddress => {
+    return {
+      payload: buildNftTransferPayload(fromAddress, toAddress, comment),
+      amount: NFT_TRANSFER_TON_AMOUNT,
+      toAddress: nftAddress
+    };
+  });
+  const result = await checkMultiTransactionDraft(accountId, messages);
+  if ('error' in result) {
+    return result;
+  }
+  return {
+    ...result,
+    ...checkAddressResult
+  };
+}
+async function submitNftTransfers(accountId, password, nftAddresses, toAddress, comment) {
+  const fromAddress = await fetchStoredAddress(accountId);
+  const messages = nftAddresses.map(nftAddress => {
+    return {
+      payload: buildNftTransferPayload(fromAddress, toAddress, comment),
+      amount: NFT_TRANSFER_TON_AMOUNT,
+      toAddress: nftAddress
+    };
+  });
+  return submitMultiTransfer(accountId, password, messages);
+}
+function buildNftTransferPayload(fromAddress, toAddress, comment) {
+  const forwardAmount = NFT_TRANSFER_TON_FORWARD_AMOUNT;
+  let builder = new dist.Builder().storeUint(NftOpCode.TransferOwnership, 32).storeUint(generateQueryId(), 64).storeAddress(dist.Address.parse(toAddress)).storeAddress(dist.Address.parse(fromAddress)).storeBit(false) // null custom_payload
+  .storeCoins(forwardAmount);
+  let forwardPayload;
+  if (comment) {
+    const bytes = commentToBytes(comment);
+    const freeBytes = Math.floor(builder.availableBits / 8);
+    forwardPayload = packBytesAsSnake(bytes, freeBytes);
+  }
+  if (forwardPayload instanceof Uint8Array) {
+    builder.storeBit(0);
+    builder = builder.storeBuffer(nfts_Buffer.from(forwardPayload));
+  } else {
+    builder = builder.storeMaybeRef(forwardPayload);
+  }
+  return builder.endCell();
+}
+;// CONCATENATED MODULE: ./src/api/blockchains/ton/contracts/NominatorPool.ts
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function nominatorPoolConfigToCell(config) {
-  return (0,core_dist.beginCell)().endCell();
+  return (0,dist.beginCell)().endCell();
 }
 class NominatorPool {
   constructor(address, init) {
@@ -45353,7 +45892,7 @@ class NominatorPool {
       code,
       data
     };
-    return new NominatorPool((0,core_dist.contractAddress)(workchain, init), init);
+    return new NominatorPool((0,dist.contractAddress)(workchain, init), init);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -45361,9 +45900,9 @@ class NominatorPool {
     const res = await provider.get('list_nominators', []);
     const items = res.stack.items[0].items;
     return items.map(item => {
-      const tuple = new core_dist.TupleReader(item.items);
+      const tuple = new dist.TupleReader(item.items);
       const hash = tuple.readBigNumber().toString(16).padStart(64, '0');
-      const address = toBase64Address(`0:${hash}`, true);
+      const address = dist.Address.parse(`0:${hash}`);
       const amount = tuple.readBigNumber();
       const pendingDepositAmount = tuple.readBigNumber();
       const withdrawRequested = Boolean(tuple.readNumber());
@@ -45396,6 +45935,29 @@ function setStakingCommonCache(data) {
 function getStakingCommonCache() {
   return stakingCommonCache;
 }
+// EXTERNAL MODULE: ./src/lib/dexie/dexie.js
+var dexie = __webpack_require__(8876);
+var dexie_default = /*#__PURE__*/__webpack_require__.n(dexie);
+;// CONCATENATED MODULE: ./src/api/db.ts
+function db_defineProperty(obj, key, value) { key = db_toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function db_toPropertyKey(arg) { var key = db_toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
+function db_toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+var Table = (dexie_default()).Table;
+const DB_NANE = 'tables';
+class ApiDb extends (dexie_default()) {
+  constructor() {
+    super(DB_NANE);
+    db_defineProperty(this, "nfts", void 0);
+    this.version(1).stores({
+      nfts: '[accountId+address], accountId, address, collectionAddress'
+    });
+    this.version(2).stores({
+      sseConnections: '&clientId'
+    });
+  }
+}
+const apiDb = new ApiDb();
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/staking.ts
 
 
@@ -45419,7 +45981,12 @@ async function checkStakeDraft(accountId, amount, backendState) {
     type = 'nominators';
     const poolAddress = backendState.nominatorsPool.address;
     amount += ONE_TON;
-    result = await checkTransactionDraft(accountId, TON_TOKEN_SLUG, poolAddress, amount, STAKE_COMMENT);
+    result = await checkTransactionDraft({
+      accountId,
+      toAddress: poolAddress,
+      amount,
+      data: STAKE_COMMENT
+    });
   } else if (amount < ONE_TON) {
     return {
       error: ApiTransactionDraftError.InvalidAmount
@@ -45427,7 +45994,12 @@ async function checkStakeDraft(accountId, amount, backendState) {
   } else {
     type = 'liquid';
     const body = buildLiquidStakingDepositBody();
-    result = await checkTransactionDraft(accountId, TON_TOKEN_SLUG, LIQUID_POOL, amount, body);
+    result = await checkTransactionDraft({
+      accountId,
+      toAddress: LIQUID_POOL,
+      amount,
+      data: body
+    });
   }
   return {
     ...result,
@@ -45447,7 +46019,12 @@ async function checkUnstakeDraft(accountId, amount, backendState) {
   if (staked.type === 'nominators') {
     type = 'nominators';
     const poolAddress = backendState.nominatorsPool.address;
-    result = await checkTransactionDraft(accountId, TON_TOKEN_SLUG, poolAddress, ONE_TON, UNSTAKE_COMMENT);
+    result = await checkTransactionDraft({
+      accountId,
+      toAddress: poolAddress,
+      amount: ONE_TON,
+      data: UNSTAKE_COMMENT
+    });
   } else if (staked.type === 'liquid') {
     type = 'liquid';
     if (amount > staked.amount) {
@@ -45460,7 +46037,12 @@ async function checkUnstakeDraft(accountId, amount, backendState) {
       tokenAmount = bigintDivideToNumber(amount, commonData.liquid.currentRate);
     }
     const params = await buildLiquidStakingWithdraw(network, address, tokenAmount);
-    result = await checkTransactionDraft(accountId, TON_TOKEN_SLUG, params.toAddress, params.amount, params.payload);
+    result = await checkTransactionDraft({
+      accountId,
+      toAddress: params.toAddress,
+      amount: params.amount,
+      data: params.payload
+    });
   } else {
     return {
       error: ApiCommonError.Unexpected
@@ -45474,13 +46056,28 @@ async function checkUnstakeDraft(accountId, amount, backendState) {
 }
 async function submitStake(accountId, password, amount, type, backendState) {
   let result;
+  const {
+    network
+  } = parseAccountId(accountId);
   const address = await fetchStoredAddress(accountId);
   if (type === 'liquid') {
     amount += ONE_TON;
-    result = await submitTransfer(accountId, password, TON_TOKEN_SLUG, LIQUID_POOL, amount, buildLiquidStakingDepositBody());
+    result = await submitTransfer({
+      accountId,
+      password,
+      toAddress: LIQUID_POOL,
+      amount,
+      data: buildLiquidStakingDepositBody()
+    });
   } else {
     const poolAddress = backendState.nominatorsPool.address;
-    result = await submitTransfer(accountId, password, TON_TOKEN_SLUG, toBase64Address(poolAddress, true), amount, STAKE_COMMENT);
+    result = await submitTransfer({
+      accountId,
+      password,
+      toAddress: toBase64Address(poolAddress, true, network),
+      amount,
+      data: STAKE_COMMENT
+    });
   }
   if (!('error' in result)) {
     updateAccountCache(accountId, address, {
@@ -45499,10 +46096,22 @@ async function submitUnstake(accountId, password, type, amount, backendState) {
   if (type === 'liquid') {
     const mode = staked.type === 'liquid' && !staked.instantAvailable ? ApiLiquidUnstakeMode.BestRate : ApiLiquidUnstakeMode.Default;
     const params = await buildLiquidStakingWithdraw(network, address, amount, mode);
-    result = await submitTransfer(accountId, password, TON_TOKEN_SLUG, params.toAddress, params.amount, params.payload);
+    result = await submitTransfer({
+      accountId,
+      password,
+      toAddress: params.toAddress,
+      amount: params.amount,
+      data: params.payload
+    });
   } else {
     const poolAddress = backendState.nominatorsPool.address;
-    result = await submitTransfer(accountId, password, TON_TOKEN_SLUG, toBase64Address(poolAddress, true), ONE_TON, UNSTAKE_COMMENT);
+    result = await submitTransfer({
+      accountId,
+      password,
+      toAddress: toBase64Address(poolAddress, true, network),
+      amount: ONE_TON,
+      data: UNSTAKE_COMMENT
+    });
   }
   return result;
 }
@@ -45527,7 +46136,7 @@ async function getStakingState(accountId, backendState) {
   const {
     network
   } = parseAccountId(accountId);
-  const address = toBase64Address(await fetchStoredAddress(accountId), true);
+  const address = await fetchStoredAddress(accountId);
   const {
     currentRate,
     collection
@@ -45553,7 +46162,7 @@ async function getStakingState(accountId, backendState) {
   } = backendState;
   const accountCache = getAccountCache(accountId, address);
   const stakedAt = Math.max((_accountCache$stakedA = accountCache.stakedAt) !== null && _accountCache$stakedA !== void 0 ? _accountCache$stakedA : 0, (_backendState$stakedA = backendState.stakedAt) !== null && _backendState$stakedA !== void 0 ? _backendState$stakedA : 0);
-  const isInstantUnstake = !commonData.liquid.collection && Date.now() - stakedAt > VALIDATION_PERIOD_MS;
+  const isInstantUnstake = Date.now() - stakedAt > VALIDATION_PERIOD_MS;
   const liquidAvailable = isInstantUnstake ? commonData.liquid.available : 0n;
   let liquidApy = commonData.liquid.apy;
   if (loyaltyType && loyaltyType in commonData.liquid.loyaltyApy) {
@@ -45575,7 +46184,8 @@ async function getStakingState(accountId, backendState) {
   if (backendState.type === 'nominators') {
     const nominatorPool = getPoolContract(network, poolAddress);
     const nominators = await nominatorPool.getListNominators();
-    const currentNominator = nominators.find(n => n.address === address);
+    const addressObject = dist.Address.parse(address);
+    const currentNominator = nominators.find(n => n.address.equals(addressObject));
     if (currentNominator) {
       return {
         type: 'nominators',
@@ -45604,7 +46214,7 @@ async function getStakingState(accountId, backendState) {
   }
 }
 function getPoolContract(network, poolAddress) {
-  return getTonClient(network).open(new NominatorPool(core_dist.Address.parse(poolAddress)));
+  return getTonClient(network).open(new NominatorPool(dist.Address.parse(poolAddress)));
 }
 async function getLiquidStakingTokenBalance(accountId) {
   const {
@@ -45626,16 +46236,16 @@ async function getLiquidStakingTokenBalance(accountId) {
 
 
 function packPayloadToBoc(payload) {
-  let cell = new core_dist.Cell();
+  let cell = new dist.Cell();
   if (payload) {
-    if (payload instanceof core_dist.Cell) {
+    if (payload instanceof dist.Cell) {
       cell = payload;
     } else if (typeof payload === 'string') {
       if (payload.length > 0) {
-        cell = new core_dist.Builder().storeUint(0, 32).storeStringTail(payload).asCell();
+        cell = new dist.Builder().storeUint(0, 32).storeStringTail(payload).asCell();
       }
     } else {
-      cell = new core_dist.Builder().storeBuffer(other_Buffer.from(payload)).asCell();
+      cell = new dist.Builder().storeBuffer(other_Buffer.from(payload)).asCell();
     }
   }
   return cell.toBoc().toString('base64');
@@ -45648,12 +46258,6 @@ async function checkApiAvailability(network) {
     return false;
   }
 }
-;// CONCATENATED MODULE: ./src/util/assert.ts
-function assert(condition, message) {
-  if (!condition) {
-    throw new Error(message || 'Assertion failed');
-  }
-}
 ;// CONCATENATED MODULE: ./src/api/blockchains/ton/swap.ts
 
 
@@ -45661,6 +46265,8 @@ function assert(condition, message) {
 
 
 
+
+const MEGATON_WTON_MINTER = 'EQCajaUU1XXSAjTD-xOV7pE49fGtg4q8kF3ELCOJtGvQFQ2C';
 const MAX_NETWORK_FEE = 1000000000n; // 1 TON
 
 async function validateDexSwapTransfers(network, address, params, transfers) {
@@ -45668,6 +46274,11 @@ async function validateDexSwapTransfers(network, address, params, transfers) {
   const [mainTransfer, feeTransfer] = transfers;
   if (params.from === TON_SYMBOL) {
     const maxAmount = fromDecimal(params.fromAmount) + MAX_NETWORK_FEE;
+    const {
+      isSwapAllowed,
+      codeHash
+    } = await getContractInfo(network, mainTransfer.toAddress);
+    assert(!!isSwapAllowed, `Not allowed swap contract: ${codeHash} ${mainTransfer.toAddress}`);
     assert(mainTransfer.amount <= maxAmount);
     if (feeTransfer) {
       assert(feeTransfer.amount <= mainTransfer.amount);
@@ -45681,13 +46292,25 @@ async function validateDexSwapTransfers(network, address, params, transfers) {
     const maxTonAmount = MAX_NETWORK_FEE;
     const walletAddress = await resolveTokenWalletAddress(network, address, token.minterAddress);
     const parsedPayload = await parsePayloadBase64(network, mainTransfer.toAddress, mainTransfer.payload);
-    assert(mainTransfer.toAddress === walletAddress);
+    let destination;
+    let tokenAmount = 0n;
+    if (mainTransfer.toAddress === MEGATON_WTON_MINTER) {
+      destination = mainTransfer.toAddress;
+      assert(mainTransfer.toAddress === token.minterAddress);
+    } else {
+      assert(mainTransfer.toAddress === walletAddress);
+      assert(['tokens:transfer', 'tokens:transfer-non-standard'].includes(parsedPayload.type));
+      ({
+        amount: tokenAmount,
+        destination
+      } = parsedPayload);
+      assert(tokenAmount <= maxAmount);
+    }
     assert(mainTransfer.amount < maxTonAmount);
-    assert(['tokens:transfer', 'tokens:transfer-non-standard'].includes(parsedPayload.type));
     const {
-      amount: tokenAmount
-    } = parsedPayload;
-    assert(tokenAmount <= maxAmount);
+      isSwapAllowed
+    } = await getContractInfo(network, destination);
+    assert(!!isSwapAllowed);
     if (feeTransfer) {
       const feePayload = await parsePayloadBase64(network, feeTransfer.toAddress, feeTransfer.payload);
       assert(feeTransfer.amount + mainTransfer.amount < maxTonAmount);
@@ -45695,11 +46318,11 @@ async function validateDexSwapTransfers(network, address, params, transfers) {
       assert(['tokens:transfer', 'tokens:transfer-non-standard'].includes(feePayload.type));
       const {
         amount: tokenFeeAmount,
-        destination
+        destination: feeDestination
       } = feePayload;
       assert(tokenFeeAmount < tokenAmount);
       assert(tokenAmount + tokenFeeAmount <= maxAmount);
-      assert(toBase64Address(destination, false) === SWAP_FEE_ADDRESS);
+      assert(toBase64Address(feeDestination, false) === SWAP_FEE_ADDRESS);
     }
   }
 }
@@ -45923,7 +46546,7 @@ function getSseLastEventId() {
 function setSseLastEventId(lastEventId) {
   return storages_storage.setItem('sseLastEventId', lastEventId);
 }
-function fetchDappCatalog() {
+function loadExploreSites() {
   return callBackendGet('/dapp/catalog');
 }
 ;// CONCATENATED MODULE: ./src/util/Deferred.ts
@@ -46044,65 +46667,9 @@ function whenTxComplete(normalizedAddress, amount) {
     });
   });
 }
-;// CONCATENATED MODULE: ./src/api/methods/nfts.ts
-
-
-
-let nfts_onUpdate;
-function initNfts(_onUpdate) {
-  nfts_onUpdate = _onUpdate;
-}
-function fetchNfts(accountId) {
-  const blockchain = blockchains[resolveBlockchainKey(accountId)];
-  return blockchain.getAccountNfts(accountId);
-}
-async function processNftUpdates(accountId, updates) {
-  updates.filter(update => !(update.type === 'nftReceived' && update.nft.isHidden)).forEach(nfts_onUpdate);
-  for (const update of updates) {
-    if (update.type === 'nftSent') {
-      const key = [accountId, update.nftAddress];
-      await apiDb.nfts["delete"](key);
-    } else if (update.type === 'nftReceived') {
-      const dbNft = convertToDbEntity(accountId, update.nft);
-      await apiDb.nfts.put(dbNft);
-    } else if (update.type === 'nftPutUpForSale') {
-      const key = [accountId, update.nftAddress];
-      await apiDb.nfts.update(key, {
-        isOnSale: true
-      });
-    }
-  }
-}
-async function updateNfts(accountId, nfts) {
-  const visibleNfts = nfts.filter(nft => !nft.isHidden);
-  nfts_onUpdate({
-    type: 'updateNfts',
-    accountId,
-    nfts: visibleNfts
-  });
-  const dbNfts = nfts.map(nft => convertToDbEntity(accountId, nft));
-  await apiDb.nfts.where({
-    accountId
-  }).delete();
-  await apiDb.nfts.bulkPut(dbNfts);
-}
-function convertToDbEntity(accountId, nft) {
-  var _nft$collectionAddres;
-  return {
-    ...nft,
-    collectionAddress: (_nft$collectionAddres = nft.collectionAddress) !== null && _nft$collectionAddres !== void 0 ? _nft$collectionAddres : '',
-    accountId
-  };
-}
-;// CONCATENATED MODULE: ./src/api/methods/prices.ts
-
-
-async function getBaseCurrency() {
-  var _await$storage$getIte;
-  return (_await$storage$getIte = await storages_storage.getItem('baseCurrency')) !== null && _await$storage$getIte !== void 0 ? _await$storage$getIte : DEFAULT_PRICE_CURRENCY;
-}
-function setBaseCurrency(currency) {
-  return storages_storage.setItem('baseCurrency', currency);
+;// CONCATENATED MODULE: ./src/util/swap/buildSwapId.ts
+function buildSwapId(backendId) {
+  return `swap:${backendId}`;
 }
 ;// CONCATENATED MODULE: ./src/api/methods/other.ts
 /* provided dependency */ var methods_other_Buffer = __webpack_require__(8764)["lW"];
@@ -46157,10 +46724,11 @@ async function getClientId() {
 }
 async function fetchAccountConfigForDebugPurposesOnly() {
   try {
-    const [accounts, mnemonicsEncrypted] = await Promise.all([fetchStoredAccounts(), storages_storage.getItem('mnemonicsEncrypted')]);
+    const [accounts, mnemonicsEncrypted, stateVersion] = await Promise.all([fetchStoredAccounts(), storages_storage.getItem('mnemonicsEncrypted'), storages_storage.getItem('stateVersion')]);
     return JSON.stringify({
       accounts,
-      mnemonicsEncrypted
+      mnemonicsEncrypted,
+      stateVersion
     });
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -46168,11 +46736,10 @@ async function fetchAccountConfigForDebugPurposesOnly() {
     return undefined;
   }
 }
-
-;// CONCATENATED MODULE: ./src/util/swap/buildSwapId.ts
-function buildSwapId(backendId) {
-  return `swap:${backendId}`;
+function ping() {
+  return true;
 }
+
 ;// CONCATENATED MODULE: ./src/api/methods/tokens.ts
 
 
@@ -46259,6 +46826,7 @@ async function swapBuildTransfer(accountId, password, params) {
   };
 }
 async function swapSubmit(accountId, password, fee, transfers, historyItem) {
+  const address = await fetchStoredAddress(accountId);
   const transferList = transfers.map(transfer => ({
     ...transfer,
     amount: BigInt(transfer.amount),
@@ -46277,6 +46845,13 @@ async function swapSubmit(accountId, password, fee, transfers, historyItem) {
     to,
     kind: 'swap'
   };
+  const authToken = await getBackendAuthToken(accountId, password);
+  await callBackendPost(`/swap/history/${address}/${historyItem.id}/update`, {
+    msgHash: result.msgHash
+  }, {
+    method: 'PATCH',
+    authToken
+  });
   swap_onUpdate({
     type: 'newActivities',
     accountId,
@@ -46325,7 +46900,7 @@ async function swapReplaceTransactionsByRanges(accountId, transactions, chunks, 
     network
   } = parseAccountId(accountId);
   if (!chunks.length || network === 'testnet') {
-    return [];
+    return transactions;
   }
   try {
     const address = await fetchStoredAddress(accountId);
@@ -46387,6 +46962,10 @@ async function waitPendingDexSwap(address) {
     if (!pendingSwaps.length) {
       break;
     }
+    const areAllStale = pendingSwaps.every(swap => Date.now() - swap.timestamp > SWAP_WAITING_TIME * 2);
+    if (areAllStale) {
+      break;
+    }
     await pause(SWAP_WAITING_PAUSE);
   }
 }
@@ -46422,7 +47001,10 @@ function swapEstimate(params) {
   });
 }
 function swapBuild(authToken, params) {
-  return callBackendPost('/swap/ton/build', params, {
+  return callBackendPost('/swap/ton/build', {
+    ...params,
+    isMsgHashMode: true
+  }, {
     authToken
   });
 }
@@ -46449,7 +47031,9 @@ function swapGetHistoryItem(address, id) {
   return callBackendGet(`/swap/history/${address}/${id}`);
 }
 function swapCexEstimate(params) {
-  return callBackendPost('/swap/cex/estimate', params);
+  return callBackendPost('/swap/cex/estimate', params, {
+    isAllowBadRequest: true
+  });
 }
 function swapCexValidateAddress(params) {
   return callBackendGet('/swap/cex/validate-address', params);
@@ -46483,6 +47067,8 @@ async function swapCexCreateTransaction(accountId, password, params) {
   };
 }
 ;// CONCATENATED MODULE: ./src/api/methods/transactions.ts
+
+
 
 
 
@@ -46526,34 +47112,46 @@ async function fetchAllActivitySlice(accountId, lastTxIds, limit) {
     return handleServerError(err);
   }
 }
-function transactions_checkTransactionDraft(accountId, slug, toAddress, amount, comment, shouldEncrypt) {
-  const blockchain = blockchains[resolveBlockchainKey(accountId)];
-  return blockchain.checkTransactionDraft(accountId, slug, toAddress, amount, comment, undefined, shouldEncrypt);
+function transactions_checkTransactionDraft(options) {
+  const blockchain = blockchains[resolveBlockchainKey(options.accountId)];
+  return blockchain.checkTransactionDraft(options);
 }
 async function transactions_submitTransfer(options) {
   let shouldCreateLocalTransaction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   const {
     accountId,
     password,
-    slug,
     toAddress,
     amount,
+    tokenAddress,
     comment,
     fee,
-    shouldEncrypt
+    shouldEncrypt,
+    isBase64Data
   } = options;
   const blockchain = blockchains[resolveBlockchainKey(accountId)];
   const fromAddress = await fetchStoredAddress(accountId);
-  const result = await blockchain.submitTransfer(accountId, password, slug, toAddress, amount, comment, undefined, shouldEncrypt);
+  const result = await blockchain.submitTransfer({
+    accountId,
+    password,
+    toAddress,
+    amount,
+    tokenAddress,
+    data: comment,
+    shouldEncrypt,
+    isBase64Data
+  });
   if ('error' in result) {
     return result;
   }
   const {
-    encryptedComment
+    encryptedComment,
+    msgHash
   } = result;
   if (!shouldCreateLocalTransaction) {
     return result;
   }
+  const slug = tokenAddress ? tokens_buildTokenSlug(tokenAddress) : TON_TOKEN_SLUG;
   const localTransaction = createLocalTransaction(accountId, {
     amount,
     fromAddress,
@@ -46561,32 +47159,39 @@ async function transactions_submitTransfer(options) {
     comment: shouldEncrypt ? undefined : comment,
     encryptedComment,
     fee: fee || 0n,
-    slug
+    slug,
+    inMsgHash: msgHash
   });
   return {
     ...result,
     txId: localTransaction.txId
   };
 }
-async function transactions_waitLastTransfer(accountId) {
+async function waitLastTransfer(accountId) {
   const blockchain = blockchains.ton;
   const {
     network
   } = parseAccountId(accountId);
   const address = await fetchStoredAddress(accountId);
-  return blockchain.waitLastTransfer(network, address);
+  return blockchain.waitPendingTransfer(network, address);
 }
 async function sendSignedTransferMessage(accountId, message) {
   const blockchain = blockchains[resolveBlockchainKey(accountId)];
-  await blockchain.sendSignedMessage(accountId, message);
-  const localTransaction = createLocalTransaction(accountId, message.params);
+  const msgHash = await blockchain.sendSignedMessage(accountId, message);
+  const localTransaction = createLocalTransaction(accountId, {
+    ...message.params,
+    inMsgHash: msgHash
+  });
   return localTransaction.txId;
 }
 async function sendSignedTransferMessages(accountId, messages) {
   const blockchain = blockchains.ton;
   const result = await blockchain.sendSignedMessages(accountId, messages);
   for (let i = 0; i < result.successNumber; i++) {
-    createLocalTransaction(accountId, messages[i].params);
+    createLocalTransaction(accountId, {
+      ...messages[i].params,
+      inMsgHash: result.msgHashes[i]
+    });
   }
   return result;
 }
@@ -46595,12 +47200,15 @@ function transactions_decryptComment(accountId, encryptedComment, fromAddress, p
   return blockchain.decryptComment(accountId, encryptedComment, fromAddress, password);
 }
 function createLocalTransaction(accountId, params) {
-  const blockchainKey = parseAccountId(accountId).blockchain;
+  const {
+    blockchain: blockchainKey,
+    network
+  } = parseAccountId(accountId);
   const blockchain = blockchains[blockchainKey];
   const {
     toAddress
   } = params;
-  const normalizedAddress = blockchain.normalizeAddress(toAddress);
+  const normalizedAddress = blockchain.normalizeAddress(toAddress, network);
   const localTransaction = buildLocalTransaction(params, normalizedAddress);
   transactions_onUpdate({
     type: 'newLocalTransaction',
@@ -46608,6 +47216,123 @@ function createLocalTransaction(accountId, params) {
     accountId
   });
   return localTransaction;
+}
+;// CONCATENATED MODULE: ./src/api/methods/nfts.ts
+
+
+
+
+
+
+let nfts_onUpdate;
+function initNfts(_onUpdate) {
+  nfts_onUpdate = _onUpdate;
+}
+function fetchNfts(accountId) {
+  const blockchain = blockchains[resolveBlockchainKey(accountId)];
+  return blockchain.getAccountNfts(accountId);
+}
+async function processNftUpdates(accountId, updates) {
+  updates.filter(update => !(update.type === 'nftReceived' && update.nft.isHidden)).forEach(nfts_onUpdate);
+  for (const update of updates) {
+    if (update.type === 'nftSent') {
+      const key = [accountId, update.nftAddress];
+      await apiDb.nfts["delete"](key);
+    } else if (update.type === 'nftReceived') {
+      const dbNft = convertToDbEntity(accountId, update.nft);
+      await apiDb.nfts.put(dbNft);
+    } else if (update.type === 'nftPutUpForSale') {
+      const key = [accountId, update.nftAddress];
+      await apiDb.nfts.update(key, {
+        isOnSale: true
+      });
+    }
+  }
+}
+async function updateNfts(accountId, nfts) {
+  const visibleNfts = nfts.filter(nft => !nft.isHidden);
+  nfts_onUpdate({
+    type: 'updateNfts',
+    accountId,
+    nfts: visibleNfts
+  });
+  const dbNfts = nfts.map(nft => convertToDbEntity(accountId, nft));
+  await apiDb.nfts.where({
+    accountId
+  }).delete();
+  await apiDb.nfts.bulkPut(dbNfts);
+}
+function convertToDbEntity(accountId, nft) {
+  var _nft$collectionAddres;
+  return {
+    ...nft,
+    collectionAddress: (_nft$collectionAddres = nft.collectionAddress) !== null && _nft$collectionAddres !== void 0 ? _nft$collectionAddres : '',
+    accountId
+  };
+}
+function nfts_checkNftTransferDraft(options) {
+  const blockchain = blockchains[resolveBlockchainKey(options.accountId)];
+  return blockchain.checkNftTransferDraft(options);
+}
+async function nfts_submitNftTransfers(accountId, password, nftAddresses, toAddress, comment, nfts) {
+  let fee = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0n;
+  const blockchain = blockchains[resolveBlockchainKey(accountId)];
+  const fromAddress = await fetchStoredAddress(accountId);
+  const result = await blockchain.submitNftTransfers(accountId, password, nftAddresses, toAddress, comment);
+  if ('error' in result) {
+    return result;
+  }
+  for (const [i, message] of result.messages.entries()) {
+    createLocalTransaction(accountId, {
+      amount: message.amount,
+      fromAddress,
+      toAddress: message.toAddress,
+      comment,
+      fee,
+      slug: TON_TOKEN_SLUG,
+      inMsgHash: result.msgHash,
+      type: 'nftTransferred',
+      nft: nfts === null || nfts === void 0 ? void 0 : nfts[i]
+    });
+  }
+  return result;
+}
+;// CONCATENATED MODULE: ./src/api/methods/preload.ts
+let resolvePromise;
+const preloadPromise = new Promise(resolve => {
+  resolvePromise = resolve;
+});
+function resolveDataPreloadPromise() {
+  resolvePromise();
+}
+async function waitDataPreload() {
+  await preloadPromise;
+}
+;// CONCATENATED MODULE: ./src/api/methods/prices.ts
+
+
+
+
+
+async function getBaseCurrency() {
+  var _await$storage$getIte;
+  return (_await$storage$getIte = await storages_storage.getItem('baseCurrency')) !== null && _await$storage$getIte !== void 0 ? _await$storage$getIte : DEFAULT_PRICE_CURRENCY;
+}
+function setBaseCurrency(currency) {
+  return storages_storage.setItem('baseCurrency', currency);
+}
+async function fetchPriceHistory(slug, period) {
+  var _token$minterAddress;
+  let baseCurrency = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : DEFAULT_PRICE_CURRENCY;
+  await waitDataPreload();
+  const token = tokens_resolveTokenBySlug(slug);
+  if (!token) {
+    return [];
+  }
+  return callBackendGet(`/prices/chart/${(_token$minterAddress = token.minterAddress) !== null && _token$minterAddress !== void 0 ? _token$minterAddress : TON_SYMBOL}`, {
+    base: baseCurrency,
+    period
+  });
 }
 ;// CONCATENATED MODULE: ./src/api/methods/staking.ts
 
@@ -46657,7 +47382,8 @@ async function staking_submitStake(accountId, password, amount, type, fee) {
     comment: STAKE_COMMENT,
     fee: fee || 0n,
     type: 'stake',
-    slug: TON_TOKEN_SLUG
+    slug: TON_TOKEN_SLUG,
+    inMsgHash: result.msgHash
   });
   return {
     ...result,
@@ -46680,7 +47406,8 @@ async function staking_submitUnstake(accountId, password, type, amount, fee) {
     comment: UNSTAKE_COMMENT,
     fee: fee || 0n,
     type: 'unstakeRequest',
-    slug: TON_TOKEN_SLUG
+    slug: TON_TOKEN_SLUG,
+    inMsgHash: result.msgHash
   });
   return {
     ...result,
@@ -46770,6 +47497,7 @@ async function tryUpdateStakingCommonData() {
 
 
 
+
 const SEC = 1000;
 const BALANCE_BASED_INTERVAL = 1.1 * SEC;
 const BALANCE_BASED_INTERVAL_WHEN_NOT_FOCUSED = 10 * SEC;
@@ -46783,14 +47511,11 @@ const SWAP_POLLING_INTERVAL_WHEN_NOT_FOCUSED = 10 * SEC;
 const SWAP_FINISHED_STATUSES = new Set(['failed', 'completed', 'expired']);
 const VERSIONS_INTERVAL = 5 * 60 * SEC;
 const VERSIONS_INTERVAL_WHEN_NOT_FOCUSED = 15 * 60 * SEC;
+const INCORRECT_TIME_DIFF = 30 * SEC;
 const FIRST_TRANSACTIONS_LIMIT = 50;
 const DOUBLE_CHECK_TOKENS_PAUSE = 30 * SEC;
 let polling_onUpdate;
 let isAccountActive;
-let resolvePreloadPromise;
-const preloadEnsurePromise = new Promise(resolve => {
-  resolvePreloadPromise = resolve;
-});
 const prices = {
   baseCurrency: DEFAULT_PRICE_CURRENCY,
   bySlug: {}
@@ -46801,8 +47526,8 @@ async function initPolling(_onUpdate, _isAccountActive) {
   polling_onUpdate = _onUpdate;
   isAccountActive = _isAccountActive;
   await tryUpdatePrices();
-  Promise.all([tryUpdateKnownAddresses(), tryUpdateTokens(_onUpdate), tryLoadSwapTokens(_onUpdate), tryUpdateStakingCommonData()]).then(() => resolvePreloadPromise());
-  void tryUpdateRegion(_onUpdate);
+  Promise.allSettled([tryUpdateKnownAddresses(), tryUpdateTokens(_onUpdate), tryLoadSwapTokens(_onUpdate), tryUpdateStakingCommonData()]).then(() => resolveDataPreloadPromise());
+  void tryUpdateConfig(_onUpdate);
   void setupBackendPolling();
   void setupLongBackendPolling();
 }
@@ -46814,16 +47539,15 @@ function registerNewTokens(tokenBalances) {
   } of tokenBalances.filter(Boolean)) {
     if (token.slug in tokens) continue;
     areNewTokensFound = true;
-    tokens[token.slug] = {
+    addKnownToken({
       ...token,
       quote: prices.bySlug[token.slug] || {
+        slug: token.slug,
         price: 0.0,
-        percentChange1h: 0.0,
-        percentChange24h: 0.0,
-        percentChange7d: 0.0,
-        percentChange30d: 0.0
+        priceUsd: 0.0,
+        percentChange24h: 0.0
       }
-    };
+    });
   }
   if (areNewTokensFound) {
     sendUpdateTokens();
@@ -47065,7 +47789,7 @@ async function setupLongBackendPolling() {
   const localOnUpdate = polling_onUpdate;
   while (isUpdaterAlive(localOnUpdate)) {
     await pauseOrFocus(LONG_BACKEND_INTERVAL);
-    await Promise.all([tryUpdateKnownAddresses(), tryUpdateStakingCommonData(), tryUpdateRegion(localOnUpdate)]);
+    await Promise.all([tryUpdateKnownAddresses(), tryUpdateStakingCommonData(), tryUpdateConfig(localOnUpdate)]);
   }
 }
 async function tryUpdatePrices(localOnUpdate) {
@@ -47074,20 +47798,11 @@ async function tryUpdatePrices(localOnUpdate) {
   }
   try {
     const baseCurrency = await getBaseCurrency();
-    const pricesData = await callBackendGet('/prices', {
+    const pricesData = await callBackendGet('/prices/current', {
       base: baseCurrency
     });
     if (!isUpdaterAlive(localOnUpdate)) return;
-    prices.bySlug = Object.values(pricesData).reduce((acc, _ref4) => {
-      let {
-        slugs,
-        quote
-      } = _ref4;
-      for (const slug of slugs) {
-        acc[slug] = quote;
-      }
-      return acc;
-    }, {});
+    prices.bySlug = buildCollectionByKey(Object.values(pricesData), 'slug');
     prices.baseCurrency = baseCurrency;
   } catch (err) {
     logDebugError('tryUpdatePrices', err);
@@ -47107,6 +47822,9 @@ async function tryUpdateTokens(localOnUpdate) {
   }
 }
 async function tryLoadSwapTokens(localOnUpdate) {
+  if (!localOnUpdate) {
+    localOnUpdate = polling_onUpdate;
+  }
   try {
     const assets = await swapGetAssets();
     if (!isUpdaterAlive(localOnUpdate)) return;
@@ -47127,16 +47845,25 @@ async function tryLoadSwapTokens(localOnUpdate) {
     logDebugError('tryLoadSwapTokens', err);
   }
 }
-async function tryUpdateRegion(localOnUpdate) {
+async function tryUpdateConfig(localOnUpdate) {
   try {
     const {
-      isLimited
-    } = await callBackendGet('/utils/check-region');
+      isLimited,
+      isCopyStorageEnabled = false,
+      now: serverUtc
+    } = await callBackendGet('/utils/get-config');
     if (!isUpdaterAlive(localOnUpdate)) return;
     polling_onUpdate({
-      type: 'updateRegion',
-      isLimited
+      type: 'updateConfig',
+      isLimited,
+      isCopyStorageEnabled
     });
+    const localUtc = new Date().getTime();
+    if (Math.abs(serverUtc - localUtc) > INCORRECT_TIME_DIFF) {
+      polling_onUpdate({
+        type: 'incorrectTime'
+      });
+    }
   } catch (err) {
     logDebugError('tryUpdateRegion', err);
   }
@@ -47191,7 +47918,7 @@ async function setupSwapPolling(accountId) {
           isLastFinishedSwapUpdated = true;
         }
         isPrevFinished = isFinished;
-        if (!swap.cex && swap.status !== 'completed') {
+        if (swap.cex || swap.status !== 'completed') {
           // Completed onchain swaps are processed in swapReplaceTransactions
           polling_onUpdate({
             type: 'newActivities',
@@ -47237,9 +47964,6 @@ function logAndRescue(err) {
   logDebugError('Polling error', err);
   return undefined;
 }
-async function waitDataPreload() {
-  await preloadEnsurePromise;
-}
 async function setupWalletVersionsPolling(accountId) {
   const {
     ton
@@ -47257,17 +47981,17 @@ async function setupWalletVersionsPolling(accountId) {
   let lastResult;
   while (isAlive(localOnUpdate, accountId)) {
     try {
-      const versionInfos = (await ton.getWalletVersionInfos(network, publicKeyBytes, versions)).filter(_ref5 => {
+      const versionInfos = (await ton.getWalletVersionInfos(network, publicKeyBytes, versions)).filter(_ref4 => {
         let {
           lastTxId
-        } = _ref5;
+        } = _ref4;
         return !!lastTxId;
       });
-      const filteredVersions = versionInfos.map(_ref6 => {
+      const filteredVersions = versionInfos.map(_ref5 => {
         let {
           wallet,
           ...rest
-        } = _ref6;
+        } = _ref5;
         return rest;
       });
       if (!isAlive(localOnUpdate, accountId)) return;
@@ -47354,22 +48078,22 @@ function getActiveAccountId() {
 
 
 
+
+
 function auth_generateMnemonic() {
   return blockchains.ton.generateMnemonic();
 }
 async function createWallet(network, mnemonic, password) {
   const {
-    mnemonicToSeed,
-    seedToKeyPair,
+    mnemonicToKeyPair,
     publicKeyToAddress
   } = blockchains.ton;
   if (!(await auth_validateMnemonic(mnemonic))) {
     throw new Error('Invalid mnemonic');
   }
-  const seedBase64 = await mnemonicToSeed(mnemonic);
   const {
     publicKey
-  } = seedToKeyPair(seedBase64);
+  } = await mnemonicToKeyPair(mnemonic);
   const version = DEFAULT_WALLET_VERSION;
   const address = publicKeyToAddress(network, publicKey, version);
   const accountId = await getNewAccountId(network);
@@ -47392,17 +48116,16 @@ function auth_validateMnemonic(mnemonic) {
 }
 async function importMnemonic(network, mnemonic, password) {
   const {
-    mnemonicToSeed,
-    seedToKeyPair,
+    mnemonicToKeyPair,
     pickBestWallet
   } = blockchains.ton;
-  if (!(await auth_validateMnemonic(mnemonic))) {
+  const isPrivateKey = isMnemonicPrivateKey(mnemonic);
+  if (!isMnemonicPrivateKey(mnemonic) && !(await auth_validateMnemonic(mnemonic))) {
     throw new Error('Invalid mnemonic');
   }
-  const seedBase64 = await mnemonicToSeed(mnemonic);
   const {
     publicKey
-  } = seedToKeyPair(seedBase64);
+  } = isPrivateKey ? privateKeyHexToKeyPair(mnemonic[0]) : await mnemonicToKeyPair(mnemonic);
   let wallet;
   let version;
   try {
@@ -47413,7 +48136,7 @@ async function importMnemonic(network, mnemonic, password) {
   } catch (err) {
     return handleServerError(err);
   }
-  const address = toBase64Address(wallet.address, false);
+  const address = toBase64Address(wallet.address, false, network);
   const accountId = await getNewAccountId(network);
   const result = await storeAccount(accountId, mnemonic, password, {
     publicKey: bytesToHex(publicKey),
@@ -47623,6 +48346,10 @@ function isWalletInitialized(network, address) {
 function wallet_getWalletBalance(network, address) {
   const blockchain = blockchains.ton;
   return blockchain.getWalletBalance(network, address);
+}
+function wallet_getWalletInfo(network, address) {
+  const blockchain = blockchains.ton;
+  return blockchain.getWalletInfo(network, address);
 }
 ;// CONCATENATED MODULE: ./src/util/handleError.ts
 
@@ -47890,6 +48617,7 @@ function errors_toPrimitive(input, hint) { if (typeof input !== "object" || inpu
 
 
 
+
 class TonConnectError extends ApiBaseError {
   constructor(message) {
     let code = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -47934,7 +48662,7 @@ class UserRejectsError extends (/* unused pure expression or super */ null && (T
 class InsufficientBalance extends (/* unused pure expression or super */ null && (BadRequestError)) {
   constructor() {
     let message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Insufficient balance';
-    super(message);
+    super(message, ApiTransactionError.InsufficientBalance);
   }
 }
 ;// CONCATENATED MODULE: ./src/api/tonConnect/utils.ts
@@ -48001,11 +48729,13 @@ async function connect(request, message, id) {
     await openExtensionPopup(true);
     onPopupUpdate({
       type: 'dappLoading',
-      connectionType: 'connect'
+      connectionType: 'connect',
+      isSse: request && 'sseOptions' in request
     });
     const dappMetadata = await fetchDappMetadata(message.manifestUrl);
-    // Take origin from manifest metadata
-    request.origin = dappMetadata.origin;
+    if (!IS_EXTENSION) {
+      request.origin = dappMetadata.origin;
+    }
     const {
       origin
     } = await validateRequest(request, true);
@@ -48035,7 +48765,8 @@ async function connect(request, message, id) {
       promise
     } = createDappPromise();
     const dapp = {
-      ...(await dappMetadata),
+      ...dappMetadata,
+      origin,
       connectedAt: Date.now(),
       ...('sseOptions' in request && {
         sse: request.sseOptions
@@ -48054,6 +48785,7 @@ async function connect(request, message, id) {
     });
     const promiseResult = await promise;
     accountId = promiseResult.accountId;
+    request.accountId = accountId;
     await addDapp(accountId, dapp);
     const result = await reconnect(request, id);
     if (result.event === 'connect' && proof) {
@@ -48070,6 +48802,12 @@ async function connect(request, message, id) {
       }
       result.payload.items.push(proofReplyItem);
     }
+    onPopupUpdate({
+      type: 'updateDapps'
+    });
+    onPopupUpdate({
+      type: 'dappConnectComplete'
+    });
     return result;
   } catch (err) {
     logDebugError('tonConnect:connect', err);
@@ -48118,6 +48856,9 @@ async function disconnect(request, message) {
     } = await validateRequest(request);
     await deleteDapp(accountId, origin, true);
     deactivateAccountDapp(accountId);
+    onPopupUpdate({
+      type: 'updateDapps'
+    });
   } catch (err) {
     logDebugError('tonConnect:disconnect', err);
   }
@@ -48150,12 +48891,14 @@ async function sendTransaction(request, message) {
     await openExtensionPopup(true);
     onPopupUpdate({
       type: 'dappLoading',
-      connectionType: 'sendTransaction'
+      connectionType: 'sendTransaction',
+      accountId,
+      isSse: Boolean('sseOptions' in request && request.sseOptions)
     });
     const {
       preparedMessages,
       checkResult
-    } = await checkTransactionMessages(accountId, messages);
+    } = await checkTransactionMessages(accountId, messages, network);
     const dapp = (await getDappsByOrigin(accountId))[origin];
     const transactionsForRequest = await prepareTransactionForRequest(network, messages, isLedger);
     const {
@@ -48179,16 +48922,18 @@ async function sendTransaction(request, message) {
     let boc;
     let successNumber;
     let error;
+    let msgHashes = [];
     if (isLedger) {
       const signedTransfers = response;
       const submitResult = await tonConnect_ton.sendSignedMessages(accountId, signedTransfers);
-      boc = signedTransfers[0].base64;
+      boc = submitResult.externalMessage.toBoc().toString('base64');
       successNumber = submitResult.successNumber;
+      msgHashes = submitResult.msgHashes;
       if (successNumber > 0) {
         if (successNumber < messages.length) {
           onPopupUpdate({
             type: 'showError',
-            error: ApiTransactionError.PartialTransactionFailure
+            error: errors_ApiTransactionError.PartialTransactionFailure
           });
         }
       } else {
@@ -48202,6 +48947,7 @@ async function sendTransaction(request, message) {
       } else {
         boc = submitResult.boc;
         successNumber = messages.length;
+        msgHashes = [submitResult.msgHash];
       }
     }
     if (error) {
@@ -48209,20 +48955,22 @@ async function sendTransaction(request, message) {
     }
     const fromAddress = await fetchStoredAddress(accountId);
     const successTransactions = transactionsForRequest.slice(0, successNumber);
-    successTransactions.forEach(_ref3 => {
+    successTransactions.forEach((_ref3, index) => {
       let {
         amount,
         normalizedAddress,
         payload
       } = _ref3;
       const comment = (payload === null || payload === void 0 ? void 0 : payload.type) === 'comment' ? payload.comment : undefined;
+      const msgHash = isLedger ? msgHashes[index] : msgHashes[0];
       createLocalTransaction(accountId, {
         amount,
         fromAddress,
         toAddress: normalizedAddress,
         comment,
         fee: checkResult.fee,
-        slug: TON_TOKEN_SLUG
+        slug: TON_TOKEN_SLUG,
+        inMsgHash: msgHash
       });
     });
     return {
@@ -48277,7 +49025,7 @@ function signData(request, message) {
     id: message.id
   };
 }
-async function checkTransactionMessages(accountId, messages) {
+async function checkTransactionMessages(accountId, messages, network) {
   const preparedMessages = messages.map(msg => {
     const {
       address,
@@ -48286,10 +49034,10 @@ async function checkTransactionMessages(accountId, messages) {
       stateInit
     } = msg;
     return {
-      toAddress: getIsRawAddress(address) ? toBase64Address(address, true) : address,
+      toAddress: getIsRawAddress(address) ? toBase64Address(address, true, network) : address,
       amount: BigInt(amount),
-      payload: payload ? core_dist.Cell.fromBase64(payload) : undefined,
-      stateInit: stateInit ? core_dist.Cell.fromBase64(stateInit) : undefined
+      payload: payload ? dist.Cell.fromBase64(payload) : undefined,
+      stateInit: stateInit ? dist.Cell.fromBase64(stateInit) : undefined
     };
   });
   const checkResult = await tonConnect_ton.checkMultiTransactionDraft(accountId, preparedMessages);
@@ -48313,28 +49061,35 @@ function prepareTransactionForRequest(network, messages, isLedger) {
       payload: rawPayload,
       stateInit
     } = _ref4;
-    const toAddress = getIsRawAddress(address) ? toBase64Address(address, true) : address;
+    const toAddress = getIsRawAddress(address) ? toBase64Address(address, true, network) : address;
     // Fix address format for `waitTxComplete` to work properly
-    const normalizedAddress = toBase64Address(address);
+    const normalizedAddress = toBase64Address(address, undefined, network);
     const payload = rawPayload ? await parsePayloadBase64(network, toAddress, rawPayload) : undefined;
-    const {
-      isLedgerAllowed
-    } = await getContractInfo(network, toAddress);
     if (isLedger) {
-      if (!isLedgerAllowed) {
-        throw new BadRequestError('Unsupported contract', ApiTransactionError.UnsupportedHardwareContract);
-      } else if (payload) {
-        if (!LEDGER_SUPPORTED_PAYLOADS.includes(payload.type)) {
-          throw new BadRequestError('Unsupported payload', ApiTransactionError.UnsupportedHardwarePayload);
+      const isNft = (payload === null || payload === void 0 ? void 0 : payload.type) === 'nft:transfer';
+      if (isNft) {
+        if (payload.forwardPayload || LEDGER_NFT_TRANSFER_DISABLED) {
+          throw new BadRequestError('Unsupported payload', errors_ApiTransactionError.UnsupportedHardwareNftOperation);
         }
-        if (payload.type === 'comment' && !isAscii(payload.comment)) {
-          throw new BadRequestError('Unsupported payload', ApiTransactionError.NonAsciiCommentForHardwareOperation);
+      } else {
+        const {
+          isLedgerAllowed,
+          codeHash
+        } = await getContractInfo(network, toAddress);
+        if (!isLedgerAllowed) {
+          logDebug('Unsupported contract', toAddress, codeHash);
+          throw new BadRequestError('Unsupported contract', errors_ApiTransactionError.UnsupportedHardwareContract);
         }
-        if (payload.type === 'comment' && !isLedgerCommentLengthValid(payload.comment)) {
-          throw new BadRequestError('Unsupported payload', ApiTransactionError.TooLongCommentForHardwareOperation);
-        }
-        if (payload.type === 'nft:transfer' && !!payload.forwardPayload) {
-          throw new BadRequestError('Unsupported payload', ApiTransactionError.UnsupportedHardwareNftOperation);
+        if (payload) {
+          if (!LEDGER_SUPPORTED_PAYLOADS.includes(payload.type)) {
+            throw new BadRequestError('Unsupported payload', errors_ApiTransactionError.UnsupportedHardwarePayload);
+          }
+          if (payload.type === 'comment' && !isAscii(payload.comment)) {
+            throw new BadRequestError('Unsupported payload', errors_ApiTransactionError.NonAsciiCommentForHardwareOperation);
+          }
+          if (payload.type === 'comment' && !isLedgerCommentLengthValid(payload.comment)) {
+            throw new BadRequestError('Unsupported payload', errors_ApiTransactionError.TooLongCommentForHardwareOperation);
+          }
         }
       }
     }
@@ -48405,7 +49160,7 @@ async function signTonProof(accountId, password, walletAddress, proof) {
   const domainBuffer = tonConnect_Buffer.from(domain);
   const domainLengthBuffer = tonConnect_Buffer.allocUnsafe(4);
   domainLengthBuffer.writeInt32LE(domainBuffer.byteLength);
-  const address = core_dist.Address.parse(walletAddress);
+  const address = dist.Address.parse(walletAddress);
   const addressWorkchainBuffer = tonConnect_Buffer.allocUnsafe(4);
   addressWorkchainBuffer.writeInt32BE(address.workChain);
   const addressBuffer = tonConnect_Buffer.concat([addressWorkchainBuffer, address.hash]);
@@ -48513,9 +49268,20 @@ async function getCurrentAccountOrFail() {
 const BRIDGE_URL = 'https://tonconnectbridge.mytonwallet.org/bridge';
 const TTL_SEC = 300;
 const NONCE_SIZE = 24;
+const MAX_CONFIRM_DURATION = 60 * 1000;
 let sseEventSource;
 let sseDapps = [];
-async function startSseConnection(url, deviceInfo) {
+let delayedReturnParams;
+let sse_onUpdate;
+function initSse(_onUpdate) {
+  sse_onUpdate = _onUpdate;
+}
+async function startSseConnection(_ref) {
+  let {
+    url,
+    deviceInfo,
+    isFromInAppBrowser
+  } = _ref;
   const {
     searchParams: params,
     origin
@@ -48523,14 +49289,20 @@ async function startSseConnection(url, deviceInfo) {
   const ret = params.get('ret') || 'back';
   const version = Number(params.get('v'));
   const appClientId = params.get('id');
-  if (!params.get('r')) {
+  // `back` strategy cannot be implemented
+  const shouldOpenUrl = ret !== 'back' && ret !== 'none';
+  const r = params.get('r');
+  if (!r) {
+    if (shouldOpenUrl) {
+      delayedReturnParams = {
+        validUntil: Date.now() + MAX_CONFIRM_DURATION,
+        url: ret,
+        isFromInAppBrowser
+      };
+    }
     return undefined;
   }
-  if (await apiDb.sseConnections.get(appClientId)) {
-    // Avoid re-processing link
-    return ret !== null && ret !== void 0 ? ret : undefined;
-  }
-  const connectRequest = JSON.parse(params.get('r'));
+  const connectRequest = safeExec(() => JSON.parse(r)) || JSON.parse(decodeURIComponent(r));
   logDebug('SSE Start connection:', {
     version,
     appClientId,
@@ -48546,7 +49318,6 @@ async function startSseConnection(url, deviceInfo) {
   const clientId = bytesToHex(publicKeyArray);
   const lastOutputId = 0;
   const request = {
-    origin,
     sseOptions: {
       clientId,
       appClientId,
@@ -48555,19 +49326,22 @@ async function startSseConnection(url, deviceInfo) {
     }
   };
   await waitLogin();
+  if (!connectRequest) {
+    sse_onUpdate({
+      type: 'showError',
+      error: 'Invalid TON Connect link'
+    });
+    return undefined;
+  }
   const result = await connect(request, connectRequest, lastOutputId);
   if (result.event === 'connect') {
     result.payload.device = deviceInfo;
   }
   await sendMessage(result, secretKey, clientId, appClientId);
-  await apiDb.sseConnections.put({
-    clientId: appClientId
-  });
   if (result.event !== 'connect_error') {
     await resetupSseConnection();
   }
-  if (ret === 'none' || ret === 'back') {
-    // `back` strategy cannot be implemented
+  if (!shouldOpenUrl) {
     return undefined;
   }
   return ret;
@@ -48578,8 +49352,8 @@ async function resetupSseConnection() {
   if (!dappsState || !network) {
     return;
   }
-  sseDapps = Object.entries(dappsState).reduce((result, _ref) => {
-    let [accountId, dapps] = _ref;
+  sseDapps = Object.entries(dappsState).reduce((result, _ref2) => {
+    let [accountId, dapps] = _ref2;
     if (parseAccountId(accountId).network === network) {
       for (const dapp of Object.values(dapps)) {
         result.push({
@@ -48613,10 +49387,10 @@ async function resetupSseConnection() {
       from,
       message: encryptedMessage
     } = JSON.parse(event.data);
-    const sseDapp = sseDapps.find(_ref2 => {
+    const sseDapp = sseDapps.find(_ref3 => {
       let {
         appClientId
-      } = _ref2;
+      } = _ref3;
       return appClientId === from;
     });
     if (!sseDapp) {
@@ -48628,18 +49402,41 @@ async function resetupSseConnection() {
       clientId,
       appClientId,
       secretKey,
-      origin
+      origin,
+      lastOutputId
     } = sseDapp;
     const message = decryptMessage(encryptedMessage, appClientId, secretKey);
     logDebug('SSE Event:', message);
     await setSseLastEventId(event.lastEventId);
+    const sseOptions = {
+      clientId,
+      appClientId,
+      secretKey,
+      lastOutputId
+    };
 
     // @ts-ignore
     const result = await tonConnect_namespaceObject[message.method]({
       origin,
-      accountId
+      accountId,
+      sseOptions
     }, message);
     await sendMessage(result, secretKey, clientId, appClientId);
+    if (delayedReturnParams) {
+      const {
+        validUntil,
+        url,
+        isFromInAppBrowser
+      } = delayedReturnParams;
+      if (validUntil > Date.now()) {
+        sse_onUpdate({
+          type: 'openUrl',
+          url,
+          isExternal: !isFromInAppBrowser
+        });
+      }
+      delayedReturnParams = undefined;
+    }
   };
 }
 async function sendSseDisconnect(accountId, origin) {
@@ -48717,6 +49514,8 @@ function decryptMessage(message, publicKey, secretKey) {
 
 
 
+
+
 ;// CONCATENATED MODULE: ./src/api/methods/init.ts
 
 
@@ -48748,6 +49547,9 @@ async function init(onUpdate, args) {
   if (environment.isDappSupported) {
     initDapps(onUpdate);
     initTonConnect(onUpdate);
+  }
+  if (environment.isSseSupported) {
+    initSse(onUpdate);
   }
   await startStorageMigration(onUpdate, blockchains.ton);
   if (environment.isSseSupported) {

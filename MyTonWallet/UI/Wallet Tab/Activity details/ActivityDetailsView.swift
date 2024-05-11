@@ -189,6 +189,28 @@ struct ActivityDetailsView: View {
                     }
                     
                     LabeledContent {
+                        Text(activity.raw.type ?? "-")
+                            .font(.body.monospaced())
+                    } label: {
+                        Text("Type").frame(width: 42, alignment: .leading)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        UIPasteboard.general.string = activity.raw.type
+                        toastPresented = true
+                    }
+                    
+                    LabeledContent {
+                        if let shouldHide = activity.raw.shouldHide {
+                            Text(String(shouldHide))
+                         } else {
+                            Text("nil")
+                        }
+                    } label: {
+                        Text("Should hide").frame(width: 42, alignment: .leading)
+                    }
+                    
+                    LabeledContent {
                         Text(activity.raw.txId?.split(separator: ":").last ?? "-")
                             .font(.body.monospaced())
                     } label: {

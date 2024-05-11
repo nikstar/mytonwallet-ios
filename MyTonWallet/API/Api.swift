@@ -22,7 +22,7 @@ final class Api: ObservableObject {
                         let update = try decoder.decode(ApiUpdate.self, from: data)
                         
                         //                        #warning("make optional")
-                        if update.kind != "region" {
+                        if update.kind != "config" {
                             let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
                             try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
                             try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-\(update.kind).json"))

@@ -21,6 +21,7 @@ struct ApiActivity: Hashable, Identifiable, Codable {
     var fee: ApiBigint?
     var normalizedAddress: TonAddress?
     //    var metadata: [String: Any]? ?
+    var type: String?
     
     
     // swap only
