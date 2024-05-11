@@ -39370,7 +39370,6 @@ __webpack_require__.d(ton_namespaceObject, {
   getAccountTransactionSlice: () => (getAccountTransactionSlice),
   getAddressTokenBalances: () => (getAddressTokenBalances),
   getMergedTransactionSlice: () => (getMergedTransactionSlice),
-  getMergedTransactionSliceForTokens: () => (getMergedTransactionSliceForTokens),
   getNftUpdates: () => (getNftUpdates),
   getStakingState: () => (getStakingState),
   getTokenTransactionSlice: () => (getTokenTransactionSlice),
@@ -39450,7 +39449,6 @@ __webpack_require__.d(methods_namespaceObject, {
   fetchAccountConfigForDebugPurposesOnly: () => (fetchAccountConfigForDebugPurposesOnly),
   fetchAddress: () => (fetchAddress),
   fetchAllActivitySlice: () => (fetchAllActivitySlice),
-  fetchAllActivitySliceForTokens: () => (fetchAllActivitySliceForTokens),
   fetchBackendStakingState: () => (fetchBackendStakingState),
   fetchDappCatalog: () => (fetchDappCatalog),
   fetchNfts: () => (fetchNfts),
@@ -39603,17 +39601,17 @@ const IS_EXTENSION = false === '1';
 const IS_FIREFOX_EXTENSION = (/* unused pure expression or super */ null && (false === '1'));
 const IS_PACKAGED_ELECTRON = false === '1';
 const IS_CAPACITOR = false === '1';
-const ELECTRON_HOST_URL = 'api-https://dumb-host';
+const ELECTRON_HOST_URL = 'https://dumb-host';
 const INACTIVE_MARKER = '[Inactive]';
-const PRODUCTION_URL = 'api-https://mytonwallet.app';
-const BETA_URL = 'api-https://beta.mytonwallet.app';
-const BASE_URL = (/* unused pure expression or super */ null && ("api-https://mytonwallet.app"));
+const PRODUCTION_URL = 'https://mytonwallet.app';
+const BETA_URL = 'https://beta.mytonwallet.app';
+const BASE_URL = (/* unused pure expression or super */ null && ("https://mytonwallet.app"));
 const SWAP_FEE_ADDRESS =  false || 'UQDUkQbpTVIgt7v66-JTFR-3-eXRFz_4V66F-Ufn6vOg0GOp';
 const STRICTERDOM_ENABLED = DEBUG && !IS_PACKAGED_ELECTRON;
 const DEBUG_ALERT_MSG = 'Shoot!\nSomething went wrong, please see the error details in Dev Tools Console.';
 const PIN_LENGTH = 4;
 const NATIVE_BIOMETRICS_USERNAME = 'MyTonWallet';
-const NATIVE_BIOMETRICS_SERVER = 'api-https://mytonwallet.app';
+const NATIVE_BIOMETRICS_SERVER = 'https://mytonwallet.app';
 const MNEMONIC_COUNT = 24;
 const MNEMONIC_CHECK_COUNT = 3;
 const MOBILE_SCREEN_MAX_WIDTH = 700; // px
@@ -39650,17 +39648,17 @@ const TONAPIIO_TESTNET_URL = "api-https://tonapiio-testnet.mytonwallet.org" || 0
 const BRILLIANT_API_BASE_URL = "api-https://api.mytonwallet.org" || 0;
 const FRACTION_DIGITS = 9;
 const SHORT_FRACTION_DIGITS = 2;
-const MY_TON_WALLET_PROMO_URL = 'api-https://mytonwallet.io';
-const TELEGRAM_WEB_URL = 'api-https://web.telegram.org/a/';
-const TONSCAN_BASE_MAINNET_URL = 'api-https://tonscan.org/';
-const TONSCAN_BASE_TESTNET_URL = 'api-https://testnet.tonscan.org/';
-const GETGEMS_BASE_MAINNET_URL = 'api-https://getgems.io/';
-const GETGEMS_BASE_TESTNET_URL = 'api-https://testnet.getgems.io/';
+const MY_TON_WALLET_PROMO_URL = 'https://mytonwallet.io';
+const TELEGRAM_WEB_URL = 'https://web.telegram.org/a/';
+const TONSCAN_BASE_MAINNET_URL = 'https://tonscan.org/';
+const TONSCAN_BASE_TESTNET_URL = 'https://testnet.tonscan.org/';
+const GETGEMS_BASE_MAINNET_URL = 'https://getgems.io/';
+const GETGEMS_BASE_TESTNET_URL = 'https://testnet.getgems.io/';
 const CHANGELLY_SUPPORT_EMAIL = 'support@changelly.com';
 const CHANGELLY_SECURITY_EMAIL = 'security@changelly.com';
-const CHANGELLY_TERMS_OF_USE = 'api-https://changelly.com/terms-of-use';
-const CHANGELLY_PRIVACY_POLICY = 'api-https://changelly.com/privacy-policy';
-const CHANGELLY_AML_KYC = 'api-https://changelly.com/aml-kyc';
+const CHANGELLY_TERMS_OF_USE = 'https://changelly.com/terms-of-use';
+const CHANGELLY_PRIVACY_POLICY = 'https://changelly.com/privacy-policy';
+const CHANGELLY_AML_KYC = 'https://changelly.com/aml-kyc';
 const CHANGELLY_WAITING_DEADLINE = (/* unused pure expression or super */ null && (3 * 60 * 60 * 1000)); // 3 hour
 
 const TON_TOKEN_SLUG = 'toncoin';
@@ -39720,7 +39718,7 @@ const STAKING_MIN_AMOUNT = (/* unused pure expression or super */ null && (ONE_T
 const NOMINATORS_STAKING_MIN_AMOUNT = ONE_TON * 10001n;
 const TON_PROTOCOL = 'ton://';
 const TONCONNECT_PROTOCOL = 'tc://';
-const TONCONNECT_UNIVERSAL_URL = 'api-https://connect.mytonwallet.org';
+const TONCONNECT_UNIVERSAL_URL = 'https://connect.mytonwallet.org';
 const TONCONNECT_PROTOCOL_VERSION = 2;
 const TONCONNECT_WALLET_JSBRIDGE_KEY = 'mytonwallet';
 const DEFAULT_API_TIMEOUT = 5000;
@@ -39759,7 +39757,7 @@ const INIT_SWAP_ASSETS = {
     slug: 'ton-eqdcbkghmc',
     decimals: 8,
     // eslint-disable-next-line max-len
-    image: 'api-https://cache.tonapi.io/imgproxy/LaFKdzahVX9epWT067gyVLd8aCa1lFrZd7Rp9siViEE/rs:fill:200:200:1/g:no/aHR0cHM6Ly9icmlkZ2UudG9uLm9yZy90b2tlbi8xLzB4MjI2MGZhYzVlNTU0MmE3NzNhYTQ0ZmJjZmVkZjdjMTkzYmMyYzU5OS5wbmc.webp',
+    image: 'https://cache.tonapi.io/imgproxy/LaFKdzahVX9epWT067gyVLd8aCa1lFrZd7Rp9siViEE/rs:fill:200:200:1/g:no/aHR0cHM6Ly9icmlkZ2UudG9uLm9yZy90b2tlbi8xLzB4MjI2MGZhYzVlNTU0MmE3NzNhYTQ0ZmJjZmVkZjdjMTkzYmMyYzU5OS5wbmc.webp',
     contract: 'EQDcBkGHmC4pTf34x3Gm05XvepO5w60DNxZ-XT4I6-UGG5L5',
     price: 0,
     isPopular: false,
@@ -44973,19 +44971,6 @@ async function getMergedTransactionSlice(accountId, lastTxIds, limit) {
   allTxs.sort((a, b) => compareActivities(a, b));
   return allTxs;
 }
-async function getMergedTransactionSliceForTokens(accountId, tokens, limit) {
-  const tonTxs = await getAccountTransactionSlice(accountId, undefined, undefined, limit);
-  if (!tonTxs.length) {
-    return [];
-  }
-  const lastTonTxId = tonTxs[tonTxs.length - 1].txId;
-  const results = await Promise.all(tokens.filter(slug => slug !== TON_TOKEN_SLUG).map(slug => {
-    return getTokenTransactionSlice(accountId, slug, undefined, lastTonTxId, GET_TRANSACTIONS_MAX_LIMIT);
-  }));
-  const allTxs = [...tonTxs, ...results.flat()];
-  allTxs.sort((a, b) => compareActivities(a, b));
-  return allTxs;
-}
 async function getTokenTransactionSlice(accountId, tokenSlug, toTxId, fromTxId, limit) {
   if (tokenSlug === TON_TOKEN_SLUG) {
     return getAccountTransactionSlice(accountId, toTxId, fromTxId, limit);
@@ -46538,22 +46523,6 @@ async function fetchAllActivitySlice(accountId, lastTxIds, limit) {
     return activities;
   } catch (err) {
     logDebugError('fetchAllActivitySlice', err);
-    return handleServerError(err);
-  }
-}
-async function fetchAllActivitySliceForTokens(accountId, tokens, limit) {
-  const {
-    network,
-    blockchain
-  } = parseAccountId(accountId);
-  const activeBlockchain = blockchains[blockchain];
-  try {
-    const transactions = await activeBlockchain.getMergedTransactionSliceForTokens(accountId, tokens, limit !== null && limit !== void 0 ? limit : 100);
-    const activities = await swapReplaceTransactions(accountId, transactions, network);
-    await activeBlockchain.fixTokenActivitiesAddressForm(network, activities);
-    return activities;
-  } catch (err) {
-    logDebugError('fetchAllActivitySliceForTokens', err);
     return handleServerError(err);
   }
 }

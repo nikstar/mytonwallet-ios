@@ -55,9 +55,9 @@ final class AccountModel {
         }
         loadTokensTask = Task.detached { [weak self] in
             do {
-                try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
+//                try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
                     try await self?.loadTokens()
-                }
+//                }
             } catch {
                 log.fault("\(error)")
             }
@@ -180,14 +180,32 @@ final class AccountModel {
             }
         }
         
-        let activities = try await api.fetchAllActivitySliceForTokens(accountId: accountId, tokens: Array(walletTokens.keys))
-        await MainActor.run {
-            for activity in activities {
-                if (abs(activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
-                let normalized = MtwActivity(activity: activity, knownTokens: self.knownTokens)
-                self.activities[normalized.id] = normalized
+        for token in walletTokens.keys {
+            print(token)
+            do {
+                let activities = try await api.fetchTokenActivitySlice(accountId: accountId, slug: token, fromTxId: nil, limit: nil)
+                await MainActor.run {
+                    for activity in activities {
+                        if (abs(activity.amount?.value ?? 0) <= 20) && (activity.slug == "toncoin") { continue }
+                        let normalized = MtwActivity(activity: activity, knownTokens: self.knownTokens)
+                        self.activities[normalized.id] = normalized
+                    }
+                }
+            } catch {
+                print(token, error)
+                continue
             }
+            print(token, "ok")
         }
+//        let tokensToFetch = Array(walletTokens.keys.filter { ($0 != "ton-eqcqc6ehrj") && ($0 != "toncoin") })
+//        print(tokensToFetch)
+//        do {
+//            
+//
+//        } catch (let error) {
+//            print(error)
+//            throw error
+//        }
 //        for (slug, token) in walletTokens {
 //            let activities = try await api.fetchTokenActivitySlice(accountId: accountId, slug: slug)
 //            print(slug, token.formatted())
@@ -203,7 +221,7 @@ final class AccountModel {
 //            }
 //        }
         await MainActor.run {
-            self.activities.sort(by: { $0.key > $1.key })
+            self.activities.sort(by: { $0.value.date > $1.value.date })
             if self.activities.isEmpty {
                 self.assumeEmpty = true
             }

@@ -204,11 +204,17 @@ extension Api {
         return try await callApi("fetchTokenActivitySlice", accountId, slug, decoding: [ApiActivity].self)
     }
     
-    //
-    func fetchAllActivitySliceForTokens(accountId: String, tokens: [String], limit: Int? = nil) async throws -> [ApiActivity] {
-        return try await callApi("fetchAllActivitySliceForTokens", accountId, tokens, limit as Any, decoding: [ApiActivity].self)
+    func fetchAllActivitySlice(accountId: String, tokens: [String], limit: Int? = nil) async throws -> [ApiActivity] {
+        
+        var dict: [String: NSNull] = [:]
+        for token in tokens {
+            dict[token] = NSNull()
+        }
+        let limit = limit ?? 100
+        
+        return try await callApi("fetchAllActivitySlice", accountId, dict, limit, decoding: [ApiActivity].self)
     }
-    
+        
     // MARK: -  Staking
     
     struct BackendStakingState: Hashable, Codable {
