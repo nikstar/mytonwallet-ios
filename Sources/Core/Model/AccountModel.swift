@@ -90,7 +90,15 @@ final class AccountModel {
         guard walletTokens.count > 0 else { return nil }
         var acc = 0.0
         for token in walletTokens.values {
-            guard let value = token.valueInCurrency else { return nil }
+            guard let value = token.valueInCurrency else {
+                if token.token.slug == "ton-eqcqc6ehrj" {
+                    if let price = walletTokens["toncoin"]?.pricePerToken {
+                        acc += token.decimalAmount * price.value
+                        continue
+                    }
+                }
+                return nil
+            }
             acc += value.value
         }
         return CurrencyValue(currency: baseCurrency, value: acc)
