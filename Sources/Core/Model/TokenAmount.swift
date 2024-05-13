@@ -1,5 +1,6 @@
 
-import Foundation
+
+import SwiftUI
 
 struct TokenAmount: Hashable, Codable {
 
@@ -92,6 +93,12 @@ struct TokenAmountFormatStyle: FormatStyle {
         s.precision = v
         return s
     }
+    
+    func noSymbol(_ v: Bool) -> TokenAmountFormatStyle {
+        var s = self
+        s.noSymbol = v
+        return s
+    }
 }
 
 
@@ -114,5 +121,40 @@ extension FormatStyle where Self == TokenAmountFormatStyle {
     
     static func tokenAmount(noSymbol: Bool) -> TokenAmountFormatStyle {
         TokenAmountFormatStyle(noSymbol: noSymbol)
+    }
+}
+
+
+struct TokenAmountRow: View {
+    
+    var tokenAmount: TokenAmount
+    
+    var body: some View {
+        TwoLineRow(title: tokenAmount.token.name, subtitle: tokenAmount.formatted(), image: TokenImage(token: tokenAmount.token.slug, image: tokenAmount.token.image).clipShape(.circle))
+    }
+}
+
+
+struct TokenAmountView: View {
+    
+    var tokenAmount: Optional<TokenAmount>
+    var format: TokenAmountFormatStyle = .tokenAmount
+    var font1: Font = .system(size: 48, weight: .semibold, design: .rounded)
+    var font2: Font = .system(size: 32, weight: .semibold, design: .rounded)
+    var color1: Color = .primary
+    var color2: Color = .secondary
+    
+    var body: some View {
+        if let tokenAmount {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text(tokenAmount
+                    .formatted(format.noSymbol(true)))
+                    .font(font1)
+                    .foregroundColor(color1)
+                Text(verbatim: tokenAmount.token.symbol)
+                    .font(font2)
+                    .foregroundStyle(color2)
+            }
+        }
     }
 }

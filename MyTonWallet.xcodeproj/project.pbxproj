@@ -33,6 +33,10 @@
 		581867AC2BD11D45001A1A91 /* AccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AB2BD11D45001A1A91 /* AccountModel.swift */; };
 		581867AF2BD18EA7001A1A91 /* Scaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AD2BD18EA7001A1A91 /* Scaffold.swift */; };
 		581867B02BD18EA7001A1A91 /* TopAppBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867AE2BD18EA7001A1A91 /* TopAppBar.swift */; };
+		581E05F52BF127DC00D8942E /* AvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581E05F42BF127DC00D8942E /* AvatarImage.swift */; };
+		581E05F72BF1284700D8942E /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581E05F62BF1284700D8942E /* Color+hex.swift */; };
+		581E05F92BF1319900D8942E /* QRScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581E05F82BF1319900D8942E /* QRScanner.swift */; };
+		581E05FC2BF1333600D8942E /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 581E05FB2BF1333600D8942E /* CodeScanner */; };
 		5849904D2BE4E06A00880815 /* Popovers in Frameworks */ = {isa = PBXBuildFile; productRef = 5849904C2BE4E06A00880815 /* Popovers */; };
 		584990552BE4EF9200880815 /* View+apply.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584990542BE4EF9200880815 /* View+apply.swift */; };
 		584990572BE5126400880815 /* TwoLineRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 584990562BE5126400880815 /* TwoLineRow.swift */; };
@@ -128,6 +132,9 @@
 		581867AB2BD11D45001A1A91 /* AccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountModel.swift; sourceTree = "<group>"; };
 		581867AD2BD18EA7001A1A91 /* Scaffold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scaffold.swift; sourceTree = "<group>"; };
 		581867AE2BD18EA7001A1A91 /* TopAppBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopAppBar.swift; sourceTree = "<group>"; };
+		581E05F42BF127DC00D8942E /* AvatarImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarImage.swift; sourceTree = "<group>"; };
+		581E05F62BF1284700D8942E /* Color+hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
+		581E05F82BF1319900D8942E /* QRScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanner.swift; sourceTree = "<group>"; };
 		584990542BE4EF9200880815 /* View+apply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+apply.swift"; sourceTree = "<group>"; };
 		584990562BE5126400880815 /* TwoLineRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwoLineRow.swift; sourceTree = "<group>"; };
 		58511A852BA37F1400E08053 /* MyTonWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTonWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,6 +204,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				581E05FC2BF1333600D8942E /* CodeScanner in Frameworks */,
 				58DDF7862BA8E782003D9628 /* HashTreeCollections in Frameworks */,
 				58DDF7822BA8E782003D9628 /* Collections in Frameworks */,
 				580D09172BAD91BF00575E4B /* Lottie in Frameworks */,
@@ -235,6 +243,8 @@
 				584990562BE5126400880815 /* TwoLineRow.swift */,
 				589A70C22BE44F500023547C /* Tip.swift */,
 				580D09122BAD912800575E4B /* Sticker.swift */,
+				581E05F42BF127DC00D8942E /* AvatarImage.swift */,
+				581E05F82BF1319900D8942E /* QRScanner.swift */,
 			);
 			path = "UI Components";
 			sourceTree = "<group>";
@@ -269,6 +279,7 @@
 				58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */,
 				58B4ABDF2BBAC5B00007BF54 /* StatusBarAppearanceManager.swift */,
 				584990542BE4EF9200880815 /* View+apply.swift */,
+				581E05F62BF1284700D8942E /* Color+hex.swift */,
 			);
 			path = "UI Utils";
 			sourceTree = "<group>";
@@ -525,6 +536,7 @@
 				581867A92BD113DE001A1A91 /* Perception */,
 				587539B42BDB23FE00A0B40E /* GRDB */,
 				5849904C2BE4E06A00880815 /* Popovers */,
+				581E05FB2BF1333600D8942E /* CodeScanner */,
 			);
 			productName = mytonwallet;
 			productReference = 58511A852BA37F1400E08053 /* MyTonWallet.app */;
@@ -565,6 +577,7 @@
 				581867A82BD113DE001A1A91 /* XCRemoteSwiftPackageReference "swift-perception" */,
 				587539B32BDB23FE00A0B40E /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				5849904B2BE4E06A00880815 /* XCLocalSwiftPackageReference "../../Popovers" */,
+				581E05FA2BF1333600D8942E /* XCRemoteSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = 58511A862BA37F1400E08053 /* Products */;
 			projectDirPath = "";
@@ -609,6 +622,7 @@
 				584990552BE4EF9200880815 /* View+apply.swift in Sources */,
 				58E6E7BA2BD2CFD4003FD94F /* MtwTabBar.swift in Sources */,
 				58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */,
+				581E05F52BF127DC00D8942E /* AvatarImage.swift in Sources */,
 				58B4ABE72BBAE0CB0007BF54 /* AppDelegate.swift in Sources */,
 				58DDF7722BA86B90003D9628 /* OffsetScrollView.swift in Sources */,
 				58B4ABE02BBAC5B00007BF54 /* StatusBarAppearanceManager.swift in Sources */,
@@ -647,6 +661,7 @@
 				58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */,
 				58DDF7702BA853C7003D9628 /* Currency+CurrencyValue.swift in Sources */,
 				58DDF7742BA86FEA003D9628 /* WithOffsetReporting.swift in Sources */,
+				581E05F72BF1284700D8942E /* Color+hex.swift in Sources */,
 				5804E83E2BD4C8F500A44D76 /* ActivityDetailsSheet.swift in Sources */,
 				58511A892BA37F1400E08053 /* App.swift in Sources */,
 				58B4ABE32BBAE0770007BF54 /* TotalWalletValue.swift in Sources */,
@@ -665,6 +680,7 @@
 				580044092BB10BD200C364CE /* ApiActivity.swift in Sources */,
 				58B4ABE92BBAE0EF0007BF54 /* SceneDelegate.swift in Sources */,
 				580D09142BAD912800575E4B /* Sticker.swift in Sources */,
+				581E05F92BF1319900D8942E /* QRScanner.swift in Sources */,
 				589A70BA2BE41B2D0023547C /* VariableBlur.swift in Sources */,
 				580043F52BB0519F00C364CE /* ApiUpdate.swift in Sources */,
 				58659BF12BAAD143006E14C1 /* JSCoreConnection.swift in Sources */,
@@ -811,6 +827,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -849,6 +866,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Scan QR codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = "";
@@ -925,6 +943,14 @@
 				minimumVersion = 1.1.5;
 			};
 		};
+		581E05FA2BF1333600D8942E /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
 		587539B32BDB23FE00A0B40E /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/GRDB.swift.git";
@@ -982,6 +1008,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 581867A82BD113DE001A1A91 /* XCRemoteSwiftPackageReference "swift-perception" */;
 			productName = Perception;
+		};
+		581E05FB2BF1333600D8942E /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 581E05FA2BF1333600D8942E /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
 		};
 		5849904C2BE4E06A00880815 /* Popovers */ = {
 			isa = XCSwiftPackageProductDependency;

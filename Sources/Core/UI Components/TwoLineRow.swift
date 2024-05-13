@@ -24,7 +24,9 @@ struct TwoLineRow<T: View, S: View, I: View>: View {
                     .foregroundStyle(.secondary)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            
         }
+        .frame(minHeight: 40)
         .contentShape(.rect)
     }
 }

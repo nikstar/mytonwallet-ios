@@ -39,6 +39,8 @@ struct ApiToken: Hashable, Codable {
 extension ApiToken {
     
     static let toncoin = ApiToken(slug: "toncoin", name: "Toncoin", symbol: "TON", decimals: 9)
+    static let stakedToncoin = ApiToken(slug: "ton-eqcqc6ehrj", name: "Staked TON", symbol: "STAKED", decimals: 9)
+    
 }
 
 

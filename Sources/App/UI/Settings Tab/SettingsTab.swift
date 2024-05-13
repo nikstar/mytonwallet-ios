@@ -11,6 +11,8 @@ struct SettingsTab: View {
     
     var body: some View {
         WithPerceptionTracking {
+            @Perception.Bindable var m = model
+            
             NavigationStack {
                 List {
                     if let account = model.currentAccount {
@@ -30,7 +32,7 @@ struct SettingsTab: View {
                             } label: {
                                 LabeledContent("Name", value: account.displayName)
                             }
-
+                            
                             
                             LabeledContent("Network", value: account.apiNetwork.rawValue)
                             LabeledContent("Web API ID", value: account.apiAccount)
@@ -43,8 +45,6 @@ struct SettingsTab: View {
                                 Text("Delete account")
                                     .tint(Color.red)
                             }
-                            
-                            
                         }
                     }
                     
@@ -52,9 +52,34 @@ struct SettingsTab: View {
                         Toggle("Debug overlay", isOn: $debugOverlay)
                     }
                     
+                    let passcode: Binding<String> = Binding {
+                        model.access(keyPath: \.userPassword)
+                        return model.userPassword ?? ""
+                    } set: { v in
+                        model.withMutation(keyPath: \.userPassword) {
+                            model.userPassword = v
+                        }
+                    }
+                    Section("Passcode") {
+                        SecureField("Passcode", text: passcode)
+                    }
+                    
+                    Section("Switch account") {
+                        ForEach(Array(model.accounts.values), id: \.id) { account in
+                            Button(asyncAction: {
+                                try? await model.activateAccount(account.id)
+                            }) {
+                                Text(account.displayName)
+                            }
+                        }
+                    }
+                    
                 }
                 
                 .listStyle(.insetGrouped)
+                .navigationTitle("Settings")
+                .navigationBarTitleDisplayMode(.inline)
+                .padding(.bottom, 60)
             }
         }
     }

@@ -5,17 +5,17 @@ import Pow
 
 struct SendSheet: View {
     
-    @State private var viewModel: SendViewModel? = nil
-    
     @Environment(AccountModel.self) private var account
+    @Environment(\.dismiss) private var dismiss
+    @State private var viewModel: SendViewModel? = nil
     
     
     var body: some View {
         WithPerceptionTracking {
             if let viewModel {
-                @Perception.Bindable var model = viewModel
+                @Perception.Bindable var vm = viewModel
                 
-                NavigationStack(path: $model.path) {
+                NavigationStack(path: $vm.path) {
                     SendStepView(step: .currency)
                         .navigationDestination(for: SendStep.self, destination: { step in
                             SendStepView(step: step)
@@ -27,7 +27,7 @@ struct SendSheet: View {
             }
         }
         .task {
-            viewModel = .init(account: account)
+            viewModel = .init(account: account, dismissAction: { dismiss() })
         }
     }
 }
@@ -53,7 +53,6 @@ struct SendStepView: View {
             SendStepSuccess()
         }
     }
-    
 }
 
 
@@ -64,21 +63,18 @@ struct SendStepCurrency: View {
     @State private var searchString = ""
     
     private var displayTokens: [TokenAmount] {
-        print("get", viewModel.availableTokens.filter(query: searchString).count)
-        return viewModel.availableTokens.filter(query: searchString)
+        viewModel.sendableTokens.filter(query: searchString)
     }
     
     @State private var reload = 0
     
     var body: some View {
-        let _ = Self._printChanges()
-        
         WithPerceptionTracking {
-            List(displayTokens, id: \.self) { walletToken in
+            List(displayTokens, id: \.self) { tokenAmount in
                 Button(action: {
-                    viewModel.setCurrency(walletToken.token.slug)
+                    viewModel.setCurrency(tokenAmount.token.slug)
                 }) {
-                    TwoLineRow(title: walletToken.token.name, subtitle: walletToken.formatted(), image: TokenImage(token: walletToken.token.slug, image: walletToken.token.image).clipShape(.circle))
+                    TokenAmountRow(tokenAmount: tokenAmount)
                 }
                 .listSectionSeparator(.hidden)
             }
@@ -86,9 +82,8 @@ struct SendStepCurrency: View {
             .listStyle(.plain)
             .navigationTitle("Choose Currency")
             .navigationBarTitleDisplayMode(.inline)
-            .dismissToolbarItem()
+            .dismissToolbarItem(action: viewModel.dismissAction)
         }
-        
     }
 }
 
@@ -97,36 +92,19 @@ struct SendStepCurrency: View {
 
 struct SendStepRecipient: View {
     
-    @Environment(AccountModel.self) private var account
     @Environment(SendViewModel.self) private var viewModel
     
-    @State private var text: String = ""
     @FocusState private var isFocused: Bool
-    
-    @Namespace private var ns
-    @State private var startOffset: CGFloat = 0.0
-    @State private var currentOffset: CGFloat = 0.0
-    
     @State private var showsScanner: Bool = false
-    
     @State private var shineTrigger: Bool = false
     
     var body: some View {
         WithPerceptionTracking {
+            @Perception.Bindable var vm = viewModel
             
             List {
                 Section {
-                    ForEach(viewModel.recentAddresses, id: \.address) { recent in
-                        Button(action: {
-                            isFocused = false
-                            withAnimation {
-                                self.text = recent.address.string
-                                shineTrigger.toggle()
-                            }
-                        }) {
-                            TwoLineRow(title: recent.address.formatted(), subtitle: recent.normalizedAddress?.formatted() ?? "Wallet", image: EmptyView())
-                        }
-                    }
+                    recents
                     .listSectionSeparator(.hidden)
                 } header: {
                     Text("Recent")
@@ -148,7 +126,10 @@ struct SendStepRecipient: View {
             }
             .navigationTitle("Recipient Address")
             .sheet(isPresented: $showsScanner) {
-                Text("Scanner goes here")
+                QRScanner(onSuccess: { text in viewModel.handleUrl(text); isFocused = false; showsScanner = false }, onCancel: { showsScanner = false })
+            }
+            .alert("Error", isPresented: $vm.showAddressError, actions: {}) {
+                Text(viewModel.addressError)
             }
         }
         
@@ -162,7 +143,12 @@ struct SendStepRecipient: View {
                 Text("To:")
                     .foregroundStyle(.secondary)
                 
-                TextField("Address or domain", text: $text, axis: .vertical)
+                @Perception.Bindable var vm = viewModel
+                
+                TextField("Address or domain", text: $vm.addressText, axis: .vertical)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.asciiCapable)
                     .focused($isFocused)
                 
                 Button(action: {
@@ -183,24 +169,53 @@ struct SendStepRecipient: View {
         
     }
     
+    var recents: some View {
+        ForEach(viewModel.recentAddresses, id: \.address) { recent in
+            Button(action: {
+                isFocused = false
+                withAnimation {
+                    viewModel.addressText = recent.address.string
+                    shineTrigger.toggle()
+                }
+            }) {
+                let sub: String = if let date = recent.date {
+                    "Wallet · \(date.formatted())"
+                } else {
+                    "Wallet"
+                }
+                TwoLineRow(
+                    title: recent.address.formatted(),
+                    subtitle: sub,
+                    image: AvatarImage(color: avatarColor(recent.address))
+                )
+            }
+        }
+    }
+    
     var continueButton: some View {
-        Button(action: { viewModel.setAddress(text) }) {
-            Text("Continue")
+        Button(action: { viewModel.confirmRecipient() }) {
+            HStack(spacing: 12) {
+                if viewModel.isCheckingAddress {
+                    ProgressView()
+                        .transition(.asymmetric(insertion: .opacity.animation(.default.delay(0.3)), removal: .identity))
+                        .environment(\.colorScheme, .dark)
+                }
+                Text("Continue")
+            }
         }
         .buttonStyle(.mtwLarge)
         .padding(16)
-        .background {
-            VariableBlurView(maxBlurRadius: 10, direction: .blurredBottomClearTop)
-                .ignoresSafeArea(.container)
-        }
-        
+        .disabled(viewModel.addressText.isEmpty || viewModel.isCheckingAddress)
+//        .background {
+//            VariableBlurView(maxBlurRadius: 10, direction: .blurredBottomClearTop)
+//                .ignoresSafeArea(.container)
+//        }
     }
 }
 
 
 struct SendStepAmount: View {
     
-    @Environment(AccountModel.self) private var account
     @Environment(SendViewModel.self) private var viewModel
     
     @State private var value: Double?
@@ -227,7 +242,7 @@ struct SendStepAmount: View {
                         Button(action: {
                             withAnimation {
                                 if let v = viewModel.walletToken?.decimalAmount {
-                                    value = v
+                                    value = v - viewModel.decimalFee
                                     shineTrigger.toggle()
                                 }
                             }
@@ -266,17 +281,10 @@ struct SendStepAmount: View {
 
 struct SendStepDetails: View {
     
-    @Environment(AccountModel.self) private var account
     @Environment(SendViewModel.self) private var viewModel
     
     var body: some View {
         WithPerceptionTracking {
-            let title: String = if let symbol = viewModel.token?.symbol {
-                "Send \(symbol)"
-            } else {
-                "Send"
-            }
-            
             @Perception.Bindable var vm = viewModel
             
             List {
@@ -293,10 +301,10 @@ struct SendStepDetails: View {
                 
                 
                 Section("Transaction Details") {
-                    KeyValueView("Recepient", viewModel.address?.formatted() ?? "?")
-                    KeyValueView("Recipient address", viewModel.address?.formatted() ?? "?")
-                    KeyValueView("Amount", "\(viewModel.decimalAmount ?? 0.0) \(viewModel.token?.symbol ?? "?")")
-                    KeyValueView("Fee", "?")
+                    KeyValueView("Recepient", viewModel.draftRecipient?.formatted() ?? "?")
+                    KeyValueView("Recipient address", viewModel.draftRecipientAddress?.formatted() ?? "?")
+                    KeyValueView("Amount", viewModel.amount?.formatted() ?? "?")
+                    KeyValueView("Fee", viewModel.draftFee?.formatted(.tokenAmount.precision(.fractionLength(4...9))) ?? "?")
                 }
                 
             }
@@ -314,7 +322,7 @@ struct SendStepDetails: View {
                         .ignoresSafeArea(.container)
                 }
             }
-            .navigationTitle(title)
+            .navigationTitle("Send \(viewModel.token?.symbol ?? "")")
             .navigationBarTitleDisplayMode(.inline)
             .dismissToolbarItem()
             
@@ -331,7 +339,7 @@ struct SendStepConfirm: View {
         WithPerceptionTracking {
             ConfirmActionView(
                 title: viewModel.isSending ? "Sending" : "Confirm Send",
-                description: "\(viewModel.decimalAmount ?? 0.0) \(viewModel.token?.symbol ?? "?")" + " to " + (viewModel.address?.formatted() ?? "?"),
+                description: (viewModel.amount?.formatted() ?? "?") + " to " + (viewModel.address?.formatted() ?? "?"),
                 state: viewModel.isSending ? .processing : .codeEntry,
                 onConfirm: { viewModel.onConfirm() }
             )
@@ -348,23 +356,28 @@ struct SendStepSuccess: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            Sticker("Congratulations", play: .repeat(1))
-                .padding(.bottom, 24)
-            CurrencyAmountTextField(value: .constant(-(viewModel.decimalAmount ?? 0.0)), symbol: viewModel.token?.symbol ?? "TON", maxAvailable: viewModel.walletToken?.decimalAmount ?? 0.0, focusOnAppear: false)
-                .allowsHitTesting(false)
-            Text("Coins have been sent!")
-                .foregroundStyle(.secondary)
-            Button(action: {}) {
-                Text("Transaction Details")
+        ZStack {
+            Color.clear
+            VStack(spacing: 0) {
+                
+                Sticker("Congratulations", play: .repeat(1))
+                    .padding(.bottom, 24)
+                TokenAmountView(
+                    tokenAmount: viewModel.amount,
+                    format: .tokenAmount(asNegative: true).precision(.significantDigits(1...6)))
+                    
+                Text("Coins have been sent!")
+                    .foregroundStyle(.secondary)
+                Button(action: {}) {
+                    Text("Transaction Details")
+                }
+                .buttonStyle(.mtwLargeTertiary)
             }
-            .buttonStyle(.mtwLargeTertiary)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 32)
         }
-        .multilineTextAlignment(.center)
-        .padding(.horizontal, 32)
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            Button(action: { dismiss() }) {
+            Button(action: viewModel.dismissAction) {
                 Text("Close")
             }
             .buttonStyle(.mtwLarge)

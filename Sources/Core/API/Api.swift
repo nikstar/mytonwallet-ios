@@ -246,6 +246,66 @@ extension Api {
     func getStakingHistory(accountId: String, limit: Int?, offset: Int?) async throws -> [ApiStakingHistory] {
         return try await callApi("getStakingHistory", accountId, limit ?? 100, offset ?? 0, decoding: [ApiStakingHistory].self)
     }
+    
+    // MARK: - Send
+    
+//    export function checkTransactionDraft(options: {
+//      accountId: string;
+//      tokenAddress?: string;
+//      toAddress: string;
+//      amount: bigint;
+//      data?: string;
+//      shouldEncrypt?: boolean;
+//      isBase64Data?: boolean;
+//    export type ApiCheckTransactionDraftResult = {
+//      fee?: bigint;
+//      addressName?: string;
+//      isScam?: boolean;
+//      resolvedAddress?: string;
+//      isToAddressNew?: boolean;
+//      isBounceable?: boolean;
+//      error?: ApiAnyDisplayError;
+//    };
+
+    struct CheckTransactionDraftResult: Codable {
+        var fee: ApiBigint?
+        var addressName: String?
+        var isScam: Bool?
+        var resolvedAddress: String?
+        var isToAddressNew: Bool?
+        var isBouncable: Bool?
+        var error: String?
+    }
+    
+    func checkTransactionDraft(
+          accountId: String,
+          toAddress: String,
+          amount: ApiBigint,
+          tokenAddress: String?,
+          data: String?,
+          shouldEncrypt: Bool?,
+          isBase64Data: Bool?
+    ) async throws -> CheckTransactionDraftResult {
+
+        var options = [String: Any]()
+        options["accountId"] = accountId
+        options["toAddress"] = toAddress
+        options["amount"] = "\(amount.value)"
+        if let tokenAddress {
+            options["tokenAddress"] = tokenAddress
+        }
+        if let data {
+            options["data"] = data
+        }
+        if let shouldEncrypt {
+            options["shouldEncrypt"] = shouldEncrypt
+        }
+        if let isBase64Data {
+            options["isBase64Data"] = isBase64Data
+        }
+
+        return try await callApi("checkTransactionDraft", options, decoding: CheckTransactionDraftResult.self)
+    }
 }
 
 
