@@ -1,15 +1,18 @@
 
 import SwiftUI
 import Foundation
+import Dependencies
+
 
 private let log = fileLog()
 
-//private let API_V2 = "https://tonhttpapi.mytonwallet.org/api/v2/"
 
-final class Api: ObservableObject {
+final class Api: ObservableObject, DependencyKey {
     
     var callbacks: [UUID: (ApiUpdate) -> ()] = [:]
     var updatesTask: Task<Void, Never>? = nil
+    
+    static let liveValue = Api()
     
     init() {
         self.updatesTask = Task.detached {

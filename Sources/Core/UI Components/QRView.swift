@@ -11,7 +11,7 @@ struct QRView: View {
     var body: some View {
         _QRView(string: string, image: image)
             .frame(width: 256, height: 256)
-            .allowsHitTesting(false)
+//            .allowsHitTesting(false)
     }
 }
 

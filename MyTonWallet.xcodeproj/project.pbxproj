@@ -55,6 +55,10 @@
 		587539B72BDB246D00A0B40E /* SwapTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539B62BDB246D00A0B40E /* SwapTokens.swift */; };
 		587539B92BDB401100A0B40E /* SwapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539B82BDB401100A0B40E /* SwapSheet.swift */; };
 		587539BB2BDBAFF600A0B40E /* KeyValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539BA2BDBAFF500A0B40E /* KeyValueView.swift */; };
+		587B47432BF2309200BD17BA /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 587B47422BF2309200BD17BA /* Dependencies */; };
+		587B47452BF2309200BD17BA /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 587B47442BF2309200BD17BA /* DependenciesMacros */; };
+		587B47472BF2475000BD17BA /* BuyWithCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B47462BF2475000BD17BA /* BuyWithCrypto.swift */; };
+		587B47492BF2475800BD17BA /* BuyWithCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B47482BF2475800BD17BA /* BuyWithCard.swift */; };
 		5897499F2BDADE2500C15923 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5897499E2BDADE2500C15923 /* QRView.swift */; };
 		589A70BA2BE41B2D0023547C /* VariableBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70B92BE41B2C0023547C /* VariableBlur.swift */; };
 		589A70C12BE42E410023547C /* catchingException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70C02BE42E410023547C /* catchingException.swift */; };
@@ -152,6 +156,8 @@
 		587539B62BDB246D00A0B40E /* SwapTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokens.swift; sourceTree = "<group>"; };
 		587539B82BDB401100A0B40E /* SwapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapSheet.swift; sourceTree = "<group>"; };
 		587539BA2BDBAFF500A0B40E /* KeyValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueView.swift; sourceTree = "<group>"; };
+		587B47462BF2475000BD17BA /* BuyWithCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyWithCrypto.swift; sourceTree = "<group>"; };
+		587B47482BF2475800BD17BA /* BuyWithCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyWithCard.swift; sourceTree = "<group>"; };
 		5897499E2BDADE2500C15923 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
 		589A70B92BE41B2C0023547C /* VariableBlur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableBlur.swift; sourceTree = "<group>"; };
 		589A70BB2BE42BCE0023547C /* ExceptionCatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ExceptionCatcher.h; path = Sources/Utils/ExceptionCatcher.h; sourceTree = SOURCE_ROOT; };
@@ -205,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				581E05FC2BF1333600D8942E /* CodeScanner in Frameworks */,
+				587B47432BF2309200BD17BA /* Dependencies in Frameworks */,
 				58DDF7862BA8E782003D9628 /* HashTreeCollections in Frameworks */,
 				58DDF7822BA8E782003D9628 /* Collections in Frameworks */,
 				580D09172BAD91BF00575E4B /* Lottie in Frameworks */,
@@ -217,6 +224,7 @@
 				580D091A2BAD922100575E4B /* Gzip in Frameworks */,
 				58DDF78A2BA8E782003D9628 /* OrderedCollections in Frameworks */,
 				58DDF78C2BA8E782003D9628 /* _RopeModule in Frameworks */,
+				587B47452BF2309200BD17BA /* DependenciesMacros in Frameworks */,
 				58B934B02BB4AE290086DEBC /* Pow in Frameworks */,
 				58C8E6392BB2E6B200CDE5A0 /* SimpleToast in Frameworks */,
 				58DDF77D2BA8E491003D9628 /* Algorithms in Frameworks */,
@@ -288,6 +296,8 @@
 			isa = PBXGroup;
 			children = (
 				5804E8402BD4F2B600A44D76 /* AddCrypto.swift */,
+				587B47462BF2475000BD17BA /* BuyWithCrypto.swift */,
+				587B47482BF2475800BD17BA /* BuyWithCard.swift */,
 			);
 			path = "Add Crypto";
 			sourceTree = "<group>";
@@ -537,6 +547,8 @@
 				587539B42BDB23FE00A0B40E /* GRDB */,
 				5849904C2BE4E06A00880815 /* Popovers */,
 				581E05FB2BF1333600D8942E /* CodeScanner */,
+				587B47422BF2309200BD17BA /* Dependencies */,
+				587B47442BF2309200BD17BA /* DependenciesMacros */,
 			);
 			productName = mytonwallet;
 			productReference = 58511A852BA37F1400E08053 /* MyTonWallet.app */;
@@ -578,6 +590,7 @@
 				587539B32BDB23FE00A0B40E /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				5849904B2BE4E06A00880815 /* XCLocalSwiftPackageReference "../../Popovers" */,
 				581E05FA2BF1333600D8942E /* XCRemoteSwiftPackageReference "CodeScanner" */,
+				587B47412BF2309200BD17BA /* XCRemoteSwiftPackageReference "swift-dependencies" */,
 			);
 			productRefGroup = 58511A862BA37F1400E08053 /* Products */;
 			projectDirPath = "";
@@ -656,6 +669,7 @@
 				58D164B02BAB971800DE08BF /* JSReturnValue.swift in Sources */,
 				5864B3842BE000AC009A6092 /* StakeViewModel.swift in Sources */,
 				5864B3822BE0009B009A6092 /* StakeSheet.swift in Sources */,
+				587B47472BF2475000BD17BA /* BuyWithCrypto.swift in Sources */,
 				58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */,
 				58659BF42BAAD670006E14C1 /* Logger+file,funcLog.swift in Sources */,
 				58C8E63B2BB3123200CDE5A0 /* TonAddress.swift in Sources */,
@@ -677,6 +691,7 @@
 				580044052BB0EA1400C364CE /* ApiBigint.swift in Sources */,
 				58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */,
 				5804E8412BD4F2B600A44D76 /* AddCrypto.swift in Sources */,
+				587B47492BF2475800BD17BA /* BuyWithCard.swift in Sources */,
 				580044092BB10BD200C364CE /* ApiActivity.swift in Sources */,
 				58B4ABE92BBAE0EF0007BF54 /* SceneDelegate.swift in Sources */,
 				580D09142BAD912800575E4B /* Sticker.swift in Sources */,
@@ -959,6 +974,14 @@
 				minimumVersion = 6.27.0;
 			};
 		};
+		587B47412BF2309200BD17BA /* XCRemoteSwiftPackageReference "swift-dependencies" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-dependencies";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
 		58B934AE2BB4AE290086DEBC /* XCRemoteSwiftPackageReference "Pow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/EmergeTools/Pow";
@@ -1022,6 +1045,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 587539B32BDB23FE00A0B40E /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
+		};
+		587B47422BF2309200BD17BA /* Dependencies */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 587B47412BF2309200BD17BA /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = Dependencies;
+		};
+		587B47442BF2309200BD17BA /* DependenciesMacros */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 587B47412BF2309200BD17BA /* XCRemoteSwiftPackageReference "swift-dependencies" */;
+			productName = DependenciesMacros;
 		};
 		58B934AF2BB4AE290086DEBC /* Pow */ = {
 			isa = XCSwiftPackageProductDependency;

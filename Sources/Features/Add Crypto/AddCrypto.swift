@@ -19,31 +19,25 @@ struct AddCryptoSheet: View {
 
 struct AddCryptoContent: View {
     
+    @State private var toastPresented = false
+    
     @Environment(AccountModel.self) private var model
     
     var body: some View {
         WithPerceptionTracking {
             List {
                 Section("Your TON Address") {
-                    //                    Color.clear.frame(height: 424)
-                    //                        .disabled(true)
-                    //                        .allowsHitTesting(false)
                     qrCodeSection
                 }
                 
                 Section("Buy Crypto") {
                     
                     NavigationLink {
-                        List {
-                            EmptyView()
-                        }
-                        .navigationTitle("Buy with Card")
-                        .navigationBarTitleDisplayMode(.inline)
+                        BuyWithCardView()
                         
                     } label: {
                         HStack(spacing: 12) {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.green)
+                            Image("Add.Card")
                                 .frame(width: 30, height: 30)
                             Text("Buy with Card")
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -51,16 +45,10 @@ struct AddCryptoContent: View {
                     }
                     
                     NavigationLink {
-                        List {
-                            EmptyView()
-                        }
-                        .navigationTitle("Buy with Crypto")
-                        .navigationBarTitleDisplayMode(.inline)
-                        
+                        BuyWithCryptoView()
                     } label: {
                         HStack(spacing: 12) {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.orange)
+                            Image("Add.Crypto")
                                 .frame(width: 30, height: 30)
                             Text("Buy with Crypto")
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -71,38 +59,73 @@ struct AddCryptoContent: View {
                     .listStyle(.insetGrouped)
                 }
             }
+            .simpleToast(isPresented: $toastPresented, options: .init(alignment: .bottom, hideAfter: 3, animation: .bouncy, modifierType: .slide, dismissOnTap: true)) {
+                Text("Address copied")
+                    .foregroundStyle(.secondary)
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 20)
+                    .background(Material.regular, in: Capsule())
+                    .overlay {
+                        Capsule().strokeBorder(Color.blue.opacity(0.2), lineWidth: 2, antialiased: true)
+                    }
+            }
+
         }
     }
     
     @ViewBuilder
     var qrCodeSection: some View {
         VStack(spacing: 16) {
-            VStack(spacing: 12) {
-                QRView(string: "hello wordlfdsaljadfskladj", image: "")
-                Text("adresssaddres\naddres")
-                    .font(.system(size: 16, design: .monospaced))
-                    .lineLimit(2...2)
-            }
+            if let address = model.account?.address.string {
+                Button(action: {
+                    UIPasteboard.general.string = address
+                    UIPasteboard.general.url = URL(string: "ton://transfer/\(address)")
+                    toastPresented = true
+                }) {
+                    
+                    let addressWithBreaks = address.reduce(into: "") { s, c in
+                        s += "\u{200B}\(c)"
+                    }
+                    
+                    VStack(spacing: 12) {
+                        #warning("add image")
+                        QRView(string: "ton://transfer/\(address)", image: "")
+                        Text(addressWithBreaks)
+                            .font(.system(size: 16, design: .monospaced))
+                            .foregroundStyle(.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 12)
+                    }
+                }
+                
+                HStack(spacing: 12) {
+                    Button(action: {
+                        UIPasteboard.general.string = address
+                        UIPasteboard.general.url = URL(string: "ton://transfer/\(address)")
+                        toastPresented = true
+                    }) {
+                        Text("Copy Address")
+                            .fontWeight(.semibold)
+                            .padding(.vertical, 14)
+                            .frame(maxWidth: .infinity)
+                            .contentShape(.rect)
+                    }
+                    ShareLink(item: address) {
+                        Text("Share QR Code")
+                            .fontWeight(.semibold)
+                            .padding(.vertical, 14)
+                            .frame(maxWidth: .infinity)
+                            .contentShape(.rect)
 
-            HStack(spacing: 12) {
-//                                    Button(action: {}) {
-                    Text("Copy Address")
-                        .fontWeight(.semibold)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .contentShape(.rect)
-//                                    }
-//                                    Button(action: {}) {
-                    Text("Share QR Code")
-                        .fontWeight(.semibold)
-                        .padding(.vertical, 14)
-                        .frame(maxWidth: .infinity)
-                        .contentShape(.rect)
-//                                    }
+                    }
+                }
+                .foregroundStyle(Color.accentColor)
             }
-            .foregroundStyle(Color.accentColor)
         }
         .padding(.top, 28)
+        .buttonStyle(.plain)
     }
 
+    
 }

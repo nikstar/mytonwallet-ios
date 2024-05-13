@@ -9,6 +9,7 @@ struct MtwAccount: Equatable, Hashable, Codable, Identifiable {
     var crationDate: Date
     var apiNetwork: ApiNetwork
     var apiAccount: String
+    var address: TonAddress
 }
 
 

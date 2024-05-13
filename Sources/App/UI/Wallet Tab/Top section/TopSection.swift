@@ -31,6 +31,10 @@ struct AssetsSection: View {
     @Environment(AccountModel.self) private var model
 
     @State private var showAddCrypto = false
+    @State private var showAddCryptoQR = false
+    @State private var showAddCryptoCard = false
+    @State private var showAddCryptoCrypto = false
+    
     @State private var showSend = false
     @State private var showStake = false
     @State private var showSwap = false
@@ -51,10 +55,23 @@ struct AssetsSection: View {
             .padding(.bottom, 20)
             .background(Color.mainWalletBackground, in: Rectangle())
             .foregroundStyle(Color.white)
-        }
-        .sheet(isPresented: $showAddCrypto) {
-            AddCryptoSheet()
-        }
+            
+            .confirmationDialog("Add Crypto", isPresented: $showAddCrypto, titleVisibility: .hidden) {
+                Button("Buy with Card", action: { showAddCryptoCard = true })
+                Button("Buy with Crypto", action: { showAddCryptoCrypto = true })
+                Button("Receive with QR or Invoice", action: { showAddCryptoQR = true })
+
+            }
+            .sheet(isPresented: $showAddCryptoQR) {
+                AddCryptoSheet()
+            }
+            .sheet(isPresented: $showAddCryptoCard) {
+                
+                BuyWithCardView()
+            }
+            .sheet(isPresented: $showAddCryptoCrypto) {
+                BuyWithCryptoView()
+            }
         .sheet(isPresented: $showSend) {
             SendSheet()
         }
@@ -67,6 +84,7 @@ struct AssetsSection: View {
 //        .task {
 //            self.assets = .init(account: model)
 //        }
+        }
     }
     
     var accountValue: some View {
@@ -94,6 +112,7 @@ struct AssetsSection: View {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
         .padding(.top, 16)
+        
 
     }
     

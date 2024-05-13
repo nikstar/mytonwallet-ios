@@ -2,6 +2,7 @@
 import SwiftUI
 import Perception
 import Collections
+import Dependencies
 
 private let log = fileLog()
 
@@ -12,6 +13,8 @@ final class GlobalModel {
     
     @PerceptionIgnored var encryptionPassword: String
     
+    @PerceptionIgnored @Dependency(Api.self) var api
+    
     // login prefs
     var userPassword: Optional<String>
     
@@ -21,7 +24,7 @@ final class GlobalModel {
     var currentAccount: MtwAccount? {
         currentAccountId.flatMap { accounts[$0] }
     }
-    /*private*/ var api: Api! = nil
+//    /*private*/ var api: Api! = nil
     
     // MARK: - Init and persistence
     
@@ -90,7 +93,7 @@ final class GlobalModel {
         //        let network = try await api.getCurrentNetwork().orThrow() -- hangs??
         let network: ApiNetwork = accountId.contains("testnet") ? .testnet : .mainnet // might not be resilient
         let fallbackName = self.accounts.isEmpty ? "Main Account" : "Account \(self.accounts.count + 1)"
-        let account = MtwAccount(id: id, name: "", fallbackName: fallbackName, crationDate: .now, apiNetwork: network, apiAccount: accountId)
+        let account = MtwAccount(id: id, name: "", fallbackName: fallbackName, crationDate: .now, apiNetwork: network, apiAccount: accountId, address: address)
         accounts[id] = account
         currentAccountId = id
     }
@@ -98,13 +101,13 @@ final class GlobalModel {
     func createNewAccountAndActivate(network: ApiNetwork) async throws {
         
         let words = try await api.generateMnemomic()
-        let (accountId, _) = try await api.createWallet(network: network, mnemonic: words, password: encryptionPassword)
+        let (accountId, address) = try await api.createWallet(network: network, mnemonic: words, password: encryptionPassword)
         try await api.activateAccount(accountId: accountId)
         
         let id = UUID()
 
         let fallbackName = self.accounts.isEmpty ? "Main Account" : "Account \(self.accounts.count + 1)"
-        let account = MtwAccount(id: id, name: "", fallbackName: fallbackName, crationDate: .now, apiNetwork: network, apiAccount: accountId)
+        let account = MtwAccount(id: id, name: "", fallbackName: fallbackName, crationDate: .now, apiNetwork: network, apiAccount: accountId, address: address)
         accounts[id] = account
         currentAccountId = id
 

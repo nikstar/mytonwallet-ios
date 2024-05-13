@@ -2,6 +2,8 @@
 import SwiftUI
 import Observation
 import Perception
+import Dependencies
+
 
 @main
 struct MyTonWalletApp: App {
@@ -14,13 +16,12 @@ struct MyTonWalletApp: App {
     private let swapTokensInfo: SwapTokensModel
     
     init() {
-        let api = Api()
+        let api = Api.liveValue
         
         let g = GlobalModel.load()
-        g.api = api
+//        g.api = api
         
-        let c = AccountModel()
-        c.api = api
+        let c = AccountModel.liveValue
         c.changeAccount(newAccount: g.currentAccount)
         
         self.api = api

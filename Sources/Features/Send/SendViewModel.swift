@@ -1,6 +1,8 @@
 
 import SwiftUI
 import Perception
+import Dependencies
+
 
 enum SendStep: CaseIterable {
     case currency
@@ -22,7 +24,7 @@ struct RecentAddress {
 final class SendViewModel {
     
     var path: [SendStep] = []
-    private(set) var dismissAction: () -> ()
+    var dismissAction: () -> () = {}
     
     private(set) var draftCheck: Api.CheckTransactionDraftResult? = nil
     var draftFee: TokenAmount? { (draftCheck?.fee?.value).map { TokenAmount.toncoin(exact: $0) } }
@@ -55,11 +57,14 @@ final class SendViewModel {
     var isSending: Bool = false
     
     // private
+
     private var account: AccountModel
     
-    init(account: AccountModel, dismissAction: @escaping () -> ()) {
+    init() {
+        
+        @Dependency(AccountModel.self) var account
         self.account = account
-        self.dismissAction = dismissAction
+        
         reset()
     }
     

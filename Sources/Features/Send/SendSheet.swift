@@ -7,12 +7,12 @@ struct SendSheet: View {
     
     @Environment(AccountModel.self) private var account
     @Environment(\.dismiss) private var dismiss
-    @State private var viewModel: SendViewModel? = nil
+    @State private var viewModel: SendViewModel = .init()
     
-    
+    #warning("todo - prevent blink at start")
     var body: some View {
         WithPerceptionTracking {
-            if let viewModel {
+//            if let viewModel {
                 @Perception.Bindable var vm = viewModel
                 
                 NavigationStack(path: $vm.path) {
@@ -24,10 +24,10 @@ struct SendSheet: View {
                         })
                         .environment(viewModel)
                 }
-            }
+//            }
         }
         .task {
-            viewModel = .init(account: account, dismissAction: { dismiss() })
+            viewModel.dismissAction = { dismiss() }
         }
     }
 }
@@ -125,6 +125,7 @@ struct SendStepRecipient: View {
                 continueButton
             }
             .navigationTitle("Recipient Address")
+            .dismissToolbarItem(action: viewModel.dismissAction)
             .sheet(isPresented: $showsScanner) {
                 QRScanner(onSuccess: { text in viewModel.handleUrl(text); isFocused = false; showsScanner = false }, onCancel: { showsScanner = false })
             }
@@ -232,8 +233,22 @@ struct SendStepAmount: View {
             
             ZStack {
                 Color.clear
-                CurrencyAmountTextField(value: $value, symbol: viewModel.token?.symbol ?? "TON", maxAvailable: viewModel.walletToken?.decimalAmount ?? 0.0, focusOnAppear: true)
-                    .changeEffect(.shine, value: shineTrigger)
+                VStack(spacing: 16) {
+                    CurrencyAmountTextField(value: $value, symbol: viewModel.token?.symbol ?? "TON", maxAvailable: viewModel.walletToken?.decimalAmount ?? 0.0, focusOnAppear: true)
+                        .changeEffect(.shine, value: shineTrigger)
+                    
+                    #warning("todo - show price in usd")
+                    if let price = viewModel.token?.price, price > 0 {
+                        let cur = CurrencyValue(currency: .usd, value: price * (value ?? 0.0))
+                        Text(cur.formatted())
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 12)
+                            .background {
+                                Capsule()
+                                    .stroke(Color.transactionSeparator, lineWidth: 0.333)
+                            }
+                    }
+                }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if let token = viewModel.token {
@@ -261,7 +276,7 @@ struct SendStepAmount: View {
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .dismissToolbarItem()
+            .dismissToolbarItem(action: viewModel.dismissAction)
         }
     }
     
@@ -324,7 +339,7 @@ struct SendStepDetails: View {
             }
             .navigationTitle("Send \(viewModel.token?.symbol ?? "")")
             .navigationBarTitleDisplayMode(.inline)
-            .dismissToolbarItem()
+            .dismissToolbarItem(action: viewModel.dismissAction)
             
         }
     }

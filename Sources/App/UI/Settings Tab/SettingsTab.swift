@@ -52,17 +52,17 @@ struct SettingsTab: View {
                         Toggle("Debug overlay", isOn: $debugOverlay)
                     }
                     
-                    let passcode: Binding<String> = Binding {
-                        model.access(keyPath: \.userPassword)
-                        return model.userPassword ?? ""
-                    } set: { v in
-                        model.withMutation(keyPath: \.userPassword) {
-                            model.userPassword = v
-                        }
-                    }
-                    Section("Passcode") {
-                        SecureField("Passcode", text: passcode)
-                    }
+//                    let passcode: Binding<String> = Binding {
+//                        model.access(keyPath: \.userPassword)
+//                        return model.userPassword ?? ""
+//                    } set: { v in
+//                        model.withMutation(keyPath: \.userPassword) {
+//                            model.userPassword = v
+//                        }
+//                    }
+//                    Section("Passcode") {
+//                        SecureField("Passcode", text: passcode)
+//                    }
                     
                     Section("Switch account") {
                         ForEach(Array(model.accounts.values), id: \.id) { account in
@@ -73,13 +73,13 @@ struct SettingsTab: View {
                             }
                         }
                     }
-                    
+                    .padding(.bottom, 60)
+
                 }
                 
                 .listStyle(.insetGrouped)
                 .navigationTitle("Settings")
                 .navigationBarTitleDisplayMode(.inline)
-                .padding(.bottom, 60)
             }
         }
     }

@@ -2,12 +2,15 @@
 import SwiftUI
 import Perception
 import Collections
+import Dependencies
 
 private let log = fileLog()
 
 
 @Perceptible
-final class AccountModel {
+final class AccountModel: DependencyKey {
+    
+    static let liveValue = AccountModel()
     
     private(set) var account: MtwAccount? = nil
     
@@ -25,7 +28,12 @@ final class AccountModel {
     @PerceptionIgnored private var observeUpdatesTask: Task<Void, Never>? = nil
     @PerceptionIgnored private var loadTokensTask: Task<Void, Never>? = nil
     
-    var api: Api! = nil { didSet { observe() } }
+    @PerceptionIgnored  @Dependency(Api.self)
+    var api
+    
+    init() {
+        observe()
+    }
     
     // MARK: - switching accounts
     
