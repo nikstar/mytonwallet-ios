@@ -11,12 +11,18 @@ struct MyTonWalletApp: App {
     @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     
     private let api: Api
+    
+    private let tokenInfo: TokenInfo
+    
     private let globalModel: GlobalModel
     private let currentAccountModel: AccountModel
     private let swapTokensInfo: SwapTokensModel
+     
     
     init() {
         let api = Api.liveValue
+    
+        self.tokenInfo = TokenInfo.liveValue
         
         let g = GlobalModel.load()
 //        g.api = api
@@ -31,6 +37,8 @@ struct MyTonWalletApp: App {
         let s = try! SwapTokensModel()
         s.observeUpdates(api)
         self.swapTokensInfo = s
+        
+        
     }
     
     var body: some Scene {
@@ -42,6 +50,7 @@ struct MyTonWalletApp: App {
                 .environment(globalModel)
                 .environment(currentAccountModel)
                 .environment(swapTokensInfo)
+                .environment(tokenInfo)
                 .background {
                     WithPerceptionTracking {
                         Color.clear.onChange(of: globalModel.currentAccount) { newValue in

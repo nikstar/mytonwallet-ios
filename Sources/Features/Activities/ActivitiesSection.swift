@@ -6,11 +6,13 @@ import Perception
 struct ActivitiesSection: View {
     
     @Environment(GlobalModel.self) private var globalModel
-    @Environment(AccountModel.self) private var currentAccountModel
+    @Environment(AccountModel.self) private var account
     
     @State private var presentedActivity: MtwActivity? = nil
     
     @State private var groupedActivities: OrderedDictionary<DateComponents, [MtwActivity]> = [:]
+    
+    @State private var activityInfo: AccountActivityInfo? = nil
     
     var body: some View {
         // let _ = Self._printChanges()
@@ -28,16 +30,18 @@ struct ActivitiesSection: View {
                     ActivityDetailsSheet(activity: presentedTransaction)
                 }
                 .onAppear {
-                    self.groupedActivities = OrderedDictionary(grouping: currentAccountModel.activities.values, by: { activity -> DateComponents in
-                        let date = Date(timeIntervalSince1970: Double(activity.raw.timestamp / 1000))
-                        return Calendar.current.dateComponents([.year, .month, .day], from: date)
-                    })
+                    self.groupedActivities = if let activities = account.activityInfo?.displayActivities {
+                        OrderedDictionary(grouping: activities, by: \.dayDc)
+                    } else {
+                        [:]
+                    }
                 }
-                .onChange(of: currentAccountModel.activities) { activities in
-                    self.groupedActivities = OrderedDictionary(grouping: activities.values, by: { activity -> DateComponents in
-                        let date = Date(timeIntervalSince1970: Double(activity.raw.timestamp / 1000))
-                        return Calendar.current.dateComponents([.year, .month, .day], from: date)
-                    })
+                .onChange(of: account.activityInfo?.displayActivities) { activities in
+                    self.groupedActivities = if let activities {
+                        OrderedDictionary(grouping: activities, by: \.dayDc)
+                    } else {
+                        [:]
+                    }
                 }
                 .animation(.default, value: groupedActivities)
                 .overlay(alignment: .top) {
@@ -53,7 +57,7 @@ struct ActivitiesSection: View {
                 let activities = groupedActivities[date] ?? []
                 Section {
                     ForEach(activities, id: \.self) { activity in
-                        TransactionRow(activity: activity)
+                        ActivityRow(activity: activity)
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 presentedActivity = activity
@@ -89,7 +93,7 @@ struct ActivitiesSection: View {
     }
     
     @ViewBuilder var emptyState: some View {
-        if currentAccountModel.account != nil && currentAccountModel.assumeEmpty && groupedActivities.isEmpty {
+        if account.account != nil && account.assumeEmpty && groupedActivities.isEmpty {
             VStack(spacing: 16) {
                 Sticker("Created", play: .playOnce)
                 Text("You have no transactions yet.")
@@ -98,7 +102,7 @@ struct ActivitiesSection: View {
             }
             .padding(.top, 100)
             .padding(.horizontal, 50)
-        } else if currentAccountModel.account != nil && currentAccountModel.assumeEmpty == false && groupedActivities.isEmpty {
+        } else if account.account != nil && account.assumeEmpty == false && groupedActivities.isEmpty {
             ProgressView()
                 .controlSize(.regular)
                 .padding(.top, 160)
@@ -108,56 +112,102 @@ struct ActivitiesSection: View {
 }
 
 
-struct TransactionRow: View {
+struct ActivityRow: View {
     
     @Environment(AccountModel.self) private var model
+    @Environment(TokenInfo.self) private var tokenInfo
+    @Environment(SwapTokensModel.self) private var swapTokenInfo
     
     var activity: MtwActivity
     
     var body: some View {
-        
-        HStack(spacing: 10) {
-            
-            leftImage
-            
-            HStack(alignment: .center, spacing: 0) {
+        WithPerceptionTracking {
+            HStack(spacing: 10) {
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    topLeft
-                        .font(.callout.weight(.medium))
-                    bottomLeft
-                        .font(.system(size: 14).weight(.regular))
-                        .foregroundStyle(Color.transactionSecondary)
-                }
-                Spacer(minLength: 2)
-                HStack(spacing: 8) {
-                    VStack(alignment: .trailing, spacing: 0) {
-                        topRight
-                            .font(.callout.weight(.regular))
-                        bottomRight
+                leftImage
+                
+                HStack(alignment: .center, spacing: 0) {
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        topLeft
+                            .font(.callout.weight(.medium))
+                        bottomLeft
                             .font(.system(size: 14).weight(.regular))
                             .foregroundStyle(Color.transactionSecondary)
                     }
-                    rightImage
+                    Spacer(minLength: 2)
+                    HStack(spacing: 8) {
+                        VStack(alignment: .trailing, spacing: 0) {
+                            topRight
+                                .font(.callout.weight(.regular))
+                            bottomRight
+                                .font(.system(size: 14).weight(.regular))
+                                .foregroundStyle(Color.transactionSecondary)
+                        }
+                        rightImage
+                    }
+                    
                 }
                 
             }
-            
+            .padding(.vertical, 8)
         }
-        .padding(.vertical, 8)
-        
         
     }
     
     @ViewBuilder
     var leftImage: some View {
-        let tx = activity.tokenAmount?.token
-        let swap = activity.raw.to.flatMap { slug in model.knownTokens[slug] }
-        let token = tx.or(swap)
-        TokenImage(token: token?.slug ?? "toncoin", image: token?.image)
-            .clipShape(Circle())
-            .frame(width: 40, height: 40)
+        if let type = activity.raw.type {
+            switch type {
+            case "stake":
+                Circle()
+                    .fill(Color(hex: "2A9EF1").gradient)
+                    .overlay {
+                        Image(systemName: "arrow.down.backward")
+                            .foregroundStyle(Color.white)
+                            .font(.system(size: 20, weight: .semibold))
+                    }
+                    .frame(width: 40, height: 40)
+                
 
+            case "unstakeRequest":
+                Circle()
+                    .fill(Color(hex: "878B96").gradient)
+                    .overlay {
+                        Image(systemName: "clock.fill")
+                            .foregroundStyle(Color.white)
+                            .font(.system(size: 20, weight: .semibold))
+                    }
+                    .frame(width: 40, height: 40)
+
+            case "unstake":
+                Circle()
+                    .fill(Color(hex: "2A9EF1").gradient)
+                    .overlay {
+                        Image(systemName: "arrow.up.forward")
+                            .foregroundStyle(Color.white)
+                            .font(.system(size: 20, weight: .semibold))
+                    }
+                    .frame(width: 40, height: 40)
+
+
+            default:
+                avatarImage
+            }
+        } else {
+            avatarImage
+        }
+
+    }
+    
+    @ViewBuilder
+    var avatarImage: some View {
+        if let id = activity.raw.slug.or(activity.raw.to) {
+            let image = (tokenInfo.getToken(id)?.image).or(swapTokenInfo.getSwapToken(id)?.image)
+            TokenImage(token: id, image: image)
+                .clipShape(Circle())
+                .frame(width: 40, height: 40)
+        }
     }
     
     
@@ -165,12 +215,32 @@ struct TransactionRow: View {
     var topLeft: some View {
         switch activity.kind {
         case .transaction:
-            if activity.isIncoming {
-                Text(activity.raw.fromAddress?.formatted() ?? "--")
-            } else {
-                Text(activity.raw.toAddress?.formatted() ?? "--")
+            if let type = activity.raw.type {
+                switch type {
+                case "stake":
+                    Text("Staked")
 
+                case "unstakeRequest":
+                    Text("Unstake Requested")
+                    
+                case "unstake":
+                    Text("Unstaked")
+
+                default:
+                    if activity.isIncoming {
+                        Text(activity.raw.fromAddress?.formatted() ?? "--")
+                    } else {
+                        Text(activity.raw.toAddress?.formatted() ?? "--")
+                    }
+                }
+            } else {
+                if activity.isIncoming {
+                    Text(activity.raw.fromAddress?.formatted() ?? "--")
+                } else {
+                    Text(activity.raw.toAddress?.formatted() ?? "--")
+                }
             }
+
         case .swap:
             
             let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
@@ -213,21 +283,21 @@ struct TransactionRow: View {
     var topRight: some View {
         switch activity.kind {
         case .transaction:
-            if activity.isIncoming {
-                Text(activity.tokenAmount?.formatted(.tokenAmount(explicitPlus: true)) ?? "---")
-                    .foregroundStyle(Color.transactionGreen)
-            } else {
-                Text(activity.tokenAmount?.formatted(.tokenAmount(noSign: true)) ?? "---")
+            if let id = activity.raw.slug, let token = tokenInfo.getToken(id), let amount = activity.raw.amount {
+                let tokenAmount = MtwTokenAmount(amount: Double(amount.value), token: token)
+                if activity.isIncoming {
+                    Text(tokenAmount.formatted(.mtwTokenAmount(explicitPlus: true)))
+                        .foregroundStyle(Color.transactionGreen)
+                } else {
+                    Text(tokenAmount.formatted(.mtwTokenAmount(noSign: true)))
+                }
             }
-        
         case .swap:
-//            let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
             let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }
-//            let fromAmount = activity.raw.fromAmount.flatMap(Double.init)
             let toAmount = activity.raw.toAmount.flatMap(Double.init)
             
             if let to, let toAmount {
-                Text("+\(toAmount) \(to)")
+                Text("+\(toAmount.formatted(.number.precision(.fractionLength(0...2)))) \(to)")
                     .foregroundStyle(Color.transactionGreen)
             }
 
@@ -240,9 +310,15 @@ struct TransactionRow: View {
     var bottomRight: some View {
         switch activity.kind {
         case .transaction:
-            Text(activity.tokenAmount?.valueInCurrency?.formatted() ?? "---")
-                .foregroundStyle(activity.isIncoming ? Color.transactionGreen : Color.transactionSecondary)
-
+            if let id = activity.raw.slug, let tq = tokenInfo.getQuote(id, baseCurrency: model.baseCurrency.code) {
+                let taq = MtwTokenAmountWithQuote(
+                    amount: .init(
+                        amount: abs(Double(activity.raw.amount?.value ?? 0)),
+                        token: tq.token),
+                    quote: tq.quote)
+                Text(taq.formatted())
+                        .foregroundStyle(activity.isIncoming ? Color.transactionGreen : Color.transactionSecondary)
+            }
         case .swap:
             let from = activity.raw.from.flatMap { slug in model.knownTokens[slug]?.symbol }
 //            let to = activity.raw.to.flatMap { slug in model.knownTokens[slug]?.symbol }

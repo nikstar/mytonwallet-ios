@@ -172,8 +172,20 @@ struct StakeRoot: View {
             Color.white.ignoresSafeArea(.container, edges: .bottom)
             VStack(spacing: 16) {
                 Image("Stake.NoHistory")
-                Text("You have no earning history yet.")
-//                    .foregroundStyle(.secondary)
+                Text("Earn from your tokens while holding them")
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                    .multilineTextAlignment(.center)
+                if let apy = vm.apy {
+                    Text("Estimated APY \(apy.formatted(.percent))")
+                        .font(.system(size: 16))
+                        .foregroundStyle(.secondary)
+                }
+                TipText(text: "Why This is Safe", title: "Why Staking is Safe", description: """
+                1. Staking is fully decentralized and operated by the official TON Liquid Staking smart contracts. 
+                2. The deposited stake will be used for the TON network validation as part of its proof-of-stake essence. 
+                3. You can withdraw your stake at any time and it will be deposited back to your account within two days.
+                """)
             }
             .padding(50)
             .padding(.bottom, 20)

@@ -65,7 +65,7 @@ final class SendViewModel {
         @Dependency(AccountModel.self) var account
         self.account = account
         
-        reset()
+        Task { reset() }
     }
     
     func reset() {

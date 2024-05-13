@@ -7,6 +7,7 @@ let avatarColors: [Color] = [
     Color(hex: "FF516A"), // red
     Color(hex: "D669ED"), // purple
     Color(hex: "665FFF"), // blue
+    Color(hex: "2A9EF1"), // light blue
 ]
 
 func avatarColor(_ hashable: any Hashable) -> Color {

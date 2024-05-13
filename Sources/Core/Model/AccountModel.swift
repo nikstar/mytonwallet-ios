@@ -19,11 +19,13 @@ final class AccountModel: DependencyKey {
     
     var walletTokens: OrderedDictionary<String, TokenAmount> = [:]
     var baseCurrency: Currency = .usd
-    var activities: OrderedDictionary<MtwActivity.ID, MtwActivity> = [:]
+    private(set) var activities: OrderedDictionary<MtwActivity.ID, MtwActivity> = [:]
     var nfts: [ApiNft] = []
     var swapTokens: [String: ApiToken] = [:]
     
     var assumeEmpty: Bool = false
+    
+    private(set) var activityInfo: AccountActivityInfo? = nil
 
     @PerceptionIgnored private var observeUpdatesTask: Task<Void, Never>? = nil
     @PerceptionIgnored private var loadTokensTask: Task<Void, Never>? = nil
@@ -43,6 +45,11 @@ final class AccountModel: DependencyKey {
         self.nfts = []
         self.activities = [:]
         self.walletTokens = [:]
+        self.activityInfo = if let newAccount {
+            AccountActivityInfo(id: newAccount.id, accountId: newAccount.apiAccount)
+        } else {
+            nil
+        }
         loadTokensTask = Task.detached { [weak self] in
             do {
                 try await withRetry(numRetries: 3, retryDelay: .seconds(0.2), progressiveDelayFactor: 2) {
@@ -150,6 +157,7 @@ final class AccountModel: DependencyKey {
                             let normalized = MtwActivity(activity: newActivity, knownTokens: self.knownTokens)
                             self.activities[normalized.id] = normalized
                         }
+                        self.activities.sort { $0.value.date > $1.value.date }
                     case .nfts(let u):
                         guard u.accountId == account?.apiAccount else { break }
                         self.nfts = u.nfts
@@ -205,7 +213,9 @@ final class AccountModel: DependencyKey {
                         let normalized = MtwActivity(activity: activity, knownTokens: self.knownTokens)
                         self.activities[normalized.id] = normalized
                     }
+                    self.activities.sort { $0.value.date > $1.value.date }
                 }
+                
             } catch {
                 print(token, error)
                 continue

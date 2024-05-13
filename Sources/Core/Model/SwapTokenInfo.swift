@@ -153,3 +153,10 @@ private let migrator: DatabaseMigrator = {
     return migrator
 }()
 
+
+extension SwapTokensModel {
+    
+    func getSwapToken(_ id: SwapToken.ID) -> SwapToken? {
+        tokens[id]
+    }
+}

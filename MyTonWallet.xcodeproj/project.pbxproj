@@ -52,13 +52,14 @@
 		58659BFC2BAAD6AF006E14C1 /* Button+asyncAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */; };
 		58659BFE2BAAD79B006E14C1 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58659BFD2BAAD79B006E14C1 /* Api.swift */; };
 		587539B52BDB23FE00A0B40E /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 587539B42BDB23FE00A0B40E /* GRDB */; };
-		587539B72BDB246D00A0B40E /* SwapTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539B62BDB246D00A0B40E /* SwapTokens.swift */; };
+		587539B72BDB246D00A0B40E /* SwapTokenInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539B62BDB246D00A0B40E /* SwapTokenInfo.swift */; };
 		587539B92BDB401100A0B40E /* SwapSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539B82BDB401100A0B40E /* SwapSheet.swift */; };
 		587539BB2BDBAFF600A0B40E /* KeyValueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587539BA2BDBAFF500A0B40E /* KeyValueView.swift */; };
 		587B47432BF2309200BD17BA /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 587B47422BF2309200BD17BA /* Dependencies */; };
 		587B47452BF2309200BD17BA /* DependenciesMacros in Frameworks */ = {isa = PBXBuildFile; productRef = 587B47442BF2309200BD17BA /* DependenciesMacros */; };
 		587B47472BF2475000BD17BA /* BuyWithCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B47462BF2475000BD17BA /* BuyWithCrypto.swift */; };
 		587B47492BF2475800BD17BA /* BuyWithCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B47482BF2475800BD17BA /* BuyWithCard.swift */; };
+		587B474B2BF28CAE00BD17BA /* ActionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587B474A2BF28CAE00BD17BA /* ActionButtons.swift */; };
 		5897499F2BDADE2500C15923 /* QRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5897499E2BDADE2500C15923 /* QRView.swift */; };
 		589A70BA2BE41B2D0023547C /* VariableBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70B92BE41B2C0023547C /* VariableBlur.swift */; };
 		589A70C12BE42E410023547C /* catchingException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 589A70C02BE42E410023547C /* catchingException.swift */; };
@@ -83,6 +84,10 @@
 		58D2D0222BB1A55300F613DE /* MtwActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D2D0212BB1A55300F613DE /* MtwActivity.swift */; };
 		58D4E6EC2BB449AB00831B07 /* SettingsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D4E6EB2BB449AB00831B07 /* SettingsTab.swift */; };
 		58D4E6EE2BB4588B00831B07 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 58D4E6ED2BB4588B00831B07 /* PrivacyInfo.xcprivacy */; };
+		58DB5BB52BF2995D009AFCD0 /* AccountActivityInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DB5BB42BF2995D009AFCD0 /* AccountActivityInfo.swift */; };
+		58DB5BB72BF2B019009AFCD0 /* MtwTokenAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DB5BB62BF2B019009AFCD0 /* MtwTokenAmount.swift */; };
+		58DB5BB92BF2BD8F009AFCD0 /* MtwTokenCurrencyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DB5BB82BF2BD8F009AFCD0 /* MtwTokenCurrencyValue.swift */; };
+		58DB5BBB2BF2BDF4009AFCD0 /* MtwToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DB5BBA2BF2BDF4009AFCD0 /* MtwToken.swift */; };
 		58DDF7682BA82DF1003D9628 /* WalletTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7672BA82DF1003D9628 /* WalletTab.swift */; };
 		58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF7692BA82F8D003D9628 /* RootView.swift */; };
 		58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */; };
@@ -153,11 +158,12 @@
 		58659BF62BAAD6AF006E14C1 /* NSObject+with.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+with.swift"; sourceTree = "<group>"; };
 		58659BF82BAAD6AF006E14C1 /* Button+asyncAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Button+asyncAction.swift"; sourceTree = "<group>"; };
 		58659BFD2BAAD79B006E14C1 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
-		587539B62BDB246D00A0B40E /* SwapTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokens.swift; sourceTree = "<group>"; };
+		587539B62BDB246D00A0B40E /* SwapTokenInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapTokenInfo.swift; sourceTree = "<group>"; };
 		587539B82BDB401100A0B40E /* SwapSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapSheet.swift; sourceTree = "<group>"; };
 		587539BA2BDBAFF500A0B40E /* KeyValueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueView.swift; sourceTree = "<group>"; };
 		587B47462BF2475000BD17BA /* BuyWithCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyWithCrypto.swift; sourceTree = "<group>"; };
 		587B47482BF2475800BD17BA /* BuyWithCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyWithCard.swift; sourceTree = "<group>"; };
+		587B474A2BF28CAE00BD17BA /* ActionButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButtons.swift; sourceTree = "<group>"; };
 		5897499E2BDADE2500C15923 /* QRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRView.swift; sourceTree = "<group>"; };
 		589A70B92BE41B2C0023547C /* VariableBlur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VariableBlur.swift; sourceTree = "<group>"; };
 		589A70BB2BE42BCE0023547C /* ExceptionCatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ExceptionCatcher.h; path = Sources/Utils/ExceptionCatcher.h; sourceTree = SOURCE_ROOT; };
@@ -183,6 +189,10 @@
 		58D2D0212BB1A55300F613DE /* MtwActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwActivity.swift; sourceTree = "<group>"; };
 		58D4E6EB2BB449AB00831B07 /* SettingsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTab.swift; sourceTree = "<group>"; };
 		58D4E6ED2BB4588B00831B07 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		58DB5BB42BF2995D009AFCD0 /* AccountActivityInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountActivityInfo.swift; sourceTree = "<group>"; };
+		58DB5BB62BF2B019009AFCD0 /* MtwTokenAmount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwTokenAmount.swift; sourceTree = "<group>"; };
+		58DB5BB82BF2BD8F009AFCD0 /* MtwTokenCurrencyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwTokenCurrencyValue.swift; sourceTree = "<group>"; };
+		58DB5BBA2BF2BDF4009AFCD0 /* MtwToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwToken.swift; sourceTree = "<group>"; };
 		58DDF7672BA82DF1003D9628 /* WalletTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletTab.swift; sourceTree = "<group>"; };
 		58DDF7692BA82F8D003D9628 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		58DDF76B2BA8302B003D9628 /* UnderConstructionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderConstructionView.swift; sourceTree = "<group>"; };
@@ -271,7 +281,10 @@
 			children = (
 				58DDF7672BA82DF1003D9628 /* WalletTab.swift */,
 				58DDF7772BA87A29003D9628 /* WalletTabScaffold.swift */,
-				5804E8442BD4FB4400A44D76 /* Top section */,
+				58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */,
+				58B4ABE42BBAE0960007BF54 /* TopSection.swift */,
+				587B474A2BF28CAE00BD17BA /* ActionButtons.swift */,
+				580044002BB0DB8300C364CE /* WalletTokenRow.swift */,
 			);
 			path = "Wallet Tab";
 			sourceTree = "<group>";
@@ -300,16 +313,6 @@
 				587B47482BF2475800BD17BA /* BuyWithCard.swift */,
 			);
 			path = "Add Crypto";
-			sourceTree = "<group>";
-		};
-		5804E8442BD4FB4400A44D76 /* Top section */ = {
-			isa = PBXGroup;
-			children = (
-				58B4ABE42BBAE0960007BF54 /* TopSection.swift */,
-				58B4ABE22BBAE0770007BF54 /* TotalWalletValue.swift */,
-				580044002BB0DB8300C364CE /* WalletTokenRow.swift */,
-			);
-			path = "Top section";
 			sourceTree = "<group>";
 		};
 		580D09102BAD907B00575E4B /* Login Flow */ = {
@@ -416,16 +419,20 @@
 		58659BEA2BAAD094006E14C1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				581867A62BD11279001A1A91 /* GlobalModel.swift */,
+				58DB5BB42BF2995D009AFCD0 /* AccountActivityInfo.swift */,
 				581867AB2BD11D45001A1A91 /* AccountModel.swift */,
-				587539B62BDB246D00A0B40E /* SwapTokens.swift */,
-				580044022BB0DDAC00C364CE /* TokenAmount.swift */,
-				581867A22BD10CED001A1A91 /* MtwAccount.swift */,
-				58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */,
-				58D2D0212BB1A55300F613DE /* MtwActivity.swift */,
-				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
 				58DDF76F2BA853C7003D9628 /* Currency+CurrencyValue.swift */,
+				581867A62BD11279001A1A91 /* GlobalModel.swift */,
+				581867A22BD10CED001A1A91 /* MtwAccount.swift */,
+				58D2D0212BB1A55300F613DE /* MtwActivity.swift */,
+				58DB5BBA2BF2BDF4009AFCD0 /* MtwToken.swift */,
+				58DB5BB62BF2B019009AFCD0 /* MtwTokenAmount.swift */,
+				58DB5BB82BF2BD8F009AFCD0 /* MtwTokenCurrencyValue.swift */,
+				587539B62BDB246D00A0B40E /* SwapTokenInfo.swift */,
+				58DDF76D2BA84CFB003D9628 /* Token+TokenValue.swift */,
+				580044022BB0DDAC00C364CE /* TokenAmount.swift */,
 				58B1F1762BEBD4F000A166F2 /* TokenInfo.swift */,
+				58C8E63A2BB3123200CDE5A0 /* TonAddress.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -629,6 +636,7 @@
 				58D2D0222BB1A55300F613DE /* MtwActivity.swift in Sources */,
 				58DDF7922BA9AD92003D9628 /* ActivityDetailsView.swift in Sources */,
 				58B4ABEB2BBAE9840007BF54 /* withRetry.swift in Sources */,
+				587B474B2BF28CAE00BD17BA /* ActionButtons.swift in Sources */,
 				58D164AE2BAB961D00DE08BF /* ApiError.swift in Sources */,
 				581867A52BD10D0E001A1A91 /* ApiNetwork.swift in Sources */,
 				58659BFA2BAAD6AF006E14C1 /* NSObject+with.swift in Sources */,
@@ -655,7 +663,9 @@
 				58DDF76C2BA8302B003D9628 /* UnderConstructionView.swift in Sources */,
 				5800440B2BB173ED00C364CE /* ApiNft.swift in Sources */,
 				587539B92BDB401100A0B40E /* SwapSheet.swift in Sources */,
+				58DB5BBB2BF2BDF4009AFCD0 /* MtwToken.swift in Sources */,
 				589A70C32BE44F500023547C /* Tip.swift in Sources */,
+				58DB5BB52BF2995D009AFCD0 /* AccountActivityInfo.swift in Sources */,
 				58B1F1772BEBD4F000A166F2 /* TokenInfo.swift in Sources */,
 				58DDF76A2BA82F8D003D9628 /* RootView.swift in Sources */,
 				589A70C12BE42E410023547C /* catchingException.swift in Sources */,
@@ -683,14 +693,16 @@
 				58F4F5BF2BAC7DD3000246C4 /* HTTPApi.swift in Sources */,
 				58DDF77A2BA88130003D9628 /* GenericEnvironment.swift in Sources */,
 				581867AF2BD18EA7001A1A91 /* Scaffold.swift in Sources */,
+				58DB5BB72BF2B019009AFCD0 /* MtwTokenAmount.swift in Sources */,
 				580044032BB0DDAC00C364CE /* TokenAmount.swift in Sources */,
 				58B4ABE52BBAE0970007BF54 /* TopSection.swift in Sources */,
 				580043F72BB0CD9000C364CE /* ApiToken.swift in Sources */,
 				580044012BB0DB8400C364CE /* WalletTokenRow.swift in Sources */,
-				587539B72BDB246D00A0B40E /* SwapTokens.swift in Sources */,
+				587539B72BDB246D00A0B40E /* SwapTokenInfo.swift in Sources */,
 				580044052BB0EA1400C364CE /* ApiBigint.swift in Sources */,
 				58F4F5BD2BAC6001000246C4 /* RequestProxy.swift in Sources */,
 				5804E8412BD4F2B600A44D76 /* AddCrypto.swift in Sources */,
+				58DB5BB92BF2BD8F009AFCD0 /* MtwTokenCurrencyValue.swift in Sources */,
 				587B47492BF2475800BD17BA /* BuyWithCard.swift in Sources */,
 				580044092BB10BD200C364CE /* ApiActivity.swift in Sources */,
 				58B4ABE92BBAE0EF0007BF54 /* SceneDelegate.swift in Sources */,

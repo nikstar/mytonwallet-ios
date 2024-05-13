@@ -47,6 +47,43 @@ struct Tip: View {
 
 }
 
+struct TipText: View {
+    
+    var text: String
+    var title: String
+    var description: String
+    
+    @State private var showsTip: Bool = false
+
+    var body: some View {
+        Button(action: { showsTip = true }) {
+            Text(text)
+        }
+        .buttonStyle(.mtwLargeTertiary)
+        .popover(
+            present: $showsTip,
+            attributes: {
+                $0.blocksBackgroundTouches = true
+                $0.rubberBandingMode = .none
+                $0.position = .relative(
+                    popoverAnchors: [
+                        .center,
+                    ]
+                )
+                $0.presentation.animation = .easeOut(duration: 0.15)
+                $0.dismissal.mode = .tapOutside
+                $0.onTapOutside = {
+                    showsTip = false
+                }
+            }
+        ) {
+            AlertViewPopover2(title: title, description: description, alignment: .leading, present: $showsTip)
+        } background: {
+            Color.black.opacity(0.4)
+        }
+    }
+
+}
 
 
 
@@ -54,6 +91,7 @@ struct AlertViewPopover: View {
     
     var title: String
     var description: String
+    var alignment: TextAlignment = .center
     
     @Binding var present: Bool
 
@@ -75,7 +113,7 @@ struct AlertViewPopover: View {
 
                 Text(description)
                     .font(.footnote)
-                    .multilineTextAlignment(.center)
+                    .multilineTextAlignment(alignment)
             }
             .padding()
 
@@ -103,4 +141,62 @@ struct AlertViewPopover: View {
         }
     }
 }
+
+
+
+struct AlertViewPopover2: View {
+    
+    var title: String
+    var description: String
+    var alignment: TextAlignment = .center
+    
+    @Binding var present: Bool
+
+    /// the initial animation
+    @State var scaled = true
+
+    var body: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 8) {
+                Image(systemName: "questionmark.circle.fill")
+                    .font(.system(size: 48, design: .rounded))
+                    .foregroundStyle(Color.blue)
+                    .padding(4)
+                
+                Text(title)
+                    .font(.body.weight(.semibold))
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 2)
+
+                Text(description)
+                    .font(.footnote)
+                    .multilineTextAlignment(alignment)
+            }
+            .padding()
+
+            Divider()
+
+            Button {
+                present = false
+            } label: {
+                Text("OK")
+                    .font(.body.weight(.semibold))
+                    .foregroundColor(.blue)
+            }
+            .buttonStyle(Templates.AlertButtonStyle())
+        }
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+//        .popoverShadow(shadow: .system)
+        .frame(width: 260)
+        .scaleEffect(scaled ? 0.8 : 1)
+        .opacity(scaled ? 0 : 1)
+        .onAppear {
+            withAnimation(.default) {
+                scaled = false
+            }
+        }
+    }
+}
+
 

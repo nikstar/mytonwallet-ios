@@ -32,7 +32,7 @@ struct SettingsTab: View {
                             } label: {
                                 LabeledContent("Name", value: account.displayName)
                             }
-                            
+                        
                             
                             LabeledContent("Network", value: account.apiNetwork.rawValue)
                             LabeledContent("Web API ID", value: account.apiAccount)
@@ -73,8 +73,8 @@ struct SettingsTab: View {
                             }
                         }
                     }
-                    .padding(.bottom, 60)
-
+                    
+                    Color.clear.frame(height: 60)
                 }
                 
                 .listStyle(.insetGrouped)

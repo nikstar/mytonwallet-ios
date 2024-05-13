@@ -1,8 +1,9 @@
 
 import Foundation
+import GRDB
 
 
-struct MtwActivity: Hashable, Codable, Identifiable {
+struct MtwActivity: Hashable, Codable, Identifiable, FetchableRecord, PersistableRecord  {
     
     enum Kind: Equatable, Hashable, Codable {
         case transaction
@@ -10,6 +11,7 @@ struct MtwActivity: Hashable, Codable, Identifiable {
         case other(String)
     }
     
+    var id: String
     var raw: ApiActivity
     var tokenAmount: TokenAmount?
     
@@ -35,18 +37,22 @@ struct MtwActivity: Hashable, Codable, Identifiable {
     }
     
     
-    
-    var id: String { raw.id }
-    
     var date: Date { Date(timeIntervalSince1970: Double(raw.timestamp) / 1000) }
         
     var fee: TokenAmount { .init(amount: Double(raw.fee?.value ?? 0), token: .toncoin)}
+    
+    init(raw: ApiActivity, tokenAmount: TokenAmount? = nil) {
+        self.id = raw.id
+        self.raw = raw
+        self.tokenAmount = tokenAmount
+    }
 }
 
 
 extension MtwActivity {
     
     init(activity: ApiActivity, knownTokens: Dictionary<String, ApiToken>) {
+        self.id = activity.id
         self.raw = activity
         guard let amount = activity.amount, let slug = activity.slug, let info = knownTokens[slug] else {
             self.tokenAmount = nil
@@ -60,5 +66,12 @@ extension MtwActivity {
             return
         }
         self.tokenAmount = .init(amount: Double(amount.value), token: info)
+    }
+}
+
+
+extension MtwActivity {
+    var dayDc: DateComponents {
+        return Calendar.current.dateComponents([.year, .month, .day], from: date)
     }
 }
