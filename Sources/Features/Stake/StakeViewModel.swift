@@ -11,7 +11,41 @@ enum StakeNavigation {
     case successUnstake
 }
 
-struct StakingHistory: Hashable {
+
+enum StakingHistory: Hashable {
+    case stake(MtwActivity)
+    case unstakeRequest(MtwActivity)
+    case unstake(MtwActivity)
+    case earned(StakingHistoryEarned)
+    
+    var activity: MtwActivity? {
+        switch self {
+        case .stake(let mtwActivity), .unstakeRequest(let mtwActivity), .unstake(let mtwActivity):
+            return mtwActivity
+        case .earned:
+            return nil
+        }
+    }
+    
+    var earnedItem: StakingHistoryEarned? {
+        if case .earned(let stakingHistoryEarned) = self {
+            return stakingHistoryEarned
+        } else {
+            return nil
+        }
+    }
+    
+    var date: Date {
+        switch self {
+        case .stake(let mtwActivity), .unstakeRequest(let mtwActivity), .unstake(let mtwActivity):
+            return mtwActivity.date
+        case .earned(let a):
+            return a.date
+        }
+    }
+}
+
+struct StakingHistoryEarned: Hashable {
     var date: Date
     var amount: TokenAmount
 }
@@ -77,14 +111,36 @@ final class StakeViewModel {
         do {
             if let h = try await account?.getStakingHistory(limit: nil, offset: nil) {
                 
-                let parsed: [StakingHistory] = h.compactMap { raw -> StakingHistory? in
+                let parsed: [StakingHistoryEarned] = h.compactMap { raw -> StakingHistoryEarned? in
                     guard let timestamp = raw.timestamp, let profit = raw.profit.flatMap(Double.init) else {
                         return nil
                     }
                     return .init(date: Date(timeIntervalSince1970: timestamp / 1000), amount: .toncoin(decimal: profit))
                 }
                 
-                self.history = parsed
+                let activities = (account?.activityInfo?.displayActivities ?? []).compactMap { (activity) -> StakingHistory? in
+                    if let type = activity.raw.type {
+                        switch type {
+                        case "stake":
+                            return StakingHistory.stake(activity)
+
+                        case "unstakeRequest":
+                            return StakingHistory.unstakeRequest(activity)
+
+                        case "unstake":
+                            return StakingHistory.unstake(activity)
+
+                        default:
+                            return nil
+                        }
+                    } else {
+                        return nil
+                    }
+
+                }
+                
+                let all = activities + parsed.map { StakingHistory.earned($0) }
+                self.history = all.sorted { lhs, rhs in lhs.date > rhs.date }
             }
         } catch {
             print(error)

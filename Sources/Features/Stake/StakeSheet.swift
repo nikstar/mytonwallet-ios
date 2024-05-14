@@ -200,40 +200,7 @@ struct StakeRoot: View {
         List {
             Section {
                 ForEach(items, id: \.self) { (item: StakingHistory) in
-                    TwoLineRow {
-                        HStack {
-                            Text("Earned")
-                                .font(.system(size: 16, weight: .medium))
-                            Spacer()
-                            Text(
-                                item.amount.formatted(.tokenAmount(explicitPlus: true).precision(.significantDigits(1...2)))
-                            )
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundStyle(Color.transactionGreen)
-                        }
-                    } subtitle: {
-                        HStack {
-                            Text(item.date.formatted(.dateTime.month(.wide).day().hour().minute()))
-                            Spacer()
-                            Text(
-                                item.amount.valueInCurrency?.formatted() ?? ""
-                            )
-                            .foregroundStyle(Color.transactionGreen)
-                        }
-                        .font(.system(size: 14))
-
-
-                    } image: {
-                        Circle()
-                            .fill(Color.stakeEarned.gradient)
-                            .overlay {
-                                Image(systemName: "plus")
-                                    .foregroundStyle(Color.white)
-                                    .font(.system(size: 20, weight: .semibold))
-                            }
-                            
-                    }
-
+                    StakingHistoryRow(item)
                 }
                 .listSectionSeparator(.hidden)
             } header: {
@@ -255,6 +222,96 @@ struct StakeRoot: View {
     }
 }
 
+fileprivate extension StakingHistory {
+    var title: String {
+        switch self {
+        case .stake(_):
+            "Staked"
+        case .unstakeRequest(_):
+            "Unstake Requested"
+        case .unstake(_):
+            "Unstaked"
+        case .earned(_):
+            "Earned"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .stake(_):
+            Color(hex: "2A9EF1")
+        case .unstakeRequest(_):
+            Color(hex: "878B96")
+        case .unstake(_):
+            Color(hex: "2A9EF1")
+        case .earned(_):
+            Color.stakeEarned
+        }
+    }
+    
+    var image: String {
+        switch self {
+        case .stake(_):
+            "arrow.down.backward"
+        case .unstakeRequest(_):
+            "clock.fill"
+        case .unstake(_):
+            "arrow.up.forward"
+        case .earned(_):
+            "plus"
+        }
+
+    }
+}
+struct StakingHistoryRow: View {
+    
+    var h: StakingHistory
+    
+    init(_ h: StakingHistory) {
+        self.h = h
+    }
+    
+    var body: some View {
+        TwoLineRow {
+            HStack {
+                Text(h.title)
+                    .font(.system(size: 16, weight: .medium))
+                Spacer()
+                if case .earned(let stakingHistoryEarned) = h {
+                    Text(
+                        stakingHistoryEarned.amount.formatted(.tokenAmount(explicitPlus: true).precision(.significantDigits(1...2)))
+                    )
+                    .font(.system(size: 16, weight: .regular))
+                    .foregroundStyle(Color.transactionGreen)
+                }
+            }
+        } subtitle: {
+            HStack {
+                Text(h.date.formatted(.dateTime.month(.wide).day().hour().minute()))
+                Spacer()
+                if case .earned(let stakingHistoryEarned) = h {
+                    Text(
+                        stakingHistoryEarned.amount.valueInCurrency?.formatted() ?? ""
+                    )
+                    .foregroundStyle(Color.transactionGreen)
+                }
+            }
+            .font(.system(size: 14))
+
+
+        } image: {
+            Circle()
+                .fill(h.color.gradient)
+                .overlay {
+                    Image(systemName: h.image)
+                        .foregroundStyle(Color.white)
+                        .font(.system(size: 20, weight: .semibold))
+                }
+                
+        }
+
+    }
+}
 
 
 struct StakeAdd: View {
