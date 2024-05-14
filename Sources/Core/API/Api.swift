@@ -25,22 +25,22 @@ final class Api: ObservableObject, DependencyKey {
                         let update = try decoder.decode(ApiUpdate.self, from: data)
                         
                         //                        #warning("make optional")
-                        if update.kind != "config" {
-                            let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
-                            try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
-                            try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-\(update.kind).json"))
-                        }
+//                        if update.kind != "config" {
+//                            let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
+//                            try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
+//                            try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-\(update.kind).json"))
+//                        }
                         return update
                     }
                     self.callbacks.values.forEach { $0(update) }
                 } catch {
                     log.fault("Failed to decode api error=\(error) update: \("\(raw)")")
                     
-                    let string = try! raw.as(String.self)
-                    let data = string.data(using: .utf8)!
-                    let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
-                    try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
-                    try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-UNKNOWN.json"))
+//                    let string = try! raw.as(String.self)
+//                    let data = string.data(using: .utf8)!
+//                    let tmp = URL.temporaryDirectory.appending(component: "updates", directoryHint: .isDirectory)
+//                    try! FileManager.default.createDirectory(at: tmp, withIntermediateDirectories: true)
+//                    try! data.write(to: tmp.appending(component: "\(Date.now.timeIntervalSince1970)-UNKNOWN.json"))
 
                 }
             }

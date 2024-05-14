@@ -2,99 +2,20 @@
 import SwiftUI
 import Perception
 
-@Perceptible
-final class SwapViewModel {
-    
-    private static let defaultSend: Slug = "toncoin"
-    private static let defaultReceive: Slug = "ton-eqcxe6mutq" // usdt
-    
-    private var send: Slug = SwapViewModel.defaultSend
-    private var receive: Slug = SwapViewModel.defaultReceive
-    
-    private(set) var sendToken: SwapToken? = nil
-    private(set) var receiveToken: SwapToken? = nil
-    
-    var sendValue: Double? = nil
-    var receiveValue: Double? = nil
-    
-    var swapTokensInfo: SwapTokensModel? = nil
-    
-    var path: NavigationPath = .init()
-    
-    func use(_ model: SwapTokensModel) {
-        self.swapTokensInfo = model
-        update()
-    }
-    
-    func update() {
-        sendToken = swapTokensInfo?.tokens[send]
-        receiveToken = swapTokensInfo?.tokens[receive]
-    }
-    
-    func setSend(_ send: Slug) {
-        if send == self.receive {
-            switchPlaces()
-            return
-        }
-        self.send = send
-        update()
-        syncValue(changedSend: false, newValue: receiveValue)
-    }
-    
-    func setReceive(_ receive: Slug) {
-        if receive == self.send {
-            switchPlaces()
-            return
-        }
-        self.receive = receive
-        update()
-        syncValue(changedSend: true, newValue: sendValue)
-
-
-    }
-    
-    func switchPlaces() {
-        (send, receive) = (receive, send)
-        (sendValue, receiveValue) = (receiveValue, sendValue)
-        update()
-    }
-    
-    func syncValue(changedSend: Bool, newValue: Double?) {
-        if changedSend {
-            if let newValue {
-                if let p1 = sendToken?.price, let p2 = receiveToken?.price, p1 * p2 != 0 {
-                    receiveValue = newValue * p1 / p2
-                }
-            } else {
-                receiveValue = nil
-            }
-        } else { // changed receive
-            if let newValue {
-                if let p1 = sendToken?.price, let p2 = receiveToken?.price, p1 * p2 != 0 {
-                    sendValue = newValue * p2 / p1
-                }
-            } else {
-                sendValue = nil
-            }
-            
-        }
-    }
-    
-    var conversion: Double? {
-        if let p1 = sendToken?.price, let p2 = receiveToken?.price, p1 * p2 != 0 {
-            p1 / p2
-        } else {
-            nil
-        }
-    }
-}
-
 struct SwapSheet: View {
-    
+    @Environment(AccountModel.self) private var account
     @Environment(SwapTokensModel.self) private var swapTokens
-    private let viewModel = SwapViewModel()
+    @State private var viewModel = SwapViewModel()
     
+    var isCrosschain: Bool
     
+    init(isCrosschain: Bool = false) {
+        self.isCrosschain = isCrosschain
+        if isCrosschain {
+            viewModel.isDefaultCrosschain = true
+        }
+    }
+        
     enum Picker {
         case send
         case receive
@@ -111,7 +32,7 @@ struct SwapSheet: View {
             }
             .environment(viewModel)
             .onAppear {
-                viewModel.use(swapTokens)
+                viewModel.use(account: account, swap: swapTokens)
             }
         }
     }
@@ -158,20 +79,25 @@ struct SwapRoot: View {
                         switchPlaces
                     }
                     
+                } footer: {
+                    if viewModel.isCrosschain {
+                        Text("""
+                        **Cross-chain exchange by Changelly**
+                        By continuing, you agree to [terms of use](https://example.com) and [privacy policy](https://example.com) and understand that the transaction may trigger verification according to [Changelly AML/KYC](https://example.com).
+                        """)
+                    }
                 }
                 
-                details
+                if !viewModel.isCrosschain {
+                    details
+                }
                 
             }
             .listStyle(.insetGrouped)
             .scrollDismissesKeyboard(.interactively)
 
             .safeAreaInset(edge: .bottom) {
-                Button(action: {}) {
-                    Text("Continue")
-                }
-                .buttonStyle(.wallet())
-                .padding(16)
+                continueButton
             }
             .navigationTitle(Text("Swap"))
             .navigationBarTitleDisplayMode(.inline)
@@ -201,7 +127,7 @@ struct SwapRoot: View {
                 if let token = viewModel.sendToken {
                     if let v = account.walletTokens[token.slug]?.formatted() {
                         Text("Max: \(v)")
-                    } else if let token = viewModel.sendToken {
+                    } else if let token = viewModel.sendToken, let b = token.blockchain, b == "ton" {
                         let v = TokenAmount(amount: 0, token: ApiToken(slug: token.slug, name: token.name, symbol: token.symbol, decimals: token.decimals)).formatted()
                         Text("Max: \(v)")
                         
@@ -226,6 +152,7 @@ struct SwapRoot: View {
                     
                     Spacer(minLength: 8)
                     
+                    let max = viewModel.maxAvailable?.decimalAmount ?? .infinity
                     
                     TextField("Send", value: $viewModel.sendValue, format: .number, prompt: Text("0"))
                         .focused($focused, equals: .send)
@@ -233,6 +160,7 @@ struct SwapRoot: View {
                         .keyboardType(.decimalPad)
 //                        .matchedGeometryEffect(id: viewModel.receiveToken?.slug ?? "receive", in: ns2)
 //                        .id(viewModel.receiveToken?.slug ?? "receive")
+                        .foregroundStyle((viewModel.sendValue ?? 0) > max ? Color.red : Color.primary)
 
                 }
                 .matchedGeometryEffect(id: viewModel.sendToken?.slug ?? "send", in: ns)
@@ -376,6 +304,26 @@ struct SwapRoot: View {
         }
         .buttonStyle(.plain)
     }
+    
+    @ViewBuilder
+    var continueButton: some View {
+        let disabled = if let v = viewModel.sendValue {
+            if let max = viewModel.maxAvailable?.decimalAmount {
+                v <= 0 || v > max
+            } else {
+                v <= 0
+            }
+        } else {
+            true
+        }
+        
+        Button(action: { viewModel.onContinue() }) {
+            Text("Continue")
+        }
+        .buttonStyle(.mtwLarge)
+        .padding(16)
+        .disabled(disabled)
+    }
 }
 
 
@@ -391,6 +339,7 @@ struct TokenPicker: View {
         }
         .contentShape(.rect)
         .animation(.default, value: swapToken)
+        .fixedSize()
     }
     
     @ViewBuilder
@@ -406,7 +355,9 @@ struct TokenPicker: View {
     
     @ViewBuilder
     var symbol: some View {
-        if let s = swapToken?.symbol {
+        if let b = swapToken?.blockchain, b != "ton", let n = swapToken?.name {
+            Text(n)
+        } else if let s = swapToken?.symbol {
             Text(s)
         }
     }
@@ -436,31 +387,56 @@ struct TokenListPicker: View {
         WithPerceptionTracking {
             
         Group {
-            if picker == .send {
-                let query = query.lowercased()
-                let wallet: [TokenAmount] = if !query.isEmpty {
-                    Array(account.walletTokens.values).filter {
-                        $0.token.name.lowercased().contains(query) ||
-                        $0.token.symbol.lowercased().contains(query) ||
-                        ($0.token.keywords?.firstIndex(where: { $0.contains(query) }) != nil)
-                    }
-                } else {
-                    Array(account.walletTokens.values)
-                }
-                
-                List(wallet, id: \.self) { tokenAmount in
-                    let token = tokenAmount.token
-                    TokenListRow(token: token.slug, image: token.image, headline: tokenAmount.token.name, subheadline: tokenAmount.formatted())
-                        .onTapGesture {
-                            viewModel.setSend(tokenAmount.token.slug)
-                            viewModel.path.removeLast()
-                        }
-                }
-            } else {
-                let all = swapTokens.tokens.values.filter({ $0.blockchain == "ton" }).filter(query: query)
+//            if picker == .send {
+//                let query = query.lowercased()
+//                let wallet: [TokenAmount] = if !query.isEmpty {
+//                    Array(account.walletTokens.values).filter {
+//                        $0.token.name.lowercased().contains(query) ||
+//                        $0.token.symbol.lowercased().contains(query) ||
+//                        ($0.token.keywords?.firstIndex(where: { $0.contains(query) }) != nil)
+//                    }
+//                } else {
+//                    Array(account.walletTokens.values)
+//                }
+//                
+//                List(wallet, id: \.self) { tokenAmount in
+//                    let token = tokenAmount.token
+//                    TokenListRow(token: token.slug, image: token.image, headline: tokenAmount.token.name, subheadline: tokenAmount.formatted())
+//                        .onTapGesture {
+//                            viewModel.setSend(tokenAmount.token.slug)
+//                            viewModel.path.removeLast()
+//                        }
+//                }
+//            } else {
+                let all = swapTokens.tokens.values.filter(query: query)
                 let popular = all.filter { $0.isPopular == true }
                 
                 List {
+//                    if picker == .send {
+                        let query = query.lowercased()
+                        let wallet: [TokenAmount] = if !query.isEmpty {
+                            Array(account.walletTokens.values).filter {
+                                $0.token.name.lowercased().contains(query) ||
+                                $0.token.symbol.lowercased().contains(query) ||
+                                ($0.token.keywords?.firstIndex(where: { $0.contains(query) }) != nil)
+                            }
+                        } else {
+                            Array(account.walletTokens.values)
+                        }
+                        
+                        Section("My Assets") {
+                            ForEach(wallet, id: \.self) { tokenAmount in
+                                let token = tokenAmount.token
+                                TokenListRow(token: token.slug, image: token.image, headline: tokenAmount.token.name, subheadline: tokenAmount.formatted())
+                                    .onTapGesture {
+                                        viewModel.setSend(tokenAmount.token.slug)
+                                        viewModel.path.removeLast()
+                                    }
+                            }
+                        }
+                        
+//                    }
+                    
                     Section("Popular") {
                         ForEach(popular) { token in
                             TokenListRow(token: token.slug, image: token.image, headline: token.name, subheadline: token.symbol)
@@ -480,7 +456,7 @@ struct TokenListPicker: View {
                         }
                     }
                 }
-            }
+//            }
         }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always))
         .listStyle(.plain)

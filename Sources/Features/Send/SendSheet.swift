@@ -371,34 +371,35 @@ struct SendStepSuccess: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        ZStack {
-            Color.clear
-            VStack(spacing: 0) {
-                
-                Sticker("Congratulations", play: .repeat(1))
-                    .padding(.bottom, 24)
-                TokenAmountView(
-                    tokenAmount: viewModel.amount,
-                    format: .tokenAmount(asNegative: true).precision(.significantDigits(1...6)))
+        WithPerceptionTracking {
+            ZStack {
+                Color.clear
+                VStack(spacing: 0) {
                     
-                Text("Coins have been sent!")
-                    .foregroundStyle(.secondary)
-                Button(action: {}) {
-                    Text("Transaction Details")
+                    Sticker("Congratulations", play: .repeat(1))
+                        .padding(.bottom, 24)
+                    TokenAmountView(
+                        tokenAmount: viewModel.amount,
+                        format: .tokenAmount(asNegative: true).precision(.significantDigits(1...6)))
+                    
+                    Text("Coins have been sent!")
+                        .foregroundStyle(.secondary)
+                    Button(action: {}) {
+                        Text("Transaction Details")
+                    }
+                    .buttonStyle(.mtwLargeTertiary)
                 }
-                .buttonStyle(.mtwLargeTertiary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
             }
-            .multilineTextAlignment(.center)
-            .padding(.horizontal, 32)
-        }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            Button(action: viewModel.dismissAction) {
-                Text("Close")
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                Button(action: viewModel.dismissAction) {
+                    Text("Close")
+                }
+                .buttonStyle(.mtwLarge)
+                .padding(16)
             }
-            .buttonStyle(.mtwLarge)
-            .padding(16)
         }
-        
     }
 }
 

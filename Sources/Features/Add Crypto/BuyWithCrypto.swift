@@ -4,6 +4,6 @@ import SwiftUI
 
 struct BuyWithCryptoView: View {
     var body: some View {
-        SwapSheet()
+        SwapSheet(isCrosschain: true)
     }
 }

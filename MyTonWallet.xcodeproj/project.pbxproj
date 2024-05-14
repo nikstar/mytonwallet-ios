@@ -25,6 +25,7 @@
 		580D09142BAD912800575E4B /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580D09122BAD912800575E4B /* Sticker.swift */; };
 		580D09172BAD91BF00575E4B /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09162BAD91BF00575E4B /* Lottie */; };
 		580D091A2BAD922100575E4B /* Gzip in Frameworks */ = {isa = PBXBuildFile; productRef = 580D09192BAD922100575E4B /* Gzip */; };
+		5811F7D42BF36124006D22AD /* SwapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5811F7D32BF36124006D22AD /* SwapViewModel.swift */; };
 		581828F72BE804450061AAA3 /* CurrencyAmountTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581828F62BE804440061AAA3 /* CurrencyAmountTextField.swift */; };
 		581867A32BD10CED001A1A91 /* MtwAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867A22BD10CED001A1A91 /* MtwAccount.swift */; };
 		581867A52BD10D0E001A1A91 /* ApiNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581867A42BD10D0E001A1A91 /* ApiNetwork.swift */; };
@@ -134,6 +135,7 @@
 		580D090C2BAD8A6400575E4B /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
 		580D09112BAD912800575E4B /* LoginFlow+Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginFlow+Buttons.swift"; sourceTree = "<group>"; };
 		580D09122BAD912800575E4B /* Sticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
+		5811F7D32BF36124006D22AD /* SwapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapViewModel.swift; sourceTree = "<group>"; };
 		581828F62BE804440061AAA3 /* CurrencyAmountTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyAmountTextField.swift; sourceTree = "<group>"; };
 		581867A22BD10CED001A1A91 /* MtwAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MtwAccount.swift; sourceTree = "<group>"; };
 		581867A42BD10D0E001A1A91 /* ApiNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiNetwork.swift; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 			isa = PBXGroup;
 			children = (
 				587539B82BDB401100A0B40E /* SwapSheet.swift */,
+				5811F7D32BF36124006D22AD /* SwapViewModel.swift */,
 			);
 			path = Swap;
 			sourceTree = "<group>";
@@ -695,6 +698,7 @@
 				581867AF2BD18EA7001A1A91 /* Scaffold.swift in Sources */,
 				58DB5BB72BF2B019009AFCD0 /* MtwTokenAmount.swift in Sources */,
 				580044032BB0DDAC00C364CE /* TokenAmount.swift in Sources */,
+				5811F7D42BF36124006D22AD /* SwapViewModel.swift in Sources */,
 				58B4ABE52BBAE0970007BF54 /* TopSection.swift in Sources */,
 				580043F72BB0CD9000C364CE /* ApiToken.swift in Sources */,
 				580044012BB0DB8400C364CE /* WalletTokenRow.swift in Sources */,
@@ -847,7 +851,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/MyTonWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
@@ -886,7 +890,7 @@
 				CODE_SIGN_ENTITLEMENTS = Resources/MyTonWallet.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 6RX8GEVB43;
 				ENABLE_PREVIEWS = YES;
