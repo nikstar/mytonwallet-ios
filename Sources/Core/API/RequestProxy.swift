@@ -47,11 +47,31 @@ final class RequestProxy: NSObject, WKURLSchemeHandler {
             }
             return
         }
+//        print(originalUrl, request.httpMethod ?? "<>")
+//        if let d = request.httpBody {
+//            print(String(data: d, encoding: .utf8)!)
+//        }
         request.url = URL(string: originalUrl.absoluteString
             .replacing(/^api-https:/, with: "https:")
             .replacing(/^api-http:/, with: "http:")
         )!
+//        request.setValue("mytonwallet.app", forHTTPHeaderField: "Origin")
+        request.setValue(nil, forHTTPHeaderField: "Origin")
+        request.setValue(nil, forHTTPHeaderField: "X-App-Origin")
+        request.setValue(nil, forHTTPHeaderField: "Referer")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
         do {
+//            print(request.url!, request.httpMethod ?? "-")
+//            if let d = request.httpBody {
+//                print(String(data: d, encoding: .utf8)!)
+//            }
+                
+            let rpc = request.httpMethod == "POST"
+            
+            if rpc {
+//                print(request.allHTTPHeaderFields!)
+            }
             let (data, response) = try await URLSession.shared.data(for: request)
             
             if let upstreamResponse = response as? HTTPURLResponse {
@@ -62,6 +82,9 @@ final class RequestProxy: NSObject, WKURLSchemeHandler {
                 var headers = upstreamResponse.allHeaderFields as! [String: String]
                 headers["Access-Control-Allow-Origin"] = "*"
                 let response = HTTPURLResponse(url: originalUrl, statusCode: upstreamResponse.statusCode, httpVersion: nil, headerFields: headers)!
+                if rpc {
+//                    print(response)
+                }
                 if await runningTasks.exists(urlSchemeTask) {
                     catchingException {
                         urlSchemeTask.didReceive(response)
