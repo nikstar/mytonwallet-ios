@@ -315,6 +315,53 @@ extension Api {
 
         return try await callApi("checkTransactionDraft", options, decoding: CheckTransactionDraftResult.self)
     }
+    
+    struct SubmitTransferResult: Codable {
+        var toAddress: String?
+        var amount: ApiBigint?
+        var seqno: Int?
+        var msgHash: String?
+        var encryptedComment: String?
+        var error: String?
+    }
+    
+    func submitTransfer(
+          accountId: String,
+          password: String,
+          toAddress: String,
+          amount: ApiBigint,
+          data: String?,
+          tokenAddress: String?,
+          stateInit: Any?,
+          shouldEncrypt: Bool?,
+          isBase64Data: Bool?
+    ) async throws -> SubmitTransferResult {
+
+        var options = [String: Any]()
+        options["accountId"] = accountId
+        options["password"] = password
+        options["toAddress"] = toAddress
+        options["amount"] = "\(amount.value)"
+        if let data {
+            options["data"] = data
+        }
+        if let tokenAddress {
+            options["tokenAddress"] = tokenAddress
+        }
+        if let stateInit {
+            // TODO: Initialize our wallet if not initialized
+        }
+        if let shouldEncrypt {
+            options["shouldEncrypt"] = shouldEncrypt
+        }
+        if let isBase64Data {
+            options["isBase64Data"] = isBase64Data
+        }
+        print(options)
+        return try await callApi("submitTransfer", options, decoding: SubmitTransferResult.self)
+    }
+    
+    
 }
 
 

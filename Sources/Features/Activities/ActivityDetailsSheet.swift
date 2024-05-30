@@ -7,6 +7,7 @@ struct ActivityDetailsSheet: View {
     var activity: MtwActivity
     @Environment(\.dismiss) private var dismiss
     
+    
     var body: some View {
         NavigationStack {
             ActivityDetailsView(activity: activity)

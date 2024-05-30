@@ -9,7 +9,7 @@ private let log = fileLog()
 
 /// GlobalModel represents state that is shared aacross the entire app, including all accounts
 @Perceptible
-final class GlobalModel {
+final class GlobalModel: DependencyKey {
     
     @PerceptionIgnored var encryptionPassword: String
     
@@ -42,7 +42,9 @@ final class GlobalModel {
         var currentAccountId: Optional<MtwAccount.ID>
     }
     
-    static func load() -> GlobalModel {
+    static var liveValue: GlobalModel = GlobalModel.load()
+    
+    private static  func load() -> GlobalModel {
         
         guard let data = UserDefaults.group.data(forKey: "global") else { return .reset() }
         

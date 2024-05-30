@@ -17,15 +17,21 @@ struct ApiBigint: Hashable, Codable, ExpressibleByIntegerLiteral {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let string = try container.decode(String.self)
-        if string.isEmpty {
-            self = ApiBigint(0)
-        } else {
-            if let trimmed = string.split(separator: ":").last, let value = Int(trimmed) {
-                self = ApiBigint(value)
+        do {
+            let string = try container.decode(String.self)
+            if string.isEmpty {
+                self = ApiBigint(0)
             } else {
-                throw DecodingError.dataCorruptedError(in: container, debugDescription: "Could not parse integer in bigint '\(string)'")
+                if let trimmed = string.split(separator: ":").last, let value = Int(trimmed) {
+                    self = ApiBigint(value)
+                } else {
+                    throw DecodingError.dataCorruptedError(in: container, debugDescription: "Could not parse integer in bigint '\(string)'")
+                }
             }
+        } catch let stringError {
+            print(stringError)
+            let int = try container.decode(Int.self)
+            self = ApiBigint(int)
         }
     }
     

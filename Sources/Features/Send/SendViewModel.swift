@@ -55,12 +55,16 @@ final class SendViewModel {
     
     // step 5
     var isSending: Bool = false
-    
+    var showSendError: Bool = false
+    var sendErrorString: String = ""
     // private
 
+    private var global: GlobalModel
     private var account: AccountModel
     
     init() {
+        @Dependency(GlobalModel.self) var global
+        self.global = global
         
         @Dependency(AccountModel.self) var account
         self.account = account
@@ -146,15 +150,42 @@ final class SendViewModel {
     }
     
     func onConfirm() {
+        guard let apiAcc = account.account?.apiAccount else { return }
         self.isSending = true
-        Task { @MainActor in
-            try? await Task.sleep(for: .seconds(2))
-            self.path.append(SendStep.success)
+        Task {
+            do {
+                let res = try await account.api.submitTransfer(
+                    accountId: apiAcc,
+                    password: global.encryptionPassword,
+                    toAddress: addressText,
+                    amount: ApiBigint(Int(self.amount?.amount ?? 0)),
+                    data: messageText.isEmpty ? nil : messageText,
+                    tokenAddress: token?.minterAddress?.string,
+                    stateInit: nil,
+                    shouldEncrypt: messageIsEncoded,
+                    isBase64Data: false
+                )
+                print(res)
+                if let error = res.error {
+                    sendErrorString = error
+                    showSendError = true
+                    print(error)
+                } else {
+                    self.path.append(SendStep.success)
+                }
+            } catch {
+                  sendErrorString = error.localizedDescription
+                showSendError = true
+                print(error)
+            }
         }
     }
     
     
 }
+
+
+
 
 
 fileprivate extension AccountModel {

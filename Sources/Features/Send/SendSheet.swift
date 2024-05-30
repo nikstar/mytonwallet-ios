@@ -350,14 +350,20 @@ struct SendStepConfirm: View {
     @Environment(AccountModel.self) private var account
     @Environment(SendViewModel.self) private var viewModel
     
+    
+    
     var body: some View {
         WithPerceptionTracking {
+            @Perception.Bindable var vm = viewModel
             ConfirmActionView(
                 title: viewModel.isSending ? "Sending" : "Confirm Send",
                 description: (viewModel.amount?.formatted() ?? "?") + " to " + (viewModel.address?.formatted() ?? "?"),
                 state: viewModel.isSending ? .processing : .codeEntry,
                 onConfirm: { viewModel.onConfirm() }
             )
+            .alert("Error", isPresented: $vm.showSendError, actions: {}) {
+                Text(viewModel.sendErrorString)
+            }
         }
     }
 }
@@ -372,6 +378,7 @@ struct SendStepSuccess: View {
     
     var body: some View {
         WithPerceptionTracking {
+            @Perception.Bindable var vm = viewModel
             ZStack {
                 Color.clear
                 VStack(spacing: 0) {

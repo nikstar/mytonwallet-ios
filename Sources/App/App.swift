@@ -24,7 +24,7 @@ struct MyTonWalletApp: App {
     
         self.tokenInfo = TokenInfo.liveValue
         
-        let g = GlobalModel.load()
+        let g = GlobalModel.liveValue
 //        g.api = api
         
         let c = AccountModel.liveValue

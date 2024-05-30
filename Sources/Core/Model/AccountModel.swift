@@ -167,6 +167,8 @@ final class AccountModel: DependencyKey {
                         break
                     case .staking(_):
                         break
+                    case .newLocalTransaction(let u):
+                        print(u)
                     }
                 }
             }

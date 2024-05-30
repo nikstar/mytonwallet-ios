@@ -44942,7 +44942,8 @@ async function checkTransactionDraft(options) {
     amount,
     data
   } = options;
-  const {
+    amount = BigInt(amount);
+    const {
     network
   } = parseAccountId(accountId);
   let result = {};
@@ -45108,6 +45109,7 @@ async function submitTransfer(options) {
     amount,
     data
   } = options;
+  amount = BigInt(amount);
   const {
     network
   } = parseAccountId(accountId);

@@ -88,6 +88,16 @@ final class AccountActivityInfo {
                         }
                     }
                     
+                case .newLocalTransaction(let u):
+                    guard u.accountId == accountId else {
+                        continue
+                    }
+                    let activity = MtwActivity(raw: u.transaction)
+                    if activity != self.activities[activity.id] {
+                        self.activities[activity.id] = activity
+                        try await dbConnection?.write { try activity.save($0) }
+                    }
+                    
                 default:
                     break
                 }

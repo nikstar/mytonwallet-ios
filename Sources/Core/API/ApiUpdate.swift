@@ -13,6 +13,7 @@ enum ApiUpdate {
     case config(ApiUpdateConfig)
     case swapTokens(ApiUpdateSwapTokens)
     case staking(ApiUpdateStaking)
+    case newLocalTransaction(ApiNewLocalTransaction)
 }
 
 
@@ -45,6 +46,8 @@ extension ApiUpdate: Decodable {
             self = try .swapTokens(.init(from: decoder))
         case "updateStaking":
             self = try .staking(.init(from: decoder))
+        case "newLocalTransaction":
+            self = try .newLocalTransaction(.init(from: decoder))
         default:
             log.error("Unsupported update type = \(type)")
             throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "unknownTokenType = \(type)"))
@@ -105,4 +108,10 @@ struct ApiUpdateSwapTokens: Decodable {
 
 struct ApiUpdateStaking: Decodable {
     
+}
+
+
+struct ApiNewLocalTransaction: Decodable {
+    var accountId: String
+    var transaction: ApiActivity
 }
